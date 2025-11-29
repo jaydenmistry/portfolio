@@ -1,0 +1,10 @@
+# ignore everything by default
+*
+# but allow directories so git can traverse
+!*/
+
+# allow ONLY these files
+!/.gitignore
+!/.env.example
+!**/docker-compose.yml
+!**/compose.yml

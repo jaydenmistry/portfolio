@@ -1,0 +1,32 @@
+services:
+  emby:
+    image: lscr.io/linuxserver/emby:latest
+    container_name: emby
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/emby/config:/config
+      - ${MEDIA_ROOT}:/media
+    ports:
+      - ${EMBY_PORT}:8096
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.emby.rule=Host(`${EMBY_HOST}`)"
+      - "traefik.http.routers.emby.entrypoints=websecure"
+      - "traefik.http.routers.emby.tls=true"
+      - "traefik.http.routers.emby.tls.certresolver=cf"
+      - "traefik.http.services.emby.loadbalancer.server.port=8096"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - default
+      - traefik_net
+    restart: unless-stopped
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

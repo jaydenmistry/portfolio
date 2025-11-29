@@ -1,0 +1,34 @@
+---
+services:
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TZ}
+      - PORT=${OVERSEERR_PORT}
+    ports:
+      - ${OVERSEERR_PORT}:5055
+    volumes:
+      - ${CONFIG_ROOT}/overseerr/config:/app/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${MEDIA_ROOT}/tv:/tv
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overseerr.rule=Host(`${OVERSEERR_HOST}`)"
+      - "traefik.http.routers.overseerr.entrypoints=websecure"
+      - "traefik.http.routers.overseerr.tls=true"
+      - "traefik.http.routers.overseerr.tls.certresolver=cf"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=${OVERSEERR_PORT}"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - default
+      - traefik_net
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

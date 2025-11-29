@@ -1,0 +1,40 @@
+services:
+  crafty:
+    container_name: crafty
+    image: registry.gitlab.com/crafty-controller/crafty-4:latest
+    restart: always
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "${CRAFTY_HTTP_PORT}:8000" # HTTP
+      - "${CRAFTY_HTTPS_PORT}:8443" # HTTPS
+      - "${CRAFTY_DYNMAP_PORT}:8123" # DYNMAP
+      - "${CRAFTY_BEDROCK_PORT}:19132/udp" # BEDROCK
+      - "${CRAFTY_JAVA_PORT}:25565" # MC SERVER PORT RANGE
+    volumes:
+      - ./config/backups:/crafty/backups
+      - ./config/logs:/crafty/logs
+      - ./config/servers:/crafty/servers
+      - ./config/config:/crafty/app/config
+      - ./config/import:/crafty/import
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crafty.rule=Host(`${CRAFTY_HOST}`)"
+      - "traefik.http.routers.crafty.entrypoints=websecure"
+      - "traefik.http.routers.crafty.tls=true"
+      - "traefik.http.routers.crafty.tls.certresolver=cf"
+      - "traefik.http.services.crafty.loadbalancer.server.port=8000"
+      # - "traefik.http.services.crafty.loadbalancer.server.scheme=https"
+      - "traefik.http.middlewares.crafty-sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.crafty.middlewares=crafty-sslheader@docker"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - default
+      - traefik_net
+networks:
+  default:
+    external: true
+    name: ${INFRA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

@@ -1,0 +1,42 @@
+services:
+  whisp:
+    container_name: whisp
+    image: ghcr.io/hotio/whisparr
+    ports:
+      - "${WHISP_PORT}:6969"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${CONFIG_ROOT}/whisp/config:/config
+      - ${MEDIA_ROOT}/other:/other
+      - ${MEDIA_ROOT}/downloads:/downloads
+      - ${MEDIA_ROOT}:/media
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://127.0.0.1:6969/api/v3/system/status?apikey=${WHISPARR_API_KEY} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whisp.rule=Host(`${WHISP_HOST}`)"
+      - "traefik.http.routers.whisp.entrypoints=websecure"
+      - "traefik.http.routers.whisp.tls=true"
+      - "traefik.http.routers.whisp.tls.certresolver=cf"
+      - "traefik.http.services.whisp.loadbalancer.server.port=6969"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - default
+      - traefik_net
+
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

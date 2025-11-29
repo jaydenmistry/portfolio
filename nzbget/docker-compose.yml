@@ -1,0 +1,40 @@
+---
+services:
+  nzbget:
+    image: lscr.io/linuxserver/nzbget:latest
+    container_name: nzbget
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - HTTP_PROXY=socks5://${SOCKS5_IP}:${SOCKS5_PORT}
+      - NO_PROXY=${LAN_IPV4},127.0.0.0/8
+    volumes:
+      - ${CONFIG_ROOT}/nzbget/config:/config
+      - ${MEDIA_ROOT}:/media
+    ports:
+      - ${NZBGET_PORT}:6789
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nzbget.rule=Host(`${NZBGET_HOST}`)"
+      - "traefik.http.routers.nzbget.entrypoints=websecure"
+      - "traefik.http.routers.nzbget.tls=true"
+      - "traefik.http.routers.nzbget.tls.certresolver=cf"
+      - "traefik.http.services.nzbget.loadbalancer.server.port=6789"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6789"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - default
+      - traefik_net
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

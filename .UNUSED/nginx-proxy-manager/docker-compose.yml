@@ -1,0 +1,39 @@
+services:
+  app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "82:80" # HTTP
+      - "81:81" # Web UI
+      - "445:443" # HTTPS
+    environment:
+      TZ: America/New_York
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "10192004"
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+      
+  db:
+    image: mariadb:latest
+    container_name: npm-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "10192004"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "10192004"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      
+networks:
+  default:
+    external: true
+    name: ${TRAEFIK_NET}

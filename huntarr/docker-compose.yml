@@ -1,0 +1,35 @@
+services:
+  huntarr:
+    image: huntarr/huntarr:latest
+    container_name: huntarr
+    restart: always
+    ports:
+      - "${HUNTARR_PORT}:9705"
+    volumes:
+      - ${CONFIG_ROOT}/huntarr/config:/config
+    environment:
+      - TZ=${TZ}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.huntarr.rule=Host(`${HUNTARR_HOST}`)"
+      - "traefik.http.routers.huntarr.entrypoints=websecure"
+      - "traefik.http.routers.huntarr.tls=true"
+      - "traefik.http.routers.huntarr.tls.certresolver=cf"
+      - "traefik.http.services.huntarr.loadbalancer.server.port=9705"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9705/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+    networks:
+      - default
+      - traefik_net
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

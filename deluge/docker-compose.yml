@@ -1,0 +1,36 @@
+---
+services:
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - ${CONFIG_ROOT}/deluge/config:/config
+      - ${MEDIA_ROOT}:/media
+    ports:
+      - ${DELUGE_WEBUI_PORT}:8112
+      - ${DELUGE_TORRENTING_PORT}:6882
+      - ${DELUGE_TORRENTING_PORT}:6882/udp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.deluge.rule=Host(`${DELUGE_HOST}`)"
+      - "traefik.http.routers.deluge.entrypoints=websecure"
+      - "traefik.http.routers.deluge.tls=true"
+      - "traefik.http.routers.deluge.tls.certresolver=cf"
+      - "traefik.http.services.deluge.loadbalancer.server.port=${DELUGE_WEBUI_PORT}"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    restart: unless-stopped
+    networks:
+      - default
+      - traefik_net
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

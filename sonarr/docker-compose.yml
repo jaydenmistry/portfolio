@@ -1,0 +1,43 @@
+---
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/sonarr/config:/config
+      - ${MEDIA_ROOT}/tv:/tv
+      - ${MEDIA_ROOT}/anime:/anime
+      - ${MEDIA_ROOT}/downloads:/downloads
+      - ${MEDIA_ROOT}:/media
+    ports:
+      - ${SONARR_PORT}:8989
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://127.0.0.1:8989/api/v3/system/status?apikey=${SONARR_API_KEY} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`${SONARR_HOST}`)"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.routers.sonarr.tls.certresolver=cf"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    restart: unless-stopped
+    networks:
+      - default
+      - traefik_net
+
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

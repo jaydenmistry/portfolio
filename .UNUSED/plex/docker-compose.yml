@@ -1,0 +1,36 @@
+---
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - VERSION=docker
+      - PLEX_CLAIM=claim-ZcsT9zgKdys7wDwLCbQ6
+    ports:
+      - "${PLEX_PORT}:32400/tcp"
+    volumes:
+      - ${CONFIG_ROOT}/plex/config:/config
+      - ${MEDIA_ROOT}:/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overseerr.rule=Host(`${PLEX_HOST}`)"
+      - "traefik.http.routers.overseerr.entrypoints=websecure"
+      - "traefik.http.routers.overseerr.tls=true"
+      - "traefik.http.routers.overseerr.tls.certresolver=cf"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=${PLEX_PORT}"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    restart: unless-stopped
+    networks:
+      - default
+      - traefik_net
+      
+networks:
+  default:
+    external: true
+    name: ${MEDIA_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

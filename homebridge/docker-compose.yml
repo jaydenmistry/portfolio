@@ -1,0 +1,28 @@
+services:
+  homebridge:
+    image: homebridge/homebridge:latest
+    container_name: homebridge
+    restart: always
+    network_mode: host
+    volumes:
+      - ${CONFIG_ROOT}/homebridge:/homebridge
+    logging:
+      driver: json-file
+      options:
+        max-size: "100mb"
+        max-file: "1"
+    environment:
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail localhost:8581 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 300s
+      timeout: 2s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homebridge.rule=Host(`${HOMEBRIDGE_HOST}`)"
+      - "traefik.http.routers.homebridge.entrypoints=websecure"
+      - "traefik.http.routers.homebridge.tls=true"
+      - "traefik.http.routers.homebridge.tls.certresolver=cf"
+      - "traefik.http.services.homebridge.loadbalancer.server.port=8581"
