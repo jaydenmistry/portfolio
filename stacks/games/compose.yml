@@ -1,0 +1,41 @@
+services:
+
+  crafty:
+    container_name: crafty
+    image: registry.gitlab.com/crafty-controller/crafty-4:latest
+    restart: always
+    environment:
+      - TZ=${TZ}
+    ports:
+    #   - "${CRAFTY_HTTP_PORT}:8000" # HTTP
+    #   - "${CRAFTY_HTTPS_PORT}:8443" # HTTPS
+      - "${CRAFTY_DYNMAP_PORT}:8123" # DYNMAP
+      - "${CRAFTY_BEDROCK_PORT}:19132/udp" # BEDROCK
+      - "${CRAFTY_JAVA_PORT}:25565" # MC SERVER PORT RANGE
+    volumes:
+      - ${CONFIG_ROOT}/crafty/config/backups:/crafty/backups
+      - ${CONFIG_ROOT}/crafty/config/logs:/crafty/logs
+      - ${CONFIG_ROOT}/crafty/config/servers:/crafty/servers
+      - ${CONFIG_ROOT}/crafty/config/config:/crafty/app/config
+      - ${CONFIG_ROOT}/crafty/config/import:/crafty/import
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crafty.rule=Host(`${CRAFTY_HOST}`)"
+      - "traefik.http.routers.crafty.entrypoints=websecure"
+      - "traefik.http.routers.crafty.tls=true"
+      - "traefik.http.routers.crafty.tls.certresolver=cf"
+      - "traefik.http.services.crafty.loadbalancer.server.port=8000"
+      # - "traefik.http.services.crafty.loadbalancer.server.scheme=https"
+      - "traefik.http.middlewares.crafty-sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.crafty.middlewares=crafty-sslheader@docker"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - games_net
+      - traefik_net
+
+networks:
+  games_net:
+    name: ${GAMES_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

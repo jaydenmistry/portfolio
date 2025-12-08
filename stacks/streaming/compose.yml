@@ -1,0 +1,68 @@
+services:
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - JELLYFIN_PublishedServerUrl=https://${JELLYFIN_HOST}
+    volumes:
+      - ${CONFIG_ROOT}/jellyfin/config:/config
+      - ${MEDIA_ROOT}/movies:/movies
+      - ${MEDIA_ROOT}/downloads:/downloads
+      - ${MEDIA_ROOT}/tv:/tv
+      - ${MEDIA_ROOT}/other:/other
+      - ${MEDIA_ROOT}/anime:/anime
+      - ${MEDIA_ROOT}:/media
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    group_add:
+      - "44" # video
+      - "993" # render
+    # ports:
+    #   - ${JELLYFIN_PORT}:8096
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_HOST}`)"
+      - "traefik.http.routers.jellyfin.entrypoints=websecure"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.routers.jellyfin.tls.certresolver=cf"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    restart: unless-stopped
+    networks:
+      - streaming_net
+      - traefik_net
+
+  emby:
+    image: lscr.io/linuxserver/emby:latest
+    container_name: emby
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/emby/config:/config
+      - ${MEDIA_ROOT}:/media
+    # ports:
+    #   - ${EMBY_PORT}:8096
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.emby.rule=Host(`${EMBY_HOST}`)"
+      - "traefik.http.routers.emby.entrypoints=websecure"
+      - "traefik.http.routers.emby.tls=true"
+      - "traefik.http.routers.emby.tls.certresolver=cf"
+      - "traefik.http.services.emby.loadbalancer.server.port=8096"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - streaming_net
+      - traefik_net
+    restart: unless-stopped
+networks:
+  streaming_net:
+    name: ${STREAMING_NET}
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}
