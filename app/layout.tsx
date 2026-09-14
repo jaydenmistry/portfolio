@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import { site, experience } from '@/lib/data';
 
@@ -43,6 +44,9 @@ const personJsonLd = {
   ...(education ? { alumniOf: { '@type': 'CollegeOrUniversity', name: education.org } } : {}),
 };
 
+const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
+const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+
 export const viewport: Viewport = {
   themeColor: '#0b0e14',
 };
@@ -62,6 +66,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         {children}
+        {umamiSrc && umamiWebsiteId ? (
+          <Script
+            src={umamiSrc}
+            data-website-id={umamiWebsiteId}
+            data-domains="jmistry.com"
+            strategy="afterInteractive"
+          />
+        ) : null}
       </body>
     </html>
   );

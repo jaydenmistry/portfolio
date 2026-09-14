@@ -1,0 +1,89 @@
+# Umami analytics for jmistry.com — self-hosted, cookieless, no consent banner needed.
+# 1. Either paste the two services + networks/volumes blocks into the existing
+#    ~/docker/stacks/apps/compose.yml, or drop this file into its own stack dir as compose.yml.
+# 2. Create a sibling .env with UMAMI_APP_SECRET and UMAMI_DB_PASSWORD (generators below).
+# 3. `docker compose up -d`, then wait for the umami container to report healthy.
+# 4. Open https://analytics.jmistry.com and log in with admin / umami — change that password at once.
+# 5. Settings > Websites > Add website (domain jmistry.com); copy the generated Website ID
+#    into NEXT_PUBLIC_UMAMI_WEBSITE_ID on the portfolio container, and set
+#    NEXT_PUBLIC_UMAMI_SRC=https://analytics.jmistry.com/script.js
+#
+# Every line marked "# ASSUMED — match apps/compose.yml" is a Traefik convention guessed from
+# upstream defaults. Check each against the existing stack before the first deploy.
+
+services:
+  umami:
+    # Docs recommend the postgresql-latest tag (docs.umami.is/docs/install publishes it as
+    # docker.umami.is/umami-software/umami:postgresql-latest; ghcr.io is the same upstream image).
+    # Pin to a postgresql-vX.Y.Z tag once you are happy with a version.
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    restart: unless-stopped
+    init: true
+    environment:
+      # UMAMI_DB_PASSWORD is embedded in a URL, so keep it URL-safe (alphanumeric is
+      # simplest): openssl rand -hex 24
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD}@umami-db:5432/umami
+      DATABASE_TYPE: postgresql
+      # Generate once and keep it stable, or every session token is invalidated on restart.
+      # Umami's docs suggest: openssl rand -hex 32   (openssl rand -base64 32 works too —
+      # the value is just a random string). Put the result in .env as UMAMI_APP_SECRET=...
+      APP_SECRET: ${UMAMI_APP_SECRET}
+      DISABLE_TELEMETRY: "1"
+      # Uncomment only if you plan to turn on two-factor auth (Umami v3.3.0+).
+      # Must be a 64-char hex string: openssl rand -hex 32
+      # TWO_FACTOR_ENCRYPTION_KEY: ${UMAMI_2FA_KEY}
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/heartbeat || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - proxy
+      - umami-internal
+    labels:
+      - "traefik.enable=true"
+      # >>> HOSTNAME — the only place the analytics domain appears in this file <<<
+      - "traefik.http.routers.umami.rule=Host(`analytics.jmistry.com`)"
+      - "traefik.http.routers.umami.entrypoints=websecure" # ASSUMED — match apps/compose.yml
+      - "traefik.http.routers.umami.tls=true" # ASSUMED — match apps/compose.yml
+      - "traefik.http.routers.umami.tls.certresolver=letsencrypt" # ASSUMED — match apps/compose.yml
+      - "traefik.http.routers.umami.service=umami"
+      - "traefik.http.services.umami.loadbalancer.server.port=3000"
+      # If the apps stack pins Traefik to one docker network, this must be set to the same one.
+      - "traefik.docker.network=proxy" # ASSUMED — match apps/compose.yml
+
+  umami-db:
+    image: postgres:16-alpine
+    container_name: umami-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD}
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    # Deliberately NOT on the proxy network — the database is reachable only from umami.
+    networks:
+      - umami-internal
+
+volumes:
+  umami-db-data:
+
+networks:
+  # The shared network Traefik already watches.
+  proxy: # ASSUMED — match apps/compose.yml
+    external: true
+  umami-internal:
+    driver: bridge
+    internal: true
