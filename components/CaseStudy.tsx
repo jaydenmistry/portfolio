@@ -91,6 +91,14 @@ function Screenshot({ project }: { project: Project }) {
       )}
       <figcaption className="font-mono text-meta text-graphite-2">
         fig. {fig.number}. {fig.caption}
+        {fig.src ? (
+          <>
+            {' '}
+            <a className="ulink text-graphite" href={fig.src}>
+              View full size<span aria-hidden> ↗</span>
+            </a>
+          </>
+        ) : null}
       </figcaption>
     </figure>
   );
