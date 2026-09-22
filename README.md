@@ -16,11 +16,12 @@ pnpm dev        # http://localhost:3000
 pnpm build      # production build
 ```
 
-## LAN preview (WSL)
+## LAN and Tailscale preview (WSL)
 
 Serve the production build to other computers on the local network. WSL runs
-in NAT mode, so Windows has to forward the port; nothing is exposed beyond the
-local subnet, and no router forwarding or tunnel is involved.
+in NAT mode, so Windows has to forward the port. The default setup restricts
+access to the local subnet; optional Tailscale access is described below.
+No router forwarding or public tunnel is involved.
 
 1. In WSL: `pnpm preview:lan` (add `--build` to rebuild first). It listens on
    `0.0.0.0:3100`; set `PORT` to change it.
@@ -34,6 +35,21 @@ local subnet, and no router forwarding or tunnel is involved.
    inbound firewall rule scoped to the Private profile, the LAN adapter and
    the local subnet, then prints the URL to open. Run it again after WSL
    restarts, because the WSL IP changes. Undo with `-Remove`.
+
+For access from other devices on your Tailscale network, also run this in
+elevated PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows-lan-preview.ps1 -Tailscale
+```
+
+This adds a separate listener on the Windows Tailscale IPv4 address and keeps
+LAN access intact. The firewall rule allows TCP on the preview port only through
+the Tailscale adapter, from `100.64.0.0/10` (Tailscale's peer IPv4 range).
+Your tailnet access policy still applies. Open the printed URL from another
+Tailscale-connected device; a host-side check cannot confirm peer access.
+Run both setup commands after WSL restarts. Use `-Tailscale -Remove` to remove
+only Tailscale access; plain `-Remove` removes only LAN access.
 
 ## Docker
 
