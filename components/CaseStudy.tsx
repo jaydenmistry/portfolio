@@ -67,8 +67,18 @@ function Screenshot({ project }: { project: Project }) {
   return (
     <figure className="m-0 flex flex-col gap-3">
       {fig.src ? (
+        // A plain <img>: the capture is pre-sized, and the standalone build
+        // doesn't ship an image optimizer. Fixed dimensions prevent layout shift.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={fig.src} alt={fig.alt} className="block w-full border border-rule" />
+        <img
+          src={fig.src}
+          alt={fig.alt}
+          width={1600}
+          height={1000}
+          loading="lazy"
+          decoding="async"
+          className="block aspect-[16/10] h-auto w-full border border-rule object-cover object-top"
+        />
       ) : (
         <div
           role="img"

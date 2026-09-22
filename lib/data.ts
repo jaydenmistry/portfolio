@@ -46,7 +46,11 @@ export type Project = {
   status?: string;
   live?: { href: string; label: string };
   repo?: string;
-  /** Screenshot slot. `src` stays empty until a real capture exists. */
+  /**
+   * Screenshot slot. `src` stays empty until a real capture exists; set it to a
+   * path under /public, e.g. '/images/spotr-pipeline.webp'. Captures are shown
+   * in a 16:10 frame, cropped from the top if the ratio differs.
+   */
   figure?: { number: string; src?: string; alt: string; caption: string };
 };
 
