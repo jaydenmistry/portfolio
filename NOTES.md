@@ -2,6 +2,11 @@
 
 ## Phase 1 — redesign
 
+Status (2026-09-22): implemented on `redesign/blueprint`, not deployed. Look and
+rules are in `DESIGN.md`. Waiting on a real Spotr screenshot (16:10, e.g.
+1640 × 1024, set `figure.src` in `lib/data.ts`) and any public repo URLs.
+Lighthouse not re-run yet. The Open Graph image uses the default font, not Plex.
+
 Goal: stop the site reading as AI-generated. The problem is design decisions,
 not tooling; the Next.js + Docker stack stays.
 

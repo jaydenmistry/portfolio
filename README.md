@@ -1,11 +1,12 @@
 # jmistry.com — Portfolio
 
-Personal portfolio of **Jayden Mistry** — software engineer focused on full-stack
-products, backend systems, and production-minded infrastructure.
+Personal portfolio of **Jayden Mistry**, a software engineer who builds full-stack
+products and runs the infrastructure they ship on.
 
 Built with Next.js (App Router), React, TypeScript, and Tailwind CSS. No animation
-libraries — motion is CSS-driven, triggered by a small IntersectionObserver helper,
-and fully disabled under `prefers-reduced-motion`.
+libraries: diagrams draw with CSS, triggered by a small IntersectionObserver hook,
+and render fully drawn under `prefers-reduced-motion`. Visual rules live in
+[`DESIGN.md`](DESIGN.md).
 
 ## Develop
 
@@ -31,14 +32,18 @@ The compose service definition lives in the homelab stack
 ## Editing content
 
 Everything editable lives in [`lib/data.ts`](lib/data.ts): site identity and links,
-hero copy, the hero system panel, projects, the infrastructure topology (nodes,
-edges, descriptions), skill groups, metrics, experience entries, and contact copy.
+hero copy, projects, the infrastructure topology (nodes, edges, descriptions),
+skill groups, experience entries, and contact copy. Optional project fields
+(role, timeline, status, repo) are simply omitted from the page when unset.
 Components read from that file — you should rarely need to touch them for copy changes.
 
 ## Checklist before deploying
 
-- [ ] Drop your resume PDF at `public/resume.pdf` (all "Download Resume" buttons point there).
-- [ ] Set the real GitHub repo URL for the key-value store project in `lib/data.ts`.
+- [ ] Drop your resume PDF at `public/resume.pdf` (every Résumé link points there).
+- [ ] Add a Spotr screenshot: set `figure.src` on the Spotr project in `lib/data.ts`
+      (a 16:10 capture of the acquisition pipeline, e.g. 1640 × 1024, in `public/`).
+      Until then the page shows a labeled placeholder.
+- [ ] Add repo URLs (`repo`) for the key-value store and chat projects if public.
 - [x] Contact form submits to Formspree (form `xwvgkeda`, default in `lib/data.ts`;
       `NEXT_PUBLIC_FORMSPREE_ID` overrides it at build time).
 - [ ] If the site won't live at `https://jmistry.com`, update `metadataBase` and the

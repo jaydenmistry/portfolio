@@ -19,40 +19,12 @@ export const site = {
     'I’m a CS student at UGA and co-founder of Spotr, a platform that helps dealerships find private-party vehicles. I also administer the production environment for Kappa Theta Pi, on Proxmox, Docker, Traefik and Authentik.',
 } as const;
 
-export const systemPanel = [
-  { key: 'Engineer', value: 'Jayden Mistry' },
-  { key: 'Focus', value: 'Backend + Infrastructure' },
-  { key: 'Environment', value: 'Production-minded' },
-  { key: 'Stack', value: 'TypeScript · Go · Docker · Linux' },
-  { key: 'Status', value: 'Building', status: 'ok' as const },
-  { key: 'Uptime', value: '99.99% curiosity' },
-  { key: 'Location', value: 'Georgia, USA' },
-];
-
 export const navItems = [
   { label: 'Work', href: '#work' },
   { label: 'Infrastructure', href: '#infrastructure' },
   { label: 'Experience', href: '#experience' },
   { label: 'Contact', href: '#contact' },
 ] as const;
-
-export const principles = [
-  {
-    title: 'Build end to end',
-    body: 'I work across product interfaces, backend services, deployment pipelines, and operational tooling.',
-    icon: 'layers' as const,
-  },
-  {
-    title: 'Design for reliability',
-    body: 'I care about observability, secure defaults, recoverability, and systems that hold up outside a local development environment.',
-    icon: 'shield' as const,
-  },
-  {
-    title: 'Learn by operating',
-    body: 'My homelab and infrastructure work let me learn through real deployments, failures, monitoring, and iteration.',
-    icon: 'terminal' as const,
-  },
-];
 
 export type Project = {
   number: string;
@@ -209,15 +181,6 @@ export const topologyEdges: { from: string; to: string; active?: boolean; via?: 
   { from: 'db', to: 'proxmox', via: 80 },
 ];
 
-export const solvingList = [
-  'Turning manual deployments into repeatable workflows',
-  'Debugging routing, DNS, certificates, and service connectivity',
-  'Designing practical self-hosted infrastructure',
-  'Improving security without making systems painful to use',
-  'Building developer-friendly tooling and internal platforms',
-  'Learning through real operations, incidents, and iterations',
-];
-
 export type SkillGroup = {
   id: string;
   label: string;
@@ -262,15 +225,6 @@ export const skillGroups: SkillGroup[] = [
     blurb: 'Version control, CI/CD, security hardening, and observability as defaults — not afterthoughts.',
     items: ['Git', 'GitHub Actions', 'CI/CD', 'Networking', 'Security Hardening', 'Observability', 'System Design'],
   },
-];
-
-export const metrics = [
-  { value: '10+', label: 'services deployed', note: 'websites, docs, auth, game servers, tooling' },
-  { value: '2', label: 'infrastructure environments', note: 'Atlanta datacenter + personal homelab' },
-  { value: '20+', label: 'technologies in active use', note: 'across product and platform work' },
-  { value: '4', label: 'projects shipped', note: 'full-stack, systems, and infrastructure' },
-  { value: '99.99%', label: 'curiosity', note: 'the only uptime figure I’ll claim' },
-  { value: '∞', label: 'always learning', note: 'currently: Raft consensus internals' },
 ];
 
 export type ExperienceItem = {
