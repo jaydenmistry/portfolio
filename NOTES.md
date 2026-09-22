@@ -3,14 +3,12 @@
 ## Phase 1 — redesign
 
 Status (2026-09-22): implemented on `redesign/blueprint`, not deployed. Look and
-rules are in `DESIGN.md`. Waiting on a real Spotr screenshot (16:10, 1600 × 1000, at
-`public/images/spotr-pipeline.webp`, then set `figure.src` in `lib/data.ts`) and
-any public repo URLs.
+rules are in `DESIGN.md`. Spotr screenshot is live at `public/spotr-pipeline.webp`. Waiting on any public
+repo URLs.
 Lighthouse 12.8.2 on the branch build (2026-09-22): mobile 97–99 / 100 / 100 /
 100, desktop 100 / 100 / 100 / 100, 227 KiB. Remaining flags are framework-level
-(Next's CSS chunk, polyfills in the framework bundle). The résumé PDF still says
-May 2027. Its LaTeX source (pdfTeX, TeX Live 2025) isn't in the repo, so
-the user re-exports it and replaces `public/resume.pdf`.
+(Next's CSS chunk, polyfills in the framework bundle). The résumé PDF was
+re-exported by the user; it reads "Fall 2027" while the site says December 2027.
 
 Goal: stop the site reading as AI-generated. The problem is design decisions,
 not tooling; the Next.js + Docker stack stays.

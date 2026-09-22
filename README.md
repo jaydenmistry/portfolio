@@ -59,13 +59,10 @@ Components read from that file — you should rarely need to touch them for copy
 ## Checklist before deploying
 
 - [ ] Drop your resume PDF at `public/resume.pdf` (every Résumé link points there).
-- [ ] Add the Spotr screenshot: save a 16:10 capture of the acquisition pipeline
-      (1600 × 1000, WebP or PNG, ideally under 300 KB) as
-      `public/images/spotr-pipeline.webp`, then set
-      `src: '/images/spotr-pipeline.webp'` in the Spotr `figure` in `lib/data.ts`.
-      Until then the page shows a labeled placeholder.
-- [ ] Replace `public/resume.pdf` with a re-export that says December 2027. Its
-      LaTeX source isn't in this repo.
+- [x] Spotr screenshot: `public/spotr-pipeline.webp` (1600 × 1000, 16:10), set as
+      `figure.src` in `lib/data.ts`. Replace the file to update it; keep 16:10 or
+      it is cropped from the top. Removing `src` brings back the placeholder.
+- [x] Résumé re-exported to `public/resume.pdf`. Its LaTeX source isn't in this repo.
 - [ ] Add repo URLs (`repo`) for the key-value store and chat projects if public.
 - [x] Contact form submits to Formspree (form `xwvgkeda`, default in `lib/data.ts`;
       `NEXT_PUBLIC_FORMSPREE_ID` overrides it at build time).

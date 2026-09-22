@@ -48,7 +48,7 @@ export type Project = {
   repo?: string;
   /**
    * Screenshot slot. `src` stays empty until a real capture exists; set it to a
-   * path under /public, e.g. '/images/spotr-pipeline.webp'. Captures are shown
+   * path under /public, e.g. '/spotr-pipeline.webp'. Captures are shown
    * in a 16:10 frame, cropped from the top if the ratio differs.
    */
   figure?: { number: string; src?: string; alt: string; caption: string };
@@ -81,7 +81,8 @@ export const projects: Project[] = [
     live: { href: 'https://spotrcars.com', label: 'spotrcars.com' },
     figure: {
       number: '02',
-      alt: 'Spotr acquisition pipeline board',
+      src: '/spotr-pipeline.webp',
+      alt: 'Spotr acquisition pipeline board with New Leads, Contacted and Appraisal columns of vehicle listings',
       caption: 'The drag-and-drop acquisition pipeline.',
     },
   },
