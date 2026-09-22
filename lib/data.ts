@@ -13,7 +13,7 @@ export const site = {
   linkedin: 'https://www.linkedin.com/in/jayden-mistry',
   resumePath: '/resume.pdf', // drop your resume PDF into /public/resume.pdf
   availability: 'Open to software engineering internships',
-  education: 'Computer Science, University of Georgia · May 2027',
+  education: 'Computer Science, University of Georgia · December 2027',
   headline: 'I build full-stack products, and I run the infrastructure they ship on.',
   subhead:
     'I’m a CS student at UGA and co-founder of Spotr, a platform that helps dealerships find private-party vehicles. I also administer the production environment for Kappa Theta Pi, on Proxmox, Docker, Traefik and Authentik.',
@@ -254,7 +254,7 @@ export const experience: ExperienceItem[] = [
     org: 'University of Georgia',
     role: 'B.S. Computer Science',
     location: 'Athens, GA',
-    dates: 'Expected May 2027',
+    dates: 'Expected December 2027',
     body: 'Pursuing a Computer Science degree while developing practical depth in systems, infrastructure, backend engineering, and full-stack software development.',
   },
 ];

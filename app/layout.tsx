@@ -21,10 +21,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://jmistry.com'),
   title: 'Jayden Mistry | Software Engineer',
   description:
-    'Jayden Mistry is a Computer Science student at the University of Georgia who builds full-stack products and runs the infrastructure they ship on.',
+    'Jayden Mistry is a Computer Science student at the University of Georgia, graduating December 2027, who builds full-stack products and runs the infrastructure they ship on.',
   openGraph: {
     title: 'Jayden Mistry | Software Engineer',
-    description: 'Full-stack products, and the infrastructure they ship on.',
+    description: 'UGA Computer Science, December 2027. Full-stack products, and the infrastructure they ship on.',
     url: 'https://jmistry.com',
     siteName: 'Jayden Mistry',
     type: 'website',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Jayden Mistry | Software Engineer',
-    description: 'Full-stack products, and the infrastructure they ship on.',
+    description: 'UGA Computer Science, December 2027. Full-stack products, and the infrastructure they ship on.',
   },
 };
 
