@@ -10,6 +10,9 @@ and render fully drawn under `prefers-reduced-motion`. Visual rules live in
 
 ## Develop
 
+Use Node.js 22.13 or newer within the Node 22 release line, and pnpm 10.
+CI and the Docker image also use Node 22.
+
 ```bash
 pnpm install
 pnpm dev        # http://localhost:3000
@@ -71,6 +74,26 @@ hero copy, projects, the infrastructure topology (nodes, edges, descriptions),
 skill groups, experience entries, and contact copy. Optional project fields
 (role, timeline, status, repo) are simply omitted from the page when unset.
 Components read from that file — you should rarely need to touch them for copy changes.
+
+The Contact section includes an inline Calendly scheduler. Set its link with
+`contact.calendlyUrl`; the script loads as the section approaches the viewport.
+A fixed-size loading placeholder prevents the scheduler from moving surrounding
+content. The direct Calendly link remains available if the embed cannot load.
+
+## Analytics setup
+
+The Umami stack matches the supplied hp-envy Traefik settings. See
+[`deploy/umami/README.md`](deploy/umami/README.md) for the separate analytics stack,
+the portfolio build-argument override, and activation checks. Analytics remain
+disabled until the tracker URL and website ID are supplied at build time.
+
+## Tooling compatibility
+
+ESLint remains pinned to 9.39.5 pending compatible React and accessibility
+plugins. As of 2026-09-22, the registry releases `eslint-plugin-react@7.37.5`
+and `eslint-plugin-jsx-a11y@6.10.2` do not declare ESLint 10 support. ESLint 9
+is end-of-life; revisit the migration when the plugin stack supports 10,
+rather than overriding its peer requirements or dropping checks.
 
 ## Checklist before deploying
 

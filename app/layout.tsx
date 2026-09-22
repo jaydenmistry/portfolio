@@ -50,7 +50,7 @@ const personJsonLd = {
   email: site.email,
   homeLocation: site.location,
   sameAs: [site.github, site.linkedin],
-  ...(education ? { alumniOf: { '@type': 'CollegeOrUniversity', name: education.org } } : {}),
+  ...(education ? { affiliation: { '@type': 'CollegeOrUniversity', name: education.org } } : {}),
 };
 
 const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;

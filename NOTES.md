@@ -1,74 +1,65 @@
 # Working notes
 
-## Phase 1 — redesign
+## Current scope — 2026-09-22
 
-Status (2026-09-22): implemented on `redesign/blueprint`, not deployed. Look and
-rules are in `DESIGN.md`. Spotr screenshot is live at `public/spotr-pipeline.webp`. Waiting on any public
-repo URLs.
-Lighthouse 12.8.2 on the branch build (2026-09-22): mobile 97–99 / 100 / 100 /
-100, desktop 100 / 100 / 100 / 100, 227 KiB. Remaining flags are framework-level
-(Next's CSS chunk, polyfills in the framework bundle). The résumé PDF was
-re-exported by the user; it reads "Fall 2027" while the site says December 2027.
+The blueprint redesign is approved. Keep its layout and follow DESIGN.md.
+This pass covers Calendly, Umami setup and maintenance. The user deferred
+separate project case-study pages and technical articles; do not add them.
+Do not push, merge or deploy without the user's next instruction.
 
-Goal: stop the site reading as AI-generated. The problem is design decisions,
-not tooling; the Next.js + Docker stack stays.
+## Complete locally
 
-Order: Phase 1 (redesign) before Phase 2 (Calendly), so the embed lands in the
-restructured contact section rather than the current one.
+- Blueprint design, IBM Plex fonts, readable palette, native scrolling and
+  reduced-motion support. The old JM accessible-name mismatch no longer applies:
+  the navigation link displays and announces Jayden Mistry.
+- Spotr screenshot: public/spotr-pipeline.webp, 1600 x 1000, with a full-size link.
+- Resume: preserve the user's public/resume.pdf exactly. It says Fall 2027;
+  the site says December 2027. The user accepted both wordings.
+- LAN and Tailscale preview access both confirmed by the user. Current URLs:
+  http://10.5.1.23:3100 and http://100.100.22.25:3100.
+  Rerun both Windows setup modes after WSL's IP changes.
+- Calendly: components/Scheduling.tsx, contact.calendlyUrl in lib/data.ts.
+  Uses next/script, loads near the viewport, reserves embed space, supplies
+  blueprint color parameters, hides the cookie banner as previously requested,
+  and keeps a direct-link fallback. Desktop/mobile meeting selection verified;
+  no meeting was booked.
+- CI, Docker and package engines use the Node 22 line; pnpm remains 10.
+- Person JSON-LD uses affiliation for the current university instead of alumniOf.
+- Stray Lighthouse browser profiles moved out of the repo to the Windows temp
+  directory portfolio-lighthouse-archive-20260922. They were not deleted.
 
-Process: design canvas first — 2–3 hero directions plus one project card, varying
-typeface (single vs pairing), neutral warmth, whitespace, intro length, with real
-first-person copy. No component code until a direction is picked.
+## Umami activation remains on hp-envy
 
-### Remove
+The user supplied ~/docker/stacks/apps/compose.yml. Confirmed conventions:
+entrypoint websecure, TLS enabled, resolver cf, external network TRAEFIK_NET.
+deploy/umami/compose.yml now matches these conventions. The separate database
+network and no published ports are retained. A portfolio Compose override supplies
+NEXT_PUBLIC_* values as build args; the existing short build syntax did not.
 
-- Fake-terminal framing: `system_status` panel, `❯ initiate_connection` form
-  styling, footer "System status: operational", blinking `JM_` logo cursor,
-  "Scroll to explore".
-- Metrics section and the illustrative activity bar chart.
-- Dot grid, glow blobs, constellation, and pointer parallax backgrounds.
-- Cyan-on-navy palette; three typefaces (Inter, Space Grotesk, JetBrains Mono).
-- Generic headline copy ("Engineering with ownership.", "Let's build something
-  reliable.").
+Follow deploy/umami/README.md. Still needed on the host: the actual TRAEFIK_NET
+value, generated secrets, analytics DNS, starting Umami, changing its initial
+password, creating the website ID, then an approved portfolio rebuild/deploy.
+No remote host access was supplied and no service was started from this session.
+Compose files were checked against the upstream Compose JSON schema, not run
+through Docker Compose locally (Docker is not installed in this environment).
 
-### Keep
+## Maintenance and release notes
 
-- The infrastructure topology diagram — it is real and differentiating.
-- The content model in `lib/data.ts`.
+- Current validation: full pnpm lint and production build (including TypeScript)
+  passed. Calendly meeting options and the calendar were inspected at desktop
+  and 390px mobile widths, with no horizontal page overflow. No fresh Lighthouse
+  score is claimed for the Calendly build.
 
-### Structure
-
-Hero → Selected work → Infrastructure → Experience → Contact. Fold Stack into
-Experience; fold the About principle cards into the hero paragraph.
-
-### Content
-
-- Real screenshots: Spotr UI, Proxmox/Traefik dashboard, KV-store test output.
-- Fix the two project `github` links that point at the profile, not the repos.
-
-### Accessibility — must fix in Phase 1 (pre-existing, not Phase 5 regressions)
-
-Lighthouse accessibility is 96 on both the pre- and post-Phase-5 builds because of:
-
-- `text-ink-mute` (`#5f6b7e`) at 12–14px on the dark background measures 3.5:1;
-  WCAG AA needs 4.5:1. Affects the nav availability pill and project/experience
-  meta lines. Fix at the token, not per element.
-- The nav logo `<a aria-label="Jayden Mistry — back to top">` does not contain its
-  visible text "JM" (label-content-name-mismatch). Start the accessible name with
-  the visible text, or drop the aria-label.
-
-Re-run Lighthouse after the redesign; a11y should reach 100. `app/not-found.tsx`
-and `app/error.tsx` use the current tokens and need a light touch once tokens change.
-
-### Baseline (2026-09-15, Lighthouse 12.8, single throttled run)
-
-Mobile 94 / 96 / 100 / 100, desktop 100 / 96 / 100 / 100
-(performance / accessibility / best practices / SEO). Page weight 299 KB.
-The 95→94 mobile delta from Phase 5 is single-run noise; the +12 KB is the error
-boundary and is accepted.
-
-## Phase 2 — Calendly
-
-Inline widget at `https://calendly.com/jaydenmistry`, loaded via `next/script`
-(not a raw `<script>` tag). Theme via URL params; hide the GDPR banner. Lives in
-the redesigned contact section.
+- ESLint 9.39.5 is EOL. Registry versions checked on 2026-09-22:
+  eslint-plugin-react 7.37.5 and eslint-plugin-jsx-a11y 6.10.2 do not declare
+  ESLint 10 support. Leave the current lint checks intact until a compatible
+  migration can be validated; do not force peer overrides.
+- origin/main has 6cc7502 (resume update), absent from redesign/blueprint.
+  The redesign branch's PDF includes GPA 3.84/4.0, while the remote copy omits it.
+  Preserve the approved redesign PDF when reconciling the histories.
+  No merge was performed in this pass.
+- Public KV-store and chat repository URLs remain unknown and hidden.
+- Contact-form delivery is still untested. Do not submit test messages without
+  explicit authorization.
+- Prior agent Lighthouse results (before Calendly): mobile 96-99 performance,
+  other categories 100; desktop all 100. These are historical, not new scores.
