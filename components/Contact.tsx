@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import SectionHeader from '@/components/SectionHeader';
-import Reveal from '@/components/Reveal';
+import SectionLabel from '@/components/SectionLabel';
 import { site, contact } from '@/lib/data';
-import { GitHubIcon, LinkedInIcon, MailIcon, DownloadIcon } from '@/components/icons';
 
 type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
+
+const field =
+  'w-full border border-graphite bg-sheet px-4 py-3 text-base text-graphite placeholder:text-graphite-2 focus:border-signal-ink';
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>('idle');
@@ -22,7 +23,7 @@ export default function Contact() {
     // Without a Formspree ID, fall back to composing an email.
     if (!contact.formspreeId) {
       const subject = encodeURIComponent(`Portfolio contact from ${name}`);
-      const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+      const body = encodeURIComponent(`${message}\n\n${name} (${email})`);
       window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
       return;
     }
@@ -43,94 +44,71 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="mx-auto max-w-content px-5 py-24 md:px-8 md:py-32">
-      <SectionHeader index="07" label="Contact" title={contact.headline} lede={contact.body} />
+    <section id="contact" aria-labelledby="contact-title" className="flex scroll-mt-20 flex-col gap-10 md:gap-12">
+      <SectionLabel number="05" name="Contact" />
 
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
-        <Reveal>
-          <div className="flex flex-col items-start gap-3">
-            <a href={`mailto:${site.email}`} className="btn-primary">
-              <MailIcon width={18} height={18} />
-              {site.email}
-            </a>
-            <a href={site.linkedin} target="_blank" rel="noreferrer" className="btn-secondary">
-              <LinkedInIcon width={18} height={18} />
-              LinkedIn
-            </a>
-            <a href={site.github} target="_blank" rel="noreferrer" className="btn-secondary">
-              <GitHubIcon width={18} height={18} />
-              GitHub
-            </a>
-            <a href={site.resumePath} download className="btn-secondary">
-              <DownloadIcon />
-              Download Resume
-            </a>
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-[4.5rem]">
+        <div className="flex flex-col gap-6">
+          <h3
+            id="contact-title"
+            className="m-0 text-[2.75rem] font-semibold leading-[0.98] tracking-display text-graphite md:text-[4.5rem]"
+          >
+            {contact.headline}
+          </h3>
+          <p className="m-0 max-w-[36rem] text-body text-graphite-2 md:text-body-lg">{contact.body}</p>
+          <ul className="m-0 flex list-none flex-col gap-1 p-0 text-base md:text-lg">
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
+            </li>
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={site.linkedin}>
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={site.github}>
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={site.resumePath}>
+                Résumé (PDF)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="contact-name" className="font-mono text-meta text-graphite">
+              Name
+            </label>
+            <input id="contact-name" name="name" type="text" required autoComplete="name" className={field} />
           </div>
-        </Reveal>
-
-        <Reveal delay={150}>
-          <form onSubmit={handleSubmit} className="card p-6 font-mono text-sm md:p-8" noValidate={false}>
-            <p className="mb-6 text-ink-mute" aria-hidden>
-              <span className="text-accent">❯</span> initiate_connection
+          <div className="flex flex-col gap-2">
+            <label htmlFor="contact-email" className="font-mono text-meta text-graphite">
+              Email
+            </label>
+            <input id="contact-email" name="email" type="email" required autoComplete="email" className={field} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="contact-message" className="font-mono text-meta text-graphite">
+              Message
+            </label>
+            <textarea id="contact-message" name="message" required rows={5} className={`${field} resize-y`} />
+          </div>
+          <div className="flex flex-wrap items-center gap-4 pt-1">
+            <button type="submit" className="btn-dark" disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending…' : 'Send message'}
+            </button>
+            <p role="status" className="m-0 text-[0.9375rem] text-graphite">
+              {status === 'sent' ? 'Message sent. I’ll reply soon.' : null}
+              {status === 'error' ? 'Something went wrong. Please email me directly.' : null}
             </p>
-
-            <div className="space-y-5">
-              <div>
-                <label htmlFor="contact-name" className="mb-1.5 block text-xs uppercase tracking-[0.2em] text-ink-dim">
-                  name
-                </label>
-                <input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  className="w-full rounded-lg border border-line bg-carbon px-4 py-3 text-ink placeholder:text-ink-mute focus:border-accent"
-                  placeholder="Ada Lovelace"
-                />
-              </div>
-              <div>
-                <label htmlFor="contact-email" className="mb-1.5 block text-xs uppercase tracking-[0.2em] text-ink-dim">
-                  email
-                </label>
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  className="w-full rounded-lg border border-line bg-carbon px-4 py-3 text-ink placeholder:text-ink-mute focus:border-accent"
-                  placeholder="you@company.com"
-                />
-              </div>
-              <div>
-                <label htmlFor="contact-message" className="mb-1.5 block text-xs uppercase tracking-[0.2em] text-ink-dim">
-                  message
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  required
-                  rows={4}
-                  className="w-full resize-y rounded-lg border border-line bg-carbon px-4 py-3 text-ink placeholder:text-ink-mute focus:border-accent"
-                  placeholder="What are you building?"
-                />
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center gap-4">
-              <button type="submit" className="btn-primary" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending…' : '[ Send message ]'}
-              </button>
-              <p role="status" className="text-xs text-ink-dim">
-                {status === 'sent' ? <span className="text-ok">Message sent — I’ll reply soon.</span> : null}
-                {status === 'error' ? (
-                  <span className="text-err">Something went wrong — email me directly instead.</span>
-                ) : null}
-              </p>
-            </div>
-          </form>
-        </Reveal>
+          </div>
+        </form>
       </div>
     </section>
   );

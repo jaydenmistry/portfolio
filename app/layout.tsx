@@ -19,12 +19,12 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jmistry.com'),
-  title: 'Jayden Mistry | Software Engineer & Infrastructure Builder',
+  title: 'Jayden Mistry | Software Engineer',
   description:
-    'Portfolio of Jayden Mistry, a software engineer focused on full-stack products, backend systems, and production-minded infrastructure.',
+    'Jayden Mistry is a Computer Science student at the University of Georgia who builds full-stack products and runs the infrastructure they ship on.',
   openGraph: {
-    title: 'Jayden Mistry | Software Engineer & Infrastructure Builder',
-    description: 'Full-stack products, backend systems, and production-minded infrastructure.',
+    title: 'Jayden Mistry | Software Engineer',
+    description: 'Full-stack products, and the infrastructure they ship on.',
     url: 'https://jmistry.com',
     siteName: 'Jayden Mistry',
     type: 'website',
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Jayden Mistry | Software Engineer & Infrastructure Builder',
-    description: 'Full-stack products, backend systems, and production-minded infrastructure.',
+    title: 'Jayden Mistry | Software Engineer',
+    description: 'Full-stack products, and the infrastructure they ship on.',
   },
 };
 
@@ -57,7 +57,7 @@ const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const viewport: Viewport = {
-  themeColor: '#0b0e14',
+  themeColor: '#F3F0E8',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <a
           href="#main"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-carbon transition-transform focus:translate-y-0"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 bg-graphite px-4 py-3 text-[0.9375rem] font-medium text-paper transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>

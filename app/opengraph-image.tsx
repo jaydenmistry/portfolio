@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Jayden Mistry — Software Engineer & Infrastructure Builder';
+export const alt = 'Jayden Mistry, software engineer';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -15,43 +15,25 @@ export default function OpengraphImage() {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: 72,
-          background: '#0b0e14',
-          backgroundImage: 'radial-gradient(circle at 25% 30%, rgba(84,193,255,0.14) 0%, transparent 55%)',
-          color: '#e7eaf1',
-          fontFamily: 'monospace',
+          background: '#F3F0E8',
+          backgroundImage:
+            'linear-gradient(#E7E2D7 1px, transparent 1px), linear-gradient(90deg, #E7E2D7 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          color: '#16181D',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ color: '#54c1ff', fontSize: 34, fontWeight: 700 }}>JM_</div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              border: '1px solid #1e2534',
-              borderRadius: 999,
-              padding: '8px 20px',
-              color: '#9aa5b6',
-              fontSize: 20,
-            }}
-          >
-            <div style={{ width: 10, height: 10, borderRadius: 999, background: '#41cf8e' }} />
-            Open to Software Engineering Internships
+        <div style={{ display: 'flex', fontFamily: 'monospace', fontSize: 24, color: '#4A4F5A' }}>
+          Software engineer · Computer Science, University of Georgia
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+          <div style={{ fontSize: 120, fontWeight: 700, letterSpacing: -5, lineHeight: 1 }}>Jayden Mistry</div>
+          <div style={{ fontSize: 44, lineHeight: 1.2, maxWidth: 980 }}>
+            I build full-stack products, and I run the infrastructure they ship on.
           </div>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          <div style={{ color: '#54c1ff', fontSize: 22, letterSpacing: 6 }}>
-            SOFTWARE ENGINEER / INFRASTRUCTURE
-          </div>
-          <div style={{ fontSize: 64, fontWeight: 700, lineHeight: 1.1, maxWidth: 980 }}>
-            I build products, platforms, and the systems that keep them running.
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5f6b7e', fontSize: 22 }}>
-          <div>Jayden Mistry</div>
-          <div>TypeScript · Go · Docker · Linux</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'monospace', fontSize: 24 }}>
+          <div style={{ width: 14, height: 14, background: '#E2531A' }} />
+          Open to software engineering internships
         </div>
       </div>
     ),

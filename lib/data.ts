@@ -1,20 +1,22 @@
 /**
  * All site content lives here. Edit this file to update copy, projects,
- * skills, experience, and metrics — no component changes required.
+ * skills, and experience. Never add a fact here that isn't true: the UI
+ * omits any optional field that is left out.
  */
 
 export const site = {
   name: 'Jayden Mistry',
-  role: 'Software Engineer / Infrastructure',
+  role: 'Software Engineer',
   location: 'Georgia, USA',
   email: 'jayden@jmistry.com',
   github: 'https://github.com/jaydenmistry',
   linkedin: 'https://www.linkedin.com/in/jayden-mistry',
   resumePath: '/resume.pdf', // drop your resume PDF into /public/resume.pdf
-  availability: 'Open to Software Engineering Internships',
-  headline: 'I build products, platforms, and the systems that keep them running.',
+  availability: 'Open to software engineering internships',
+  education: 'Computer Science, University of Georgia · May 2027',
+  headline: 'I build full-stack products, and I run the infrastructure they ship on.',
   subhead:
-    'I’m Jayden Mistry, a Computer Science student at the University of Georgia focused on backend systems, full-stack products, and infrastructure engineering. I build software end to end — from user-facing applications to containerized deployments, reverse-proxy routing, authentication, and production operations.',
+    'I’m a CS student at UGA and co-founder of Spotr, a platform that helps dealerships find private-party vehicles. I also administer the production environment for Kappa Theta Pi, on Proxmox, Docker, Traefik and Authentik.',
 } as const;
 
 export const systemPanel = [
@@ -28,11 +30,9 @@ export const systemPanel = [
 ];
 
 export const navItems = [
-  { label: 'Home', href: '#home' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'Work', href: '#work' },
   { label: 'Infrastructure', href: '#infrastructure' },
   { label: 'Experience', href: '#experience' },
-  { label: 'Stack', href: '#stack' },
   { label: 'Contact', href: '#contact' },
 ] as const;
 
@@ -56,160 +56,157 @@ export const principles = [
 
 export type Project = {
   number: string;
+  /** Anchor id of the section that tells this project's story. */
+  id: string;
   title: string;
+  /** Shorter title for the work index. */
+  indexTitle: string;
+  kind: string;
   summary: string;
-  engineering: string;
-  tags: string[];
-  github?: string;
-  live?: string;
-  visual: 'spotr' | 'topology' | 'raft' | 'chat';
+  /** What I built, one fact per line. Taken from the project write-up. */
+  built: string[];
+  stack: string[];
+  /** Condensed stack for the work index. */
+  indexStack: string;
+  /** Only facts I have. Missing fields are left out of the UI. */
+  role?: string;
+  timeline?: string;
+  status?: string;
+  live?: { href: string; label: string };
+  repo?: string;
+  /** Screenshot slot. `src` stays empty until a real capture exists. */
+  figure?: { number: string; src?: string; alt: string; caption: string };
 };
 
+/**
+ * Order matters: software first, infrastructure last, matching the page.
+ * The KV store and chat app have no public repo links yet, so none are set.
+ */
 export const projects: Project[] = [
   {
     number: '01',
-    title: 'Spotr — Private-Party Vehicle Intelligence',
+    id: 'spotr',
+    title: 'Spotr',
+    indexTitle: 'Spotr: private-party vehicle intelligence',
+    kind: 'Product, full-stack',
     summary:
-      'A platform that helps dealerships discover, evaluate, and manage private-party vehicle listings.',
-    engineering:
-      'Full-stack Next.js application with TypeScript, Prisma, and NextAuth: aggregation and data workflows across listing sources, a drag-and-drop acquisition pipeline, fit-scoring that ranks opportunities, and a Dockerized deployment to production on self-managed infrastructure.',
-    tags: ['Next.js', 'TypeScript', 'React', 'Prisma', 'Docker', 'Tailwind CSS'],
-    live: 'https://spotrcars.com',
-    visual: 'spotr',
+      'A platform that helps dealerships discover, evaluate and manage private-party vehicle listings.',
+    built: [
+      'Aggregation and data workflows across multiple listing sources.',
+      'A drag-and-drop acquisition pipeline for managing opportunities.',
+      'Fit-scoring that ranks which listings are worth pursuing.',
+      'Authentication with NextAuth and a Prisma data layer.',
+      'A Dockerized production deployment on self-managed infrastructure.',
+    ],
+    stack: ['Next.js', 'TypeScript', 'React', 'Prisma', 'NextAuth', 'Docker', 'Tailwind CSS'],
+    indexStack: 'Next.js · TypeScript · Prisma · Docker',
+    role: 'Co-founder, software engineer',
+    timeline: '2026 to present',
+    live: { href: 'https://spotrcars.com', label: 'spotrcars.com' },
+    figure: {
+      number: '02',
+      alt: 'Spotr acquisition pipeline board',
+      caption: 'The drag-and-drop acquisition pipeline.',
+    },
   },
   {
     number: '02',
-    title: 'Production Infrastructure for Kappa Theta Pi',
+    id: 'kv-store',
+    title: 'Distributed key-value store',
+    indexTitle: 'Distributed key-value store',
+    kind: 'Systems',
     summary:
-      'Administering a real service environment supporting web properties, authentication, documentation, game servers, and internal tools.',
-    engineering:
-      'Proxmox virtualization with LXC-provisioned services, Dockerized applications routed through a Traefik reverse proxy, centralized SSO with Authentik, firewall hardening, SSH-key-only access, and hands-on deployment and operational troubleshooting.',
-    tags: ['Proxmox', 'LXC', 'Docker', 'Traefik', 'Authentik', 'Linux', 'Networking'],
-    visual: 'topology',
+      'A systems project exploring durability, fault injection, replication, and the tradeoffs behind reliable storage.',
+    built: [
+      'Written in Go, with write-ahead-log persistence for crash durability.',
+      'Deployed across LXC containers on a self-managed Proxmox cluster.',
+      'Verified through fault-injection testing: forced node kills and unclean shutdowns.',
+      'Raft leader election and log replication are in progress.',
+    ],
+    stack: ['Go', 'Raft', 'Proxmox', 'LXC'],
+    indexStack: 'Go · write-ahead log · Raft',
+    status: 'Raft in progress',
   },
   {
     number: '03',
-    title: 'Distributed Key-Value Store',
+    id: 'chat',
+    title: 'Real-time chat platform',
+    indexTitle: 'Real-time chat platform',
+    kind: 'Full-stack',
     summary:
-      'A systems project exploring durability, fault injection, replication, and the tradeoffs behind reliable storage.',
-    engineering:
-      'Written in Go with write-ahead-log persistence for crash durability, deployed across LXC containers on a self-managed Proxmox cluster, and verified through fault-injection testing — forced node kills and unclean shutdowns. Raft leader election and log replication in progress.',
-    tags: ['Go', 'Raft', 'Distributed Systems', 'Proxmox', 'LXC', 'Fault Tolerance'],
-    github: 'https://github.com/jaydenmistry',
-    visual: 'raft',
+      'A full-stack messaging application with bidirectional communication and persistent chat workflows.',
+    built: [
+      'A Node.js and Express backend with Socket.IO for real-time, bidirectional messaging.',
+      'REST APIs, authentication and room management.',
+      'Message persistence behind a React interface.',
+    ],
+    stack: ['Node.js', 'Express', 'Socket.IO', 'React', 'REST APIs', 'WebSockets'],
+    indexStack: 'Node.js · Express · Socket.IO · React',
   },
   {
     number: '04',
-    title: 'Real-Time Chat Platform',
+    id: 'infrastructure',
+    title: 'Kappa Theta Pi production infrastructure',
+    indexTitle: 'Kappa Theta Pi production infrastructure',
+    kind: 'Infrastructure',
     summary:
-      'A full-stack messaging application with bidirectional communication and persistent chat workflows.',
-    engineering:
-      'Node.js and Express backend with Socket.IO for real-time bidirectional messaging, REST APIs, authentication, room management, and message persistence behind a React interface.',
-    tags: ['Node.js', 'Express', 'Socket.IO', 'React', 'REST APIs', 'WebSockets'],
-    github: 'https://github.com/jaydenmistry',
-    visual: 'chat',
+      'Administering a real service environment supporting web properties, authentication, documentation, game servers, and internal tools.',
+    built: [
+      'Proxmox virtualization with LXC-provisioned services.',
+      'Dockerized applications routed through a Traefik reverse proxy.',
+      'Centralized single sign-on with Authentik.',
+      'Firewall hardening and SSH-key-only access.',
+      'Hands-on deployment and operational troubleshooting.',
+    ],
+    stack: ['Proxmox', 'LXC', 'Docker', 'Traefik', 'Authentik', 'Linux', 'Networking'],
+    indexStack: 'Proxmox · Docker · Traefik · Authentik',
+    role: 'Infrastructure administrator',
+    timeline: 'Aug 2025 to present',
   },
 ];
 
 export type TopologyNode = {
   id: string;
   label: string;
+  /** Short label shown under the name in the diagram. */
+  sub: string;
   description: string;
-  kind: 'healthy' | 'routing' | 'managed' | 'support';
-  /** Position on the desktop diagram, percentage coordinates. */
+  /** Center position on the desktop diagram, percentage coordinates. */
   x: number;
   y: number;
 };
 
 export const topologyNodes: TopologyNode[] = [
-  {
-    id: 'users',
-    label: 'External Users',
-    description: 'Traffic from members and the public arriving over the internet.',
-    kind: 'support',
-    x: 8,
-    y: 50,
-  },
-  {
-    id: 'traefik',
-    label: 'Traefik',
-    description: 'Reverse proxy and routing layer for external services, with automatic TLS.',
-    kind: 'routing',
-    x: 30,
-    y: 50,
-  },
-  {
-    id: 'auth',
-    label: 'Authentik / SSO',
-    description: 'Centralized access control and single sign-on across all hosted services.',
-    kind: 'managed',
-    x: 52,
-    y: 16,
-  },
-  {
-    id: 'docker',
-    label: 'Docker Apps',
-    description: 'Consistent application packaging and deployment for hosted services.',
-    kind: 'healthy',
-    x: 54,
-    y: 50,
-  },
-  {
-    id: 'internal',
-    label: 'Internal Tools',
-    description: 'Deployment tooling, documentation, and utilities the organization relies on.',
-    kind: 'managed',
-    x: 52,
-    y: 84,
-  },
-  {
-    id: 'lxc',
-    label: 'LXC Services',
-    description: 'Lightweight containers used for isolated service provisioning.',
-    kind: 'healthy',
-    x: 76,
-    y: 30,
-  },
-  {
-    id: 'db',
-    label: 'Databases',
-    description: 'Persistent storage backing applications and internal tooling.',
-    kind: 'support',
-    x: 76,
-    y: 70,
-  },
-  {
-    id: 'monitoring',
-    label: 'Monitoring',
-    description: 'Visibility into service health and operational behavior.',
-    kind: 'routing',
-    x: 30,
-    y: 84,
-  },
-  {
-    id: 'proxmox',
-    label: 'Proxmox Host',
-    description: 'Virtualization layer for isolated, manageable workloads in an Atlanta datacenter.',
-    kind: 'managed',
-    x: 93,
-    y: 50,
-  },
+  { id: 'users', label: 'Users', sub: 'members, public', description: 'Traffic from members and the public arriving over the internet.', x: 8, y: 50 },
+  { id: 'traefik', label: 'Traefik', sub: 'routing, TLS', description: 'Reverse proxy and routing layer for external services, with automatic TLS.', x: 25, y: 50 },
+  { id: 'auth', label: 'Authentik', sub: 'single sign-on', description: 'Centralized access control and single sign-on across all hosted services.', x: 47, y: 15 },
+  { id: 'docker', label: 'Docker apps', sub: 'sites, docs, tools', description: 'Consistent application packaging and deployment for hosted services.', x: 47, y: 50 },
+  { id: 'internal', label: 'Internal tools', sub: 'deploy tooling, docs', description: 'Deployment tooling, documentation, and utilities the organization relies on.', x: 25, y: 85 },
+  { id: 'monitoring', label: 'Monitoring', sub: 'service health', description: 'Visibility into service health and operational behavior.', x: 47, y: 85 },
+  { id: 'lxc', label: 'LXC services', sub: 'isolated workloads', description: 'Lightweight containers used for isolated service provisioning.', x: 70, y: 30 },
+  { id: 'db', label: 'Databases', sub: 'persistent storage', description: 'Persistent storage backing applications and internal tooling.', x: 70, y: 70 },
+  { id: 'proxmox', label: 'Proxmox host', sub: 'Atlanta datacenter', description: 'Virtualization layer for isolated, manageable workloads in an Atlanta datacenter.', x: 90, y: 50 },
 ];
 
-/** Edges between topology nodes, by id. Packets animate along active routes. */
-export const topologyEdges: { from: string; to: string; active?: boolean }[] = [
+/**
+ * Edges between topology nodes, by id. `active` edges carry request traffic
+ * and are drawn in the signal color. `via` is the x (percent) of the vertical
+ * run for an elbow route, so parallel routes don't overlap. `route` overrides
+ * the path entirely, in percent coordinates.
+ */
+export const topologyEdges: { from: string; to: string; active?: boolean; via?: number; route?: string }[] = [
   { from: 'users', to: 'traefik', active: true },
-  { from: 'traefik', to: 'auth', active: true },
+  { from: 'traefik', to: 'auth', active: true, via: 36 },
   { from: 'traefik', to: 'docker', active: true },
   { from: 'traefik', to: 'internal' },
-  { from: 'docker', to: 'lxc' },
-  { from: 'docker', to: 'db', active: true },
-  { from: 'auth', to: 'lxc' },
-  { from: 'internal', to: 'db' },
-  { from: 'lxc', to: 'proxmox' },
-  { from: 'db', to: 'proxmox' },
-  { from: 'monitoring', to: 'docker', active: true },
+  { from: 'monitoring', to: 'docker' },
   { from: 'monitoring', to: 'internal' },
+  { from: 'docker', to: 'lxc', via: 58 },
+  { from: 'docker', to: 'db', active: true, via: 58 },
+  { from: 'auth', to: 'lxc', via: 63 },
+  { from: 'internal', to: 'db', route: 'M25 85 V96 H63 V70 H70' },
+  { from: 'lxc', to: 'proxmox', via: 80 },
+  { from: 'db', to: 'proxmox', via: 80 },
 ];
 
 export const solvingList = [
@@ -289,14 +286,14 @@ export const experience: ExperienceItem[] = [
     org: 'Spotr',
     role: 'Co-Founder / Software Engineer',
     location: 'Remote',
-    dates: '2026 — Present',
+    dates: '2026 to present',
     body: 'Building a full-stack platform that helps dealerships find and manage private-party vehicle opportunities, combining product development, data workflows, and deployment infrastructure.',
   },
   {
     org: 'Kappa Theta Pi',
     role: 'Infrastructure Administrator',
     location: 'Atlanta, GA / Remote',
-    dates: 'Aug 2025 — Present',
+    dates: 'Aug 2025 to present',
     body: 'Administered a Proxmox-based environment supporting organizational websites, documentation, authentication, internal tools, and game-server infrastructure. Provisioned LXC services, deployed containerized applications behind Traefik, strengthened access controls, and improved operational reliability through hands-on system administration.',
   },
   {
@@ -309,8 +306,8 @@ export const experience: ExperienceItem[] = [
 ];
 
 export const contact = {
-  headline: 'Let’s build something reliable.',
-  body: 'I’m looking for opportunities to contribute to teams building thoughtful products, dependable platforms, and systems with real technical depth.',
+  headline: 'Get in touch',
+  body: 'I’m looking for a software engineering internship. Email is the fastest way to reach me, or use the form.',
   /**
    * Formspree form ID (the tail of https://formspree.io/f/<id>). Form IDs are
    * public, so the default is baked in; NEXT_PUBLIC_FORMSPREE_ID overrides it

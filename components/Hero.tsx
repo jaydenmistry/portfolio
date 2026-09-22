@@ -1,97 +1,60 @@
 import { site } from '@/lib/data';
-import HeroBackground from '@/components/HeroBackground';
-import SystemPanel from '@/components/SystemPanel';
-import Reveal from '@/components/Reveal';
-import { GitHubIcon, LinkedInIcon, MailIcon, DownloadIcon } from '@/components/icons';
+import HeroTopology from '@/components/figures/HeroTopology';
 
 export default function Hero() {
   return (
-    <section id="home" className="relative flex min-h-screen items-center overflow-hidden pt-16">
-      <HeroBackground />
+    <section id="top" aria-labelledby="hero-name" className="grid gap-16 xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] xl:gap-[4.5rem]">
+      <div className="flex flex-col gap-5 md:gap-7">
+        <p className="m-0 font-mono text-meta text-graphite-2">
+          Software engineer <span aria-hidden>·</span> {site.education}
+        </p>
+        <h1
+          id="hero-name"
+          className="m-0 text-[clamp(3rem,12.5vw,6.75rem)] xl:text-[clamp(4.5rem,7.6vw,6.75rem)] font-semibold leading-[0.92] tracking-tightest text-graphite"
+        >
+          {site.name}
+        </h1>
+        <p className="m-0 max-w-[40rem] text-[1.375rem] leading-[1.25] tracking-[-0.015em] text-graphite md:text-[2rem] md:leading-[1.22]">
+          {site.headline}
+        </p>
+        <p className="m-0 max-w-[36rem] text-body text-graphite-2 md:text-body-lg">{site.subhead}</p>
 
-      <div className="relative mx-auto grid w-full max-w-content items-center gap-14 px-5 py-24 md:px-8 lg:grid-cols-[1.2fr_0.8fr]">
-        <div>
-          <Reveal>
-            <p className="section-label">Software Engineer / Infrastructure</p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tightest text-ink sm:text-5xl md:text-6xl lg:text-7xl">
-              I build products, platforms, and the systems that{' '}
-              <span className="text-accent">keep them running.</span>
-            </h1>
-          </Reveal>
-
-          <Reveal delay={240}>
-            <p className="mt-7 max-w-xl text-base leading-relaxed text-ink-dim md:text-lg">
-              {site.subhead}
-            </p>
-          </Reveal>
-
-          <Reveal delay={360}>
-            <div className="mt-9 flex flex-wrap items-center gap-4">
-              <a href="#projects" className="btn-primary">
-                View My Work
+        <div className="flex flex-col gap-5 pt-1 md:gap-6 md:pt-2">
+          <div className="flex flex-wrap gap-3">
+            <a href="#work" className="btn-dark">
+              See selected work
+            </a>
+            <a href={site.resumePath} className="btn-line">
+              Résumé (PDF)
+            </a>
+          </div>
+          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-1 p-0 text-[0.9375rem]" aria-label="Elsewhere">
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={site.github}>
+                GitHub
               </a>
-              <a href={site.resumePath} download className="btn-secondary">
-                <DownloadIcon />
-                Download Resume
+            </li>
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={site.linkedin}>
+                LinkedIn
               </a>
-              <a href="#contact" className="btn-ghost">
-                Let’s Connect →
+            </li>
+            <li>
+              <a className="ulink inline-block py-1 text-graphite" href={`mailto:${site.email}`}>
+                {site.email}
               </a>
-            </div>
-          </Reveal>
-
-          <Reveal delay={460}>
-            <ul className="mt-10 flex items-center gap-5" aria-label="Social links">
-              <li>
-                <a
-                  href={site.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="GitHub profile"
-                  className="text-ink-dim transition-colors hover:text-accent"
-                >
-                  <GitHubIcon />
-                </a>
-              </li>
-              <li>
-                <a
-                  href={site.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn profile"
-                  className="text-ink-dim transition-colors hover:text-accent"
-                >
-                  <LinkedInIcon />
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${site.email}`}
-                  aria-label={`Email ${site.name}`}
-                  className="text-ink-dim transition-colors hover:text-accent"
-                >
-                  <MailIcon />
-                </a>
-              </li>
-            </ul>
-          </Reveal>
+            </li>
+          </ul>
+          <p className="m-0 flex items-center gap-3 font-mono text-meta text-graphite">
+            <span aria-hidden className="inline-block h-2 w-2 bg-signal" />
+            {site.availability}
+          </p>
         </div>
-
-        <Reveal delay={520} className="lg:justify-self-end lg:w-full lg:max-w-md">
-          <SystemPanel />
-        </Reveal>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 md:flex" aria-hidden>
-        <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-ink-mute">
-          Scroll to explore
-        </span>
-        <span className="block h-10 w-px overflow-hidden bg-line">
-          <span className="scroll-hint block h-full w-full bg-accent" />
-        </span>
+      {/* Desktop only. On narrower screens the full diagram lives in the infrastructure section. */}
+      <div className="hidden pt-10 xl:block">
+        <HeroTopology />
       </div>
     </section>
   );
