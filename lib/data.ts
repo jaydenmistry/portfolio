@@ -265,6 +265,7 @@ export const experience: ExperienceItem[] = [
 ];
 
 export const contact = {
+  calendlyUrl: 'https://calendly.com/jaydenmistry',
   headline: 'Get in touch',
   body: 'I’m looking for a software engineering internship. Email is the fastest way to reach me, or use the form.',
   /**

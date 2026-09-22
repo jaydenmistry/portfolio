@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import SectionLabel from '@/components/SectionLabel';
+import Scheduling from '@/components/Scheduling';
 import { site, contact } from '@/lib/data';
 
 type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
@@ -110,6 +111,7 @@ export default function Contact() {
           </div>
         </form>
       </div>
+      <Scheduling />
     </section>
   );
 }
