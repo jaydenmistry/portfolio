@@ -5,7 +5,10 @@
 Status (2026-09-22): implemented on `redesign/blueprint`, not deployed. Look and
 rules are in `DESIGN.md`. Waiting on a real Spotr screenshot (16:10, e.g.
 1640 × 1024, set `figure.src` in `lib/data.ts`) and any public repo URLs.
-Lighthouse not re-run yet. The Open Graph image uses the default font, not Plex.
+Lighthouse 12.8.2 on the branch build (2026-09-22): mobile 97–99 / 100 / 100 /
+100, desktop 100 / 100 / 100 / 100, 227 KiB. Remaining flags are framework-level
+(Next's CSS chunk, polyfills in the framework bundle). The résumé PDF still says
+May 2027 and needs re-exporting from its source.
 
 Goal: stop the site reading as AI-generated. The problem is design decisions,
 not tooling; the Next.js + Docker stack stays.

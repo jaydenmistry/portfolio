@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev --turbopack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "preview:lan": "bash scripts/preview-lan.sh"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -16,6 +16,25 @@ pnpm dev        # http://localhost:3000
 pnpm build      # production build
 ```
 
+## LAN preview (WSL)
+
+Serve the production build to other computers on the local network. WSL runs
+in NAT mode, so Windows has to forward the port; nothing is exposed beyond the
+local subnet, and no router forwarding or tunnel is involved.
+
+1. In WSL: `pnpm preview:lan` (add `--build` to rebuild first). It listens on
+   `0.0.0.0:3100`; set `PORT` to change it.
+2. On Windows, in an **elevated** PowerShell from the repo folder:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\windows-lan-preview.ps1
+   ```
+
+   It adds a portproxy from the Windows LAN IP to the current WSL IP and one
+   inbound firewall rule scoped to the Private profile, the LAN adapter and
+   the local subnet, then prints the URL to open. Run it again after WSL
+   restarts, because the WSL IP changes. Undo with `-Remove`.
+
 ## Docker
 
 The Dockerfile builds a self-contained image (Next.js `output: 'standalone'`,
