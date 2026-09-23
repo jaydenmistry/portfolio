@@ -9,3 +9,5 @@ README.md
 **/.DS_Store
 Dockerfile
 .dockerignore
+test-results
+playwright-report

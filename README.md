@@ -20,6 +20,16 @@ pnpm dev        # http://localhost:3000
 pnpm build      # production build
 ```
 
+Smoke tests (Playwright, Chromium) run against the production build and in CI.
+They cover section navigation, the mobile menu, critical links, theme
+persistence and axe accessibility checks in both themes. Calendly and
+Formspree requests are blocked so results never depend on those services.
+
+```bash
+pnpm exec playwright install chromium   # once
+pnpm build && pnpm test:smoke
+```
+
 ## LAN and Tailscale preview (WSL)
 
 Serve the production build to other computers on the local network. WSL runs

@@ -11,6 +11,7 @@
     "dev": "next dev --turbopack",
     "start": "next start",
     "lint": "eslint .",
+    "test:smoke": "playwright test",
     "preview:lan": "bash scripts/preview-lan.sh"
   },
   "dependencies": {
@@ -25,6 +26,8 @@
     }
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
     "@types/node": "22.10.7",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
