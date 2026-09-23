@@ -67,8 +67,8 @@ function Screenshot({ project }: { project: Project }) {
   return (
     <figure className="m-0 flex flex-col gap-3">
       {fig.src ? (
-        // A plain <img>: the capture is pre-sized, and the standalone build
-        // doesn't ship an image optimizer. Fixed dimensions prevent layout shift.
+        // The capture is pre-sized, so serve it directly without optimization.
+        // Fixed dimensions prevent layout shift.
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={fig.src}
