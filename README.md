@@ -65,8 +65,10 @@ docker run --rm -p 3000:3000 portfolio
 ```
 
 The live Compose file is `~/docker/stacks/apps/compose.yml` on hp-envy. The
-complete supplied stack, updated with Umami and portfolio build arguments, is
-saved in [`deploy/umami/apps-compose.yml`](deploy/umami/apps-compose.yml).
+portfolio and Umami service definitions are in
+[`deploy/umami/compose.example.yml`](deploy/umami/compose.example.yml). Merge
+those definitions into the existing stack. The full homelab configuration is
+kept locally in the ignored `deploy/umami/apps-compose.yml` file.
 
 ## Editing content
 

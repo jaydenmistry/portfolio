@@ -28,6 +28,9 @@ yarn-error.log*
 .env*.local
 .env
 
+# Private full homelab configuration; public example lives alongside it.
+/deploy/umami/apps-compose.yml
+
 # vercel
 .vercel
 

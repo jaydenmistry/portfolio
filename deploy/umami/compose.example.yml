@@ -1,0 +1,96 @@
+# Merge these services into your existing apps Compose file.
+# This example intentionally includes only the portfolio and Umami services.
+# See README.md; do not replace a full homelab stack with this example.
+services:
+  portfolio:
+    build:
+      context: ${CONFIG_ROOT}/portfolio/.
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://jmistry.com}
+        NEXT_PUBLIC_FORMSPREE_ID: ${NEXT_PUBLIC_FORMSPREE_ID:-xwvgkeda}
+        NEXT_PUBLIC_UMAMI_SRC: ${NEXT_PUBLIC_UMAMI_SRC:-}
+        NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${NEXT_PUBLIC_UMAMI_WEBSITE_ID:-}
+    container_name: portfolio
+    restart: unless-stopped
+    ports:
+      - "${PORTFOLIO_PORT}:3000"
+    environment:
+      - TZ=${TZ}
+    healthcheck:
+      test: wget -qO /dev/null http://127.0.0.1:3000/ || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 2s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio.rule=Host(`${PORTFOLIO_HOST}`)"
+      - "traefik.http.routers.portfolio.entrypoints=websecure"
+      - "traefik.http.routers.portfolio.tls=true"
+      - "traefik.http.routers.portfolio.tls.certresolver=cf"
+      - "traefik.http.services.portfolio.loadbalancer.server.port=3000"
+      - "traefik.docker.network=${TRAEFIK_NET}"
+    networks:
+      - apps_net
+      - traefik_net
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    restart: unless-stopped
+    init: true
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD:?Set UMAMI_DB_PASSWORD}@umami-db:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: ${UMAMI_APP_SECRET:?Set UMAMI_APP_SECRET}
+      DISABLE_TELEMETRY: "1"
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/heartbeat').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - traefik_net
+      - apps_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.umami.rule=Host(`${UMAMI_HOST:-analytics.jmistry.com}`)"
+      - "traefik.http.routers.umami.entrypoints=websecure"
+      - "traefik.http.routers.umami.tls=true"
+      - "traefik.http.routers.umami.tls.certresolver=cf"
+      - "traefik.http.routers.umami.service=umami"
+      - "traefik.http.services.umami.loadbalancer.server.port=3000"
+      - "traefik.docker.network=${TRAEFIK_NET:?Set TRAEFIK_NET to the existing Traefik network}"
+
+  umami-db:
+    image: postgres:16-alpine
+    container_name: umami-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD:?Set UMAMI_DB_PASSWORD}
+    volumes:
+      - ${CONFIG_ROOT}/umami/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - apps_net
+
+networks:
+  apps_net:
+    name: ${APPS_NET}
+
+  traefik_net:
+    external: true
+    name: ${TRAEFIK_NET}

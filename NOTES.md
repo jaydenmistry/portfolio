@@ -47,9 +47,12 @@ would reintroduce the removed trailers. No push has been performed.
 
 ## Umami on hp-envy
 
-The canonical configuration is deploy/umami/apps-compose.yml: the user's complete
-apps stack with Umami added and portfolio NEXT_PUBLIC_* build arguments included.
-All unrelated supplied services are preserved. The old standalone Compose and
+The public reference is deploy/umami/compose.example.yml, containing only the
+portfolio, Umami and PostgreSQL services. Merge those definitions into the live
+apps stack; it is not a replacement for the complete homelab Compose file.
+The user's full updated apps-compose.yml is retained locally and ignored by Git.
+It was removed from unpublished commit history so unrelated services and personal
+configuration are not included in a future push. The old standalone Compose and
 build-argument override were removed to avoid conflicting instructions.
 
 - Umami joins apps_net and traefik_net; PostgreSQL joins apps_net only.
@@ -80,7 +83,16 @@ preview build. LAN/Tailscale hosts are excluded from tracking.
   Do not send a test message without explicit authorization.
 - Compose was checked against the official schema and compared with the supplied
   apps stack. Docker is unavailable here, so no container build/start is claimed.
-- No fresh Lighthouse score is claimed. Earlier scores predate Calendly.
+- Fresh Lighthouse 13.5.0 on the final local production preview: mobile
+  96/100/100/100; desktop 100/100/100/100 (performance/accessibility/best
+  practices/SEO). CLS is zero in both reports. Reports completed without audit
+  errors or warnings; the Windows CLI reported a temporary-profile cleanup
+  permission error after saving the reports. This is not a page audit failure.
+- Fresh keyboard pass: all 31 desktop and 27 mobile portfolio controls show
+  visible focus. The five expanded mobile-menu links are keyboard reachable;
+  Escape closes the menu and restores button focus. Calendly's meeting links
+  are reachable, have a visible background highlight, and allow Tab to leave
+  the iframe. Initial-load Lighthouse does not exercise the entire booking flow.
 
 LAN: http://10.5.1.23:3100. Tailscale: http://100.100.22.25:3100.
 Both preview paths were confirmed by the user. Rerun both Windows forwarding

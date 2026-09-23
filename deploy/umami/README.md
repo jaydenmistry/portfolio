@@ -1,10 +1,15 @@
 # Umami in the hp-envy apps stack
 
-`apps-compose.yml` is the complete apps Compose file supplied by Jayden, with
-Umami added and the portfolio build arguments included. It belongs at
-`~/docker/stacks/apps/compose.yml` on hp-envy. No separate analytics stack or
-Compose override is required. Review any newer host-side changes before replacing
-the host file with this snapshot; all other supplied services are preserved.
+`compose.example.yml` contains only the portfolio, Umami and PostgreSQL service
+definitions, plus their network declarations. Merge these into the existing
+`~/docker/stacks/apps/compose.yml` on hp-envy, preserving all unrelated services.
+Do not replace a full apps stack with this three-service example. No separate
+analytics stack or Compose override is required.
+
+The complete file supplied by Jayden, updated with these services, is retained
+locally as `apps-compose.yml` and excluded from Git. It includes unrelated homelab
+services and personal configuration that do not belong in this public repository.
+Review newer host-side changes before using that local full-file snapshot.
 
 The setup uses the existing Traefik entrypoint `websecure`, TLS resolver `cf`,
 and network `${TRAEFIK_NET}`. Umami joins `apps_net` and `traefik_net`; its database
