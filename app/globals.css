@@ -168,6 +168,17 @@ body {
   }
 }
 
+/* Mobile menu drops in briefly; links are readable from the first frame. */
+.menu-enter {
+  animation: menu-enter 0.16s ease-out;
+}
+@keyframes menu-enter {
+  from {
+    opacity: 0.4;
+    transform: translateY(-6px);
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Diagram drawing. Lines draw, then nodes appear, in about a second.  */
 /* Figures render fully drawn unless JS arms them (`draw-armed`) or    */
@@ -250,6 +261,8 @@ body {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
   ::view-transition-group(*),
   ::view-transition-old(*),

@@ -83,7 +83,7 @@ export default function Navbar() {
       </nav>
 
       {menuOpen ? (
-        <div id="mobile-menu" className="border-t border-rule bg-paper md:hidden">
+        <div id="mobile-menu" className="menu-enter border-t border-rule bg-paper md:hidden">
           <ul className="m-0 list-none px-5 py-2">
             {navItems.map((item) => (
               <li key={item.href} className="border-b border-rule">
