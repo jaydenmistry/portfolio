@@ -1,65 +1,87 @@
 # Working notes
 
-## Current scope — 2026-09-22
+## Current scope - 2026-09-23
 
 The blueprint redesign is approved. Keep its layout and follow DESIGN.md.
-This pass covers Calendly, Umami setup and maintenance. The user deferred
-separate project case-study pages and technical articles; do not add them.
-Do not push, merge or deploy without the user's next instruction.
+Calendly, Umami setup and maintenance are complete locally. Separate project
+pages and technical articles remain deferred. Do not push or deploy until the
+user explicitly requests it.
 
-## Complete locally
+## Release changes
 
-- Blueprint design, IBM Plex fonts, readable palette, native scrolling and
-  reduced-motion support. The old JM accessible-name mismatch no longer applies:
-  the navigation link displays and announces Jayden Mistry.
-- Spotr screenshot: public/spotr-pipeline.webp, 1600 x 1000, with a full-size link.
-- Resume: preserve the user's public/resume.pdf exactly. It says Fall 2027;
-  the site says December 2027. The user accepted both wordings.
-- LAN and Tailscale preview access both confirmed by the user. Current URLs:
-  http://10.5.1.23:3100 and http://100.100.22.25:3100.
-  Rerun both Windows setup modes after WSL's IP changes.
-- Calendly: components/Scheduling.tsx, contact.calendlyUrl in lib/data.ts.
-  Uses next/script, loads near the viewport, reserves embed space, supplies
-  blueprint color parameters, hides the cookie banner as previously requested,
-  and keeps a direct-link fallback. Desktop/mobile meeting selection verified;
-  no meeting was booked.
-- CI, Docker and package engines use the Node 22 line; pnpm remains 10.
-- Person JSON-LD uses affiliation for the current university instead of alumniOf.
-- Stray Lighthouse browser profiles moved out of the repo to the Windows temp
-  directory portfolio-lighthouse-archive-20260922. They were not deleted.
+- Next.js and eslint-config-next are pinned to 16.3.6. PostCSS is 8.5.28 and
+  Tailwind is 3.4.19. Transitive dependencies were refreshed; a scoped YAML
+  override prevents versions older than 2.8.3. The full dependency audit reports
+  zero known advisories. CI now rejects high/critical audit findings.
+- ESLint stays on 9.39.5 because the current React/accessibility plugins do not
+  declare ESLint 10 support. It is EOL but has no current audit findings; migrate
+  when compatible plugins are available rather than forcing peer overrides.
+- CI, Docker and package engines use Node 22; pnpm is pinned to 10.24.0.
+- Docker build arguments default to the real site URL and Formspree ID, so an
+  ordinary build retains working metadata and contact configuration.
+- Preserve public/resume.pdf exactly as supplied by Jayden on 2026-09-23.
+  SHA-256: 552f89b3ab70bda3e142e065ba91db05bac5c86374b6b3e615080dad19fcc1db.
+  This newest copy takes precedence over both earlier branch and remote PDFs.
+- Spotr screenshot: public/spotr-pipeline.webp, 1600 x 1000, full-size link present.
+- Unknown public repository URLs for the KV store and chat app remain hidden.
+- Person JSON-LD uses affiliation for the current university.
 
-## Umami activation remains on hp-envy
+## Git history
 
-The user supplied ~/docker/stacks/apps/compose.yml. Confirmed conventions:
-entrypoint websecure, TLS enabled, resolver cf, external network TRAEFIK_NET.
-deploy/umami/compose.yml now matches these conventions. The separate database
-network and no published ports are retained. A portfolio Compose override supplies
-NEXT_PUBLIC_* values as build args; the existing short build syntax did not.
+At Jayden's explicit request, co-author and session trailers were removed from
+all local release ancestry, including counterparts of commits already published.
+Original authors, commit contents and project history were retained. Commit IDs
+changed. The original history is recoverable from a local Git bundle under the
+Windows temporary directory portfolio-release-20260923.
 
-Follow deploy/umami/README.md. Still needed on the host: the actual TRAEFIK_NET
-value, generated secrets, analytics DNS, starting Umami, changing its initial
-password, creating the website ID, then an approved portfolio rebuild/deploy.
-No remote host access was supplied and no service was started from this session.
-Compose files were checked against the upstream Compose JSON schema, not run
-through Docker Compose locally (Docker is not installed in this environment).
+The clean counterpart of origin/main is codex/main-history-clean. It has been
+merged into redesign/blueprint, resolving the binary resume conflict in favor
+of the newest supplied PDF. The local main branch remains on its cleaned notes
+commit; the release work is on redesign/blueprint.
 
-## Maintenance and release notes
+GitHub and origin tracking refs remain unchanged and accurately show the old
+published history. Publishing the sanitized history will require an explicitly
+authorized force-with-lease push after checking for any newer remote work.
+Do not merge the old, unsanitized origin/main back into this branch, as that
+would reintroduce the removed trailers. No push has been performed.
 
-- Current validation: full pnpm lint and production build (including TypeScript)
-  passed. Calendly meeting options and the calendar were inspected at desktop
-  and 390px mobile widths, with no horizontal page overflow. No fresh Lighthouse
-  score is claimed for the Calendly build.
+## Umami on hp-envy
 
-- ESLint 9.39.5 is EOL. Registry versions checked on 2026-09-22:
-  eslint-plugin-react 7.37.5 and eslint-plugin-jsx-a11y 6.10.2 do not declare
-  ESLint 10 support. Leave the current lint checks intact until a compatible
-  migration can be validated; do not force peer overrides.
-- origin/main has 6cc7502 (resume update), absent from redesign/blueprint.
-  The redesign branch's PDF includes GPA 3.84/4.0, while the remote copy omits it.
-  Preserve the approved redesign PDF when reconciling the histories.
-  No merge was performed in this pass.
-- Public KV-store and chat repository URLs remain unknown and hidden.
-- Contact-form delivery is still untested. Do not submit test messages without
-  explicit authorization.
-- Prior agent Lighthouse results (before Calendly): mobile 96-99 performance,
-  other categories 100; desktop all 100. These are historical, not new scores.
+The canonical configuration is deploy/umami/apps-compose.yml: the user's complete
+apps stack with Umami added and portfolio NEXT_PUBLIC_* build arguments included.
+All unrelated supplied services are preserved. The old standalone Compose and
+build-argument override were removed to avoid conflicting instructions.
+
+- Umami joins apps_net and traefik_net; PostgreSQL joins apps_net only.
+- Database storage is a bind mount at ${CONFIG_ROOT}/umami/db.
+- No extra network, named Docker volume or Umami host ports are used.
+- Traefik uses websecure, TLS, resolver cf and the existing TRAEFIK_NET.
+- Add entries from deploy/umami/.env.example to the existing apps .env; do not
+  replace that environment file. Follow deploy/umami/README.md for activation.
+- If a named-volume database already exists, migrate it before changing mounts.
+
+No remote homelab access was supplied, and no services were activated remotely.
+Host activation still requires DNS, secrets, an Umami account/website ID and an
+approved portfolio deployment. Umami build inclusion was verified both enabled
+and disabled, using a test ID only during validation; it is absent from the final
+preview build. LAN/Tailscale hosts are excluded from tracking.
+
+## Validation and preview
+
+- Frozen-lockfile install, full lint, TypeScript and production build passed
+  against Next.js 16.3.6. Full dependency audit: zero known advisories.
+- The standalone server serves the homepage, real 404, robots, sitemap, icon,
+  social image, new resume and screenshot. The PDF matches the supplied bytes.
+- Responsive checks cover 320, 390, 768, 1024 and 1440px with no horizontal
+  overflow, missing anchor targets or visible portfolio text below 14px.
+- Calendly lives in components/Scheduling.tsx and loads near the viewport. It
+  reserves embed space and keeps a direct link. No booking was submitted.
+- Contact-form required-field validation passed; real delivery is untested.
+  Do not send a test message without explicit authorization.
+- Compose was checked against the official schema and compared with the supplied
+  apps stack. Docker is unavailable here, so no container build/start is claimed.
+- No fresh Lighthouse score is claimed. Earlier scores predate Calendly.
+
+LAN: http://10.5.1.23:3100. Tailscale: http://100.100.22.25:3100.
+Both preview paths were confirmed by the user. Rerun both Windows forwarding
+setup modes after WSL's IP changes. The user-supplied resume remains unedited.
