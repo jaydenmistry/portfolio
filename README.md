@@ -64,8 +64,9 @@ docker build -t portfolio .
 docker run --rm -p 3000:3000 portfolio
 ```
 
-The compose service definition lives in the homelab stack
-(`~/docker/stacks/apps/compose.yml`), not in this repo.
+The live Compose file is `~/docker/stacks/apps/compose.yml` on hp-envy. The
+complete supplied stack, updated with Umami and portfolio build arguments, is
+saved in [`deploy/umami/apps-compose.yml`](deploy/umami/apps-compose.yml).
 
 ## Editing content
 
@@ -82,10 +83,13 @@ content. The direct Calendly link remains available if the embed cannot load.
 
 ## Analytics setup
 
-The Umami stack matches the supplied hp-envy Traefik settings. See
-[`deploy/umami/README.md`](deploy/umami/README.md) for the separate analytics stack,
-the portfolio build-argument override, and activation checks. Analytics remain
-disabled until the tracker URL and website ID are supplied at build time.
+Umami runs in the existing hp-envy apps Compose stack using `apps_net` and
+`traefik_net`. Its database uses `apps_net` and stores data in
+`${CONFIG_ROOT}/umami/db` through a bind mount. See
+[`deploy/umami/README.md`](deploy/umami/README.md) for environment variables and
+activation steps. No separate stack, named volume, or override file is needed.
+Analytics remain disabled until the tracker URL and website ID are supplied
+at build time.
 
 ## Tooling compatibility
 
@@ -95,6 +99,10 @@ and `eslint-plugin-jsx-a11y@6.10.2` do not declare ESLint 10 support. ESLint 9
 is end-of-life; revisit the migration when the plugin stack supports 10,
 rather than overriding its peer requirements or dropping checks.
 
+CI runs `pnpm audit --audit-level=high` before lint and build. The lockfile was
+refreshed with Next.js 16.3.6; the `yaml@<2.8.3` override keeps Tailwind's
+configuration loader on a patched YAML release without changing Tailwind majors.
+
 ## Checklist before deploying
 
 - [x] Spotr screenshot: `public/spotr-pipeline.webp` (1600 × 1000, 16:10), set as
@@ -103,7 +111,8 @@ rather than overriding its peer requirements or dropping checks.
 - [x] Updated résumé at `public/resume.pdf`; every Résumé link points there.
       Its LaTeX source isn't in this repo.
 - [ ] Add repo URLs (`repo`) for the key-value store and chat projects if public.
-- [x] Contact form submits to Formspree (form `xwvgkeda`, default in `lib/data.ts`;
+- [x] Contact form is configured for Formspree (`xwvgkeda`, default in `lib/data.ts`;
       `NEXT_PUBLIC_FORMSPREE_ID` overrides it at build time).
+- [ ] Confirm real contact-form delivery; local validation does not send a message.
 - [ ] If the site won't live at `https://jmistry.com`, update `metadataBase` and the
       Open Graph URL in `app/layout.tsx`.

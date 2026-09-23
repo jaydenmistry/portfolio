@@ -1,81 +1,86 @@
-# Umami on hp-envy
+# Umami in the hp-envy apps stack
 
-Prepared against the apps Compose file supplied on 2026-09-22:
-Traefik entrypoint `websecure`, TLS enabled, resolver `cf`, and the external
-network named by `TRAEFIK_NET`. This configuration has not been activated.
+`apps-compose.yml` is the complete apps Compose file supplied by Jayden, with
+Umami added and the portfolio build arguments included. It belongs at
+`~/docker/stacks/apps/compose.yml` on hp-envy. No separate analytics stack or
+Compose override is required. Review any newer host-side changes before replacing
+the host file with this snapshot; all other supplied services are preserved.
 
-## 1. Prepare the separate analytics stack
+The setup uses the existing Traefik entrypoint `websecure`, TLS resolver `cf`,
+and network `${TRAEFIK_NET}`. Umami joins `apps_net` and `traefik_net`; its database
+joins only `apps_net`. There is no `umami-internal` network or named Docker volume.
+PostgreSQL data is bind-mounted at `${CONFIG_ROOT}/umami/db` on the host. Other
+containers on `apps_net` can reach the database, which requires authentication.
+Neither Umami service publishes a host port.
 
-After the approved portfolio changes have reached the host, copy this directory
-to `~/docker/stacks/umami` (or keep a stable absolute path to it). In that folder:
+## 1. Configure the existing apps environment
+
+Keep the existing apps `.env`, including `CONFIG_ROOT` and `TRAEFIK_NET`. Add or
+update the entries in this directory's `.env.example`; do not replace the apps
+environment file with that example. Generate two separate values on hp-envy:
 
 ```bash
-cp .env.example .env
-chmod 600 .env
 openssl rand -hex 24  # UMAMI_DB_PASSWORD
 openssl rand -hex 32  # UMAMI_APP_SECRET
 ```
 
-Edit `.env`: copy `TRAEFIK_NET` from the apps stack's `.env` and set the two generated
-secrets. Do not paste the entire apps `.env` or commit secrets. Set `UMAMI_HOST`
-to the analytics hostname, and arrange DNS/Cloudflare routing to the existing
-Traefik ingress, as for the portfolio. No database or application host ports
-are published by this stack.
+Use the first output as the database password and the second as the app secret.
+The hexadecimal password is safe inside the database connection URL. Keep both
+values stable and out of Git. Leave `NEXT_PUBLIC_UMAMI_WEBSITE_ID` empty until the
+website has been created in Umami. Keep the existing Formspree ID if it differs
+from the example.
 
-Validate and start when ready:
+Route `analytics.jmistry.com` through the same Cloudflare/Traefik ingress as the
+portfolio. The tracker script and event endpoint must be reachable by visitors;
+an interactive SSO redirect on the entire analytics hostname prevents tracking.
+
+If Umami already has data in a named volume, migrate that database before
+switching to the bind mount. An empty host directory initializes a new database;
+changing the mount does not copy existing accounts or analytics automatically.
+
+## 2. Start Umami
+
+After the updated Compose file and environment are on hp-envy, run each command
+only after the previous one succeeds:
 
 ```bash
+cd ~/docker/stacks/apps
 docker compose config --quiet
-docker compose up -d
-docker compose ps
+docker compose up -d umami-db umami
+docker compose ps umami-db umami
 ```
 
-Open `https://analytics.jmistry.com`, sign in using the documented initial account
-(`admin` / `umami`), and immediately replace its password. Add a website for
-`jmistry.com` and copy its website ID. Complete these account steps yourself.
-The tracker path and event endpoint must remain reachable by site visitors;
-putting the entire analytics hostname behind an interactive SSO redirect would
-prevent tracking from working.
+Open `https://analytics.jmistry.com`, sign in with the initial account
+(`admin` / `umami`), and immediately change its password. Under Websites, add
+`jmistry.com` and copy its website ID into `NEXT_PUBLIC_UMAMI_WEBSITE_ID` in the
+existing apps `.env`.
 
-## 2. Pass the tracker configuration into the portfolio build
+## 3. Rebuild only the portfolio
 
-The current apps stack uses the short `build: ${CONFIG_ROOT}/portfolio/.` form.
-Runtime environment variables cannot supply `NEXT_PUBLIC_*` values to a completed
-Next.js build. The included `portfolio-build-args.yml` is an override for that
-existing service, preserving its ports, healthcheck, labels and networks.
-
-Add to `~/docker/stacks/apps/.env`:
-
-```dotenv
-NEXT_PUBLIC_SITE_URL=https://jmistry.com
-NEXT_PUBLIC_FORMSPREE_ID=xwvgkeda
-NEXT_PUBLIC_UMAMI_SRC=https://analytics.jmistry.com/script.js
-NEXT_PUBLIC_UMAMI_WEBSITE_ID=<copy from Umami>
-```
-
-Copy `portfolio-build-args.yml` into `~/docker/stacks/apps/portfolio-build-args.yml`.
-From that directory, after approving the portfolio deployment:
+`NEXT_PUBLIC_*` values are embedded at build time. The combined Compose file
+already passes them as build arguments, so no override file is needed. These
+commands deploy the source currently checked out under `${CONFIG_ROOT}/portfolio`:
 
 ```bash
-docker compose -f compose.yml -f portfolio-build-args.yml config --quiet
-docker compose -f compose.yml -f portfolio-build-args.yml build portfolio
-docker compose -f compose.yml -f portfolio-build-args.yml up -d --no-deps portfolio
+cd ~/docker/stacks/apps
+docker compose config --quiet
+docker compose build portfolio
+docker compose up -d --no-deps portfolio
 ```
 
-Use both `-f` arguments for subsequent portfolio rebuilds, or fold the override's
-`build` mapping into the portfolio service in `compose.yml`. Do not replace the
-whole apps file with the override.
+## 4. Verify and maintain
 
-## 3. Verify
+- Both Umami containers report healthy.
+- `https://analytics.jmistry.com/script.js` returns JavaScript without an SSO redirect.
+- The portfolio includes the script and the correct `data-website-id`.
+- A visit to `https://jmistry.com` appears in Umami. LAN/Tailscale previews are
+  excluded by the tracker's `data-domains="jmistry.com"` setting.
 
-- The analytics application and database report healthy.
-- `https://analytics.jmistry.com/script.js` returns JavaScript without a sign-in redirect.
-- The deployed portfolio includes the script and the correct `data-website-id`.
-- A visit to `https://jmistry.com` appears in Umami. Local LAN/Tailscale previews
-  are excluded by the portfolio tracker's `data-domains="jmistry.com"` setting.
-
-To disable tracking, clear both Umami build arguments and rebuild only the
-portfolio service. Keep the Umami database volume if retaining collected data.
+To disable tracking, clear both `NEXT_PUBLIC_UMAMI_*` entries and rebuild the
+portfolio. Preserve `${CONFIG_ROOT}/umami/db` to retain accounts and analytics.
+Use PostgreSQL backups (`pg_dump`) for a running database, or stop the database
+before copying its data directory. This repository does not configure automatic
+Umami backups or activate the services remotely.
 
 Upstream references: [installation](https://docs.umami.is/docs/install),
 [tracker configuration](https://docs.umami.is/docs/tracker-configuration).
