@@ -3,7 +3,8 @@
 Personal portfolio of **Jayden Mistry**, a software engineer who builds full-stack
 products and runs the infrastructure they ship on.
 
-Built with Next.js (App Router), React, TypeScript, and Tailwind CSS. No animation
+Built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Light by
+default, with an optional dark theme from the header toggle. No animation
 libraries: diagrams draw with CSS, triggered by a small IntersectionObserver hook,
 and render fully drawn under `prefers-reduced-motion`. Visual rules live in
 [`DESIGN.md`](DESIGN.md).

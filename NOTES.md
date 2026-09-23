@@ -2,10 +2,13 @@
 
 ## Current scope - 2026-09-23
 
-The blueprint redesign is approved. Keep its layout and follow DESIGN.md.
-Calendly, Umami setup and maintenance are complete locally. Separate project
-pages and technical articles remain deferred. Do not push or deploy until the
-user explicitly requests it.
+The blueprint redesign, Calendly and Umami are published on main and deployed
+at https://jmistry.com; Umami records visits. Keep the layout and follow
+DESIGN.md. Separate project pages and technical articles remain deferred.
+Do not push or deploy new work until the user explicitly approves it.
+
+In progress on redesign/blueprint (local, unpushed): optional dark theme with
+a header toggle, themed Calendly embed, and small motion refinements.
 
 ## Release changes
 
@@ -19,9 +22,9 @@ user explicitly requests it.
 - CI, Docker and package engines use Node 22; pnpm is pinned to 10.24.0.
 - Docker build arguments default to the real site URL and Formspree ID, so an
   ordinary build retains working metadata and contact configuration.
-- Preserve public/resume.pdf exactly as supplied by Jayden on 2026-09-23.
-  SHA-256: 552f89b3ab70bda3e142e065ba91db05bac5c86374b6b3e615080dad19fcc1db.
-  This newest copy takes precedence over both earlier branch and remote PDFs.
+- Preserve public/resume.pdf exactly as supplied by Jayden (commit 91fb5f8,
+  2026-09-23). SHA-256:
+  460d0379610fedc010946aa969344e144501517f747b7f1c1bd1e9b29033a45f.
 - Spotr screenshot: public/spotr-pipeline.webp, 1600 x 1000, full-size link present.
 - Unknown public repository URLs for the KV store and chat app remain hidden.
 - Person JSON-LD uses affiliation for the current university.
@@ -29,21 +32,13 @@ user explicitly requests it.
 ## Git history
 
 At Jayden's explicit request, co-author and session trailers were removed from
-all local release ancestry, including counterparts of commits already published.
-Original authors, commit contents and project history were retained. Commit IDs
-changed. The original history is recoverable from a local Git bundle under the
-Windows temporary directory portfolio-release-20260923.
+all history, and the cleaned main was force-pushed. origin/main is the clean
+history. Never merge pre-rewrite history back in, and add no co-author
+trailers to new commits. The original history is recoverable from a local Git
+bundle under the Windows temporary directory portfolio-release-20260923.
 
-The clean counterpart of origin/main is codex/main-history-clean. It has been
-merged into redesign/blueprint, resolving the binary resume conflict in favor
-of the newest supplied PDF. The local main branch remains on its cleaned notes
-commit; the release work is on redesign/blueprint.
-
-GitHub and origin tracking refs remain unchanged and accurately show the old
-published history. Publishing the sanitized history will require an explicitly
-authorized force-with-lease push after checking for any newer remote work.
-Do not merge the old, unsanitized origin/main back into this branch, as that
-would reintroduce the removed trailers. No push has been performed.
+Local branch codex/main-history-clean is an ancestor of main and can be
+deleted. Local main may lag origin/main; fast-forward it rather than merging.
 
 ## Umami on hp-envy
 
@@ -63,11 +58,9 @@ build-argument override were removed to avoid conflicting instructions.
   replace that environment file. Follow deploy/umami/README.md for activation.
 - If a named-volume database already exists, migrate it before changing mounts.
 
-No remote homelab access was supplied, and no services were activated remotely.
-Host activation still requires DNS, secrets, an Umami account/website ID and an
-approved portfolio deployment. Umami build inclusion was verified both enabled
-and disabled, using a test ID only during validation; it is absent from the final
-preview build. LAN/Tailscale hosts are excluded from tracking.
+Umami is live on hp-envy and the user has confirmed visits are recorded.
+The tracker only loads when both NEXT_PUBLIC_UMAMI_* build arguments are set,
+and it only counts jmistry.com, so LAN/Tailscale previews are not tracked.
 
 ## Validation and preview
 
@@ -83,12 +76,13 @@ preview build. LAN/Tailscale hosts are excluded from tracking.
   Do not send a test message without explicit authorization.
 - Compose was checked against the official schema and compared with the supplied
   apps stack. Docker is unavailable here, so no container build/start is claimed.
-- Fresh Lighthouse 13.5.0 on the final local production preview: mobile
+- Lighthouse 13.5.0 on the ba4d696-era production preview (predates the
+  theme work; rerun before the next release): mobile
   96/100/100/100; desktop 100/100/100/100 (performance/accessibility/best
   practices/SEO). CLS is zero in both reports. Reports completed without audit
   errors or warnings; the Windows CLI reported a temporary-profile cleanup
   permission error after saving the reports. This is not a page audit failure.
-- Fresh keyboard pass: all 31 desktop and 27 mobile portfolio controls show
+- Keyboard pass (same era): all 31 desktop and 27 mobile portfolio controls show
   visible focus. The five expanded mobile-menu links are keyboard reachable;
   Escape closes the menu and restores button focus. Calendly's meeting links
   are reachable, have a visible background highlight, and allow Tab to leave
