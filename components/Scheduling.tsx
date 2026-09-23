@@ -3,6 +3,8 @@
 import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
 import { contact } from '@/lib/data';
+import { themePalette, type Theme } from '@/lib/theme';
+import { getTheme, useTheme } from '@/lib/use-theme';
 
 type CalendlyWindow = Window & {
   Calendly?: {
@@ -10,13 +12,26 @@ type CalendlyWindow = Window & {
   };
 };
 
-const bookingUrl = `${contact.calendlyUrl}?hide_gdpr_banner=1&background_color=f3f0e8&text_color=16181d&primary_color=b23e0c`;
+// Calendly's embed color parameters take hex without the leading '#'.
+function bookingUrl(theme: Theme) {
+  const { paper, graphite, signalInk } = themePalette[theme];
+  const hex = (color: string) => color.slice(1).toLowerCase();
+  return `${contact.calendlyUrl}?hide_gdpr_banner=1&background_color=${hex(paper)}&text_color=${hex(graphite)}&primary_color=${hex(signalInk)}`;
+}
+
+const pageViews = ['calendly.profile_page_viewed', 'calendly.event_type_viewed'];
 
 export default function Scheduling() {
   const section = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const theme = useTheme();
+  // Theme the embed was built with, and whether the visitor has moved past
+  // its first page. A started booking is never reloaded to change colors.
+  const embedTheme = useRef<Theme | null>(null);
+  const views = useRef(0);
+  const started = useRef(false);
 
   useEffect(() => {
     const element = section.current;
@@ -39,7 +54,7 @@ export default function Scheduling() {
       if (
         event.origin === 'https://calendly.com' &&
         iframe && event.source === iframe.contentWindow &&
-        ['calendly.profile_page_viewed', 'calendly.event_type_viewed'].includes(event.data?.event)
+        pageViews.includes(event.data?.event)
       ) {
         setStatus('ready');
       }
@@ -51,11 +66,41 @@ export default function Scheduling() {
     };
   }, [enabled, status]);
 
+  // Track booking progress for as long as the embed exists.
+  useEffect(() => {
+    if (!enabled) return;
+    const onMessage = (event: MessageEvent) => {
+      const iframe = container.current?.querySelector('iframe');
+      if (event.origin !== 'https://calendly.com' || !iframe || event.source !== iframe.contentWindow) return;
+      const name = event.data?.event;
+      if (pageViews.includes(name)) {
+        views.current += 1;
+        if (views.current > 1) started.current = true;
+      } else if (name === 'calendly.date_and_time_selected' || name === 'calendly.event_scheduled') {
+        started.current = true;
+      }
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [enabled]);
+
+  // Rebuild the embed in the new colors unless a booking is under way.
+  useEffect(() => {
+    const parentElement = container.current;
+    if (!parentElement || !embedTheme.current || embedTheme.current === theme || started.current) return;
+    parentElement.replaceChildren();
+    setStatus('loading');
+    initialize();
+  }, [theme]);
+
   function initialize() {
     const parentElement = container.current;
     const calendly = (window as CalendlyWindow).Calendly;
     if (!parentElement || !calendly || parentElement.querySelector('iframe')) return;
-    calendly.initInlineWidget({ url: bookingUrl, parentElement });
+    const current = getTheme();
+    embedTheme.current = current;
+    views.current = 0;
+    calendly.initInlineWidget({ url: bookingUrl(current), parentElement });
     const iframe = parentElement.querySelector('iframe');
     if (iframe) {
       iframe.title = 'Schedule a meeting with Jayden Mistry';
@@ -84,7 +129,9 @@ export default function Scheduling() {
             </div>
           </div>
         ) : null}
-        <div ref={container} className="h-full w-full" data-auto-load="false" />
+        {/* Calendly's page is color-scheme light; matching it keeps the iframe
+            transparent instead of the browser painting it white in dark mode. */}
+        <div ref={container} className="h-full w-full [color-scheme:light]" data-auto-load="false" />
         {status === 'error' ? (
           <p role="status" className="absolute inset-x-0 top-0 m-0 border-b border-rule bg-paper p-6 text-base text-graphite">
             The scheduler is taking longer to load.{' '}
