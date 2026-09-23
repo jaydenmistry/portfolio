@@ -8,7 +8,8 @@ DESIGN.md. Separate project pages and technical articles remain deferred.
 Do not push or deploy new work until the user explicitly approves it.
 
 In progress on redesign/blueprint (local, unpushed): optional dark theme with
-a header toggle, themed Calendly embed, and small motion refinements.
+a header toggle, themed Calendly embed, motion refinements, blueprint favicon,
+Umami click events and a Playwright smoke test in CI.
 
 ## Release changes
 
@@ -76,12 +77,16 @@ and it only counts jmistry.com, so LAN/Tailscale previews are not tracked.
   Do not send a test message without explicit authorization.
 - Compose was checked against the official schema and compared with the supplied
   apps stack. Docker is unavailable here, so no container build/start is claimed.
-- Lighthouse 13.5.0 on the ba4d696-era production preview (predates the
-  theme work; rerun before the next release): mobile
-  96/100/100/100; desktop 100/100/100/100 (performance/accessibility/best
-  practices/SEO). CLS is zero in both reports. Reports completed without audit
-  errors or warnings; the Windows CLI reported a temporary-profile cleanup
-  permission error after saving the reports. This is not a page audit failure.
+- Lighthouse 13.5.0, 2026-09-23, production preview with the theme work,
+  three runs each, cold cache: mobile light 96/100/100/100 (all runs);
+  mobile dark 99, 99, 96 performance, otherwise 100; desktop 100 across all
+  categories in both themes. CLS 0 everywhere. The mobile LCP element is the
+  hero paragraph in every run; its 2.2s/2.7s split is simulated-throttling
+  variance, not theme related. Dark runs were confirmed dark by screenshot.
+- Calendly: selecting event type, date and time, then switching theme twice,
+  kept the details page and the selected slot. No booking was submitted.
+- `pnpm test:smoke` covers navigation, the mobile menu, links, theme
+  persistence and axe checks in both themes; it also runs in CI.
 - Keyboard pass (same era): all 31 desktop and 27 mobile portfolio controls show
   visible focus. The five expanded mobile-menu links are keyboard reachable;
   Escape closes the menu and restores button focus. Calendly's meeting links
