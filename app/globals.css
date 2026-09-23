@@ -6,6 +6,52 @@
 
 :root {
   color-scheme: light;
+  /* Blueprint palette as RGB channels for Tailwind (see DESIGN.md). */
+  --paper: 243 240 232;
+  --sheet: 250 248 243;
+  --grid: 231 226 215;
+  --rule: 207 200 184;
+  --rule-strong: 154 147 131;
+  --graphite: 22 24 29;
+  --graphite-2: 74 79 90;
+  --graphite-hover: 42 45 52;
+  --signal: 226 83 26;
+  --signal-ink: 178 62 12;
+  /* Figure sheet and hatch linework. */
+  --figure: 247 245 239;
+  --hatch: 230 224 211;
+  --selection: rgb(226 83 26 / 0.18);
+}
+
+/* Optional dark theme: charcoal paper, warm off-white ink, same orange. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: 28 27 25;
+  --sheet: 37 36 32;
+  --grid: 44 43 39;
+  --rule: 58 56 51;
+  --rule-strong: 110 105 95;
+  --graphite: 237 232 221;
+  --graphite-2: 179 173 161;
+  --graphite-hover: 217 211 199;
+  --signal: 226 83 26;
+  --signal-ink: 238 109 53;
+  --figure: 32 31 28;
+  --hatch: 52 50 46;
+  --selection: rgb(226 83 26 / 0.32);
+}
+
+/* Colors change at once when switching themes, not per element. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
 }
 
 html {
@@ -19,12 +65,12 @@ body {
 }
 
 ::selection {
-  background: rgba(226, 83, 26, 0.18);
-  color: #16181d;
+  background: var(--selection);
+  color: rgb(var(--graphite));
 }
 
 :focus-visible {
-  outline: 2px solid #b23e0c;
+  outline: 2px solid rgb(var(--signal-ink));
   outline-offset: 3px;
 }
 
@@ -45,7 +91,7 @@ body {
   }
 
   .btn-dark {
-    @apply btn bg-graphite text-paper hover:bg-[#2a2d34];
+    @apply btn bg-graphite text-paper hover:bg-graphite-hover;
   }
 
   .btn-line {
@@ -55,14 +101,15 @@ body {
   /* Text link with a hairline underline that turns signal orange. */
   .ulink {
     text-decoration-line: underline;
-    text-decoration-color: #cfc8b8;
+    text-decoration-color: rgb(var(--rule));
     text-decoration-thickness: 1px;
     text-underline-offset: 5px;
     transition: text-decoration-color 0.15s ease-out;
   }
   .ulink:hover,
+  .ulink:focus-visible,
   .ulink[aria-current='true'] {
-    text-decoration-color: #e2531a;
+    text-decoration-color: rgb(var(--signal));
   }
 
   /* Ruled list row with an arrow that nudges on hover. */
@@ -81,24 +128,43 @@ body {
   .row-link:hover .arrow,
   .row-link:focus-visible .arrow {
     transform: translateX(4px);
-    color: #b23e0c;
+    color: rgb(var(--signal-ink));
   }
 
   .blueprint-grid {
-    background-color: #f7f5ef;
+    background-color: rgb(var(--figure));
     background-image:
-      linear-gradient(#e7e2d7 1px, transparent 1px),
-      linear-gradient(90deg, #e7e2d7 1px, transparent 1px);
+      linear-gradient(rgb(var(--grid)) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--grid)) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .hatch {
-    background-color: #faf8f3;
-    background-image: repeating-linear-gradient(135deg, #e6e0d3 0 1px, transparent 1px 10px);
+    background-color: rgb(var(--sheet));
+    background-image: repeating-linear-gradient(135deg, rgb(var(--hatch)) 0 1px, transparent 1px 10px);
   }
 
   .corner {
     @apply pointer-events-none absolute h-4 w-4 border-graphite;
+  }
+}
+
+/* Theme toggle: the moon offers dark, the sun offers light. The shown icon
+   turns in briefly, only after a click (not on page load). */
+.theme-icon-sun,
+:root[data-theme='dark'] .theme-icon-moon {
+  display: none;
+}
+:root[data-theme='dark'] .theme-icon-sun {
+  display: block;
+}
+.theme-animate .theme-toggle svg {
+  animation: theme-icon-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes theme-icon-in {
+  from {
+    opacity: 0.3;
+    transform: rotate(-45deg) scale(0.8);
   }
 }
 
@@ -184,5 +250,10 @@ body {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

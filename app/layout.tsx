@@ -3,6 +3,7 @@ import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { site, experience } from '@/lib/data';
+import { themePalette, themeScript } from '@/lib/theme';
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -57,12 +58,16 @@ const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const viewport: Viewport = {
-  themeColor: '#F3F0E8',
+  themeColor: themePalette.light.paper,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    // The theme script sets data-theme on <html> before hydration.
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="font-sans">
         <script
           type="application/ld+json"

@@ -5,18 +5,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Blueprint palette (see DESIGN.md). Contrast on paper: ink 15.6:1,
-        // ink-2 7.2:1, signal-ink 5.1:1. `signal` is 3.4:1, so lines and
-        // markers only, never text.
-        paper: '#F3F0E8',
-        sheet: '#FAF8F3',
-        grid: '#E7E2D7',
-        rule: '#CFC8B8',
-        'rule-strong': '#9A9383',
-        graphite: '#16181D',
-        'graphite-2': '#4A4F5A',
-        signal: '#E2531A',
-        'signal-ink': '#B23E0C',
+        // Blueprint palette (see DESIGN.md). Values are CSS variables in
+        // app/globals.css so the optional dark theme can swap them. Contrast
+        // on light paper: ink 15.6:1, ink-2 7.2:1, signal-ink 5.1:1. `signal`
+        // is 3.4:1, so lines and markers only, never text.
+        paper: 'rgb(var(--paper) / <alpha-value>)',
+        sheet: 'rgb(var(--sheet) / <alpha-value>)',
+        grid: 'rgb(var(--grid) / <alpha-value>)',
+        rule: 'rgb(var(--rule) / <alpha-value>)',
+        'rule-strong': 'rgb(var(--rule-strong) / <alpha-value>)',
+        graphite: 'rgb(var(--graphite) / <alpha-value>)',
+        'graphite-2': 'rgb(var(--graphite-2) / <alpha-value>)',
+        'graphite-hover': 'rgb(var(--graphite-hover) / <alpha-value>)',
+        signal: 'rgb(var(--signal) / <alpha-value>)',
+        'signal-ink': 'rgb(var(--signal-ink) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],

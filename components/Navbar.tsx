@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { navItems, site } from '@/lib/data';
 import { CloseIcon, MenuIcon } from '@/components/icons';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Navbar() {
   const [active, setActive] = useState<string | null>(null);
@@ -45,36 +46,40 @@ export default function Navbar() {
           {site.name}
         </a>
 
-        <ul className="m-0 hidden list-none items-center gap-8 p-0 md:flex">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                className="ulink text-[0.9375rem] text-graphite"
-                aria-current={active === item.href ? 'true' : undefined}
-              >
-                {item.label}
+        <div className="flex items-center gap-1 md:gap-6">
+          <ul className="m-0 hidden list-none items-center gap-8 p-0 md:flex">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <a
+                  href={item.href}
+                  className="ulink text-[0.9375rem] text-graphite"
+                  aria-current={active === item.href ? 'true' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href={site.resumePath} className="btn-line h-10 px-4">
+                Résumé
               </a>
             </li>
-          ))}
-          <li>
-            <a href={site.resumePath} className="btn-line h-10 px-4">
-              Résumé
-            </a>
-          </li>
-        </ul>
+          </ul>
 
-        <button
-          ref={menuButton}
-          type="button"
-          className="-mr-3 flex h-11 w-11 items-center justify-center text-graphite md:hidden"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        >
-          {menuOpen ? <CloseIcon /> : <MenuIcon />}
-        </button>
+          <ThemeToggle className="h-11 w-11 md:-mr-2.5 md:h-10 md:w-10" />
+
+          <button
+            ref={menuButton}
+            type="button"
+            className="-mr-3 flex h-11 w-11 items-center justify-center text-graphite md:hidden"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          >
+            {menuOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
       </nav>
 
       {menuOpen ? (
