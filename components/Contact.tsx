@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import SectionLabel from '@/components/SectionLabel';
 import Scheduling from '@/components/Scheduling';
 import { site, contact } from '@/lib/data';
+import { resumeEvent } from '@/lib/analytics';
 
 type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -74,7 +75,7 @@ export default function Contact() {
               </a>
             </li>
             <li>
-              <a className="ulink inline-block py-1 text-graphite" href={site.resumePath}>
+              <a className="ulink inline-block py-1 text-graphite" href={site.resumePath} {...resumeEvent('contact')}>
                 Résumé (PDF)
               </a>
             </li>

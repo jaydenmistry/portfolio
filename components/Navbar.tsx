@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { navItems, site } from '@/lib/data';
 import { CloseIcon, MenuIcon } from '@/components/icons';
 import ThemeToggle from '@/components/ThemeToggle';
+import { resumeEvent } from '@/lib/analytics';
 
 export default function Navbar() {
   const [active, setActive] = useState<string | null>(null);
@@ -60,7 +61,7 @@ export default function Navbar() {
               </li>
             ))}
             <li>
-              <a href={site.resumePath} className="btn-line h-10 px-4">
+              <a href={site.resumePath} className="btn-line h-10 px-4" {...resumeEvent('nav')}>
                 Résumé
               </a>
             </li>
@@ -98,7 +99,11 @@ export default function Navbar() {
               </li>
             ))}
             <li>
-              <a href={site.resumePath} className="flex h-12 items-center text-base text-graphite no-underline">
+              <a
+                href={site.resumePath}
+                className="flex h-12 items-center text-base text-graphite no-underline"
+                {...resumeEvent('mobile-menu')}
+              >
                 Résumé (PDF)
               </a>
             </li>

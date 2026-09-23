@@ -1,4 +1,5 @@
 import { site } from '@/lib/data';
+import { resumeEvent } from '@/lib/analytics';
 import HeroTopology from '@/components/figures/HeroTopology';
 
 export default function Hero() {
@@ -24,7 +25,7 @@ export default function Hero() {
             <a href="#work" className="btn-dark">
               See selected work
             </a>
-            <a href={site.resumePath} className="btn-line">
+            <a href={site.resumePath} className="btn-line" {...resumeEvent('hero')}>
               Résumé (PDF)
             </a>
           </div>

@@ -94,6 +94,15 @@ activation steps. No separate stack, named volume, or override file is needed.
 Analytics remain disabled until the tracker URL and website ID are supplied
 at build time.
 
+Click events (defined in [`lib/analytics.ts`](lib/analytics.ts)) appear under
+Events in Umami:
+
+- `resume-click`, with `location`: `nav`, `mobile-menu`, `hero` or `contact`.
+- `project-repo-click`, with `project`: the project id. These appear once a
+  project has a `repo` URL.
+
+They count clicks, not who clicked.
+
 ## Tooling compatibility
 
 ESLint remains pinned to 9.39.5 pending compatible React and accessibility

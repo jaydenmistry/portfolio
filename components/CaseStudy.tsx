@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import SectionLabel from '@/components/SectionLabel';
 import type { Project } from '@/lib/data';
+import { repoEvent } from '@/lib/analytics';
 
 type Props = {
   project: Project;
@@ -143,7 +144,7 @@ export default function CaseStudy({ project, total, label, next, figure }: Props
                 </a>
               ) : null}
               {project.repo ? (
-                <a className="ulink text-graphite" href={project.repo}>
+                <a className="ulink text-graphite" href={project.repo} {...repoEvent(project.id)}>
                   Source on GitHub <span aria-hidden>↗</span>
                 </a>
               ) : null}
