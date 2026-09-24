@@ -30,6 +30,30 @@ Umami click events and a Playwright smoke test in CI.
 - Unknown public repository URLs for the KV store and chat app remain hidden.
 - Person JSON-LD uses affiliation for the current university.
 
+## Privacy notice - 2026-09-24
+
+app/privacy/page.tsx describes only practices verified in code or by
+observation; its facts live in lib/privacy.ts. Before release, confirm with
+Jayden and update the page if any answer changes it:
+
+- Location/jurisdiction, and whether the site is solely a job-search
+  portfolio or also offers paid services.
+- Retention: how long contact emails, Formspree submissions (plan-dependent),
+  Calendly bookings and Umami data (self-hosted default: kept until deleted)
+  are kept, and whether Jayden deletes them on a schedule.
+- Whether Traefik or other homelab services log visitor IP addresses, and for
+  how long.
+- The live Umami environment matches the defaults assumed on the page: no
+  SALT_ROTATION override (monthly visitor-identifier rotation) and no stored
+  IP address.
+- jayden@jmistry.com as the privacy contact; set effectiveDate on release.
+
+Verified 2026-09-24: analytics.jmistry.com has no public DNS record
+(NXDOMAIN on 1.1.1.1, 8.8.8.8 and 9.9.9.9), so only tailnet devices can load
+the tracker. Calendly's banner and Cookie settings appear once
+hide_gdpr_banner is removed; a local DNS blocklist here blocks
+cdn.cookielaw.org, which hides them during local testing.
+
 ## Git history
 
 At Jayden's explicit request, co-author and session trailers were removed from

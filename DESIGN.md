@@ -73,6 +73,8 @@ marker and hover states. Everything else is graphite on paper.
 - No invented metrics, incidents or dates. If a fact is unknown, leave the
   field out of the UI instead of showing a placeholder.
 - The one allowed placeholder is a missing screenshot, labeled as such.
+- The privacy page states only practices that are verified or confirmed by
+  Jayden. Update it whenever a service, tracker or embed changes.
 
 ## Banned
 

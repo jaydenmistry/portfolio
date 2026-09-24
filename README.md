@@ -89,6 +89,10 @@ skill groups, experience entries, and contact copy. Optional project fields
 (role, timeline, status, repo) are simply omitted from the page when unset.
 Components read from that file — you should rarely need to touch them for copy changes.
 
+The privacy notice is `app/privacy/page.tsx`, with its effective date, contact
+and provider links in [`lib/privacy.ts`](lib/privacy.ts). Update it whenever
+the site adds or changes a service that handles visitor data.
+
 The Contact section includes an inline Calendly scheduler. Set its link with
 `contact.calendlyUrl`; the script loads as the section approaches the viewport.
 A fixed-size loading placeholder prevents the scheduler from moving surrounding
