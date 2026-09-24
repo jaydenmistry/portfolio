@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 import SectionLabel from '@/components/SectionLabel';
 import Scheduling from '@/components/Scheduling';
@@ -101,6 +102,12 @@ export default function Contact() {
             </label>
             <textarea id="contact-message" name="message" required rows={5} className={`${field} resize-y`} />
           </div>
+          <p className="m-0 text-[0.9375rem] text-graphite-2">
+            Your name, email and message go to me through Formspree, and I use them to reply.{' '}
+            <Link href="/privacy" className="ulink text-graphite">
+              Privacy
+            </Link>
+          </p>
           <div className="flex flex-wrap items-center gap-4 pt-1">
             <button type="submit" className="btn-dark" disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending…' : 'Send message'}

@@ -98,10 +98,31 @@ test('theme defaults to light and remembers an explicit choice', async ({ page }
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
 });
 
-for (const theme of ['light', 'dark'] as const) {
-  test(`no automatically detectable accessibility violations in ${theme} theme`, async ({ page }) => {
+test('privacy page is linked from the footer and contact form', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('footer').getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
+  await expect(page.locator('#contact form').getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
+
+  await page.locator('footer').getByRole('link', { name: 'Privacy' }).click();
+  await expect(page).toHaveURL(/\/privacy$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
+
+  // The theme choice carries over to the privacy page.
+  await page.getByRole('button', { name: 'Dark mode' }).click();
+  await page.goto('/privacy');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
+
+for (const [theme, path] of [
+  ['light', '/'],
+  ['dark', '/'],
+  ['light', '/privacy'],
+  ['dark', '/privacy'],
+] as const) {
+  test(`no automatically detectable accessibility violations on ${path} in ${theme} theme`, async ({ page }) => {
     if (theme === 'dark') await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
-    await page.goto('/');
+    await page.goto(path);
     if (theme === 'dark') await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     else await expect(page.locator('html')).not.toHaveAttribute('data-theme');
     const results = await new AxeBuilder({ page })

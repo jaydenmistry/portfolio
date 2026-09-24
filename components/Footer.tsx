@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { site } from '@/lib/data';
 
 export default function Footer() {
@@ -7,9 +8,14 @@ export default function Footer() {
         <p className="m-0">
           © 2026 {site.name}. Built with Next.js and Tailwind CSS.
         </p>
-        <a href="#top" className="ulink text-graphite">
-          Back to top
-        </a>
+        <p className="m-0 flex gap-6">
+          <Link href="/privacy" className="ulink text-graphite">
+            Privacy
+          </Link>
+          <a href="#top" className="ulink text-graphite">
+            Back to top
+          </a>
+        </p>
       </div>
     </footer>
   );
