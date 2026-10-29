@@ -399,6 +399,61 @@ body {
   }
 }
 
+/* Hero: lines settle in from a soft blur, one after another. They start
+   partly visible, so the name is readable from the first frame. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in {
+    animation: hero-in 0.9s var(--spring) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+@keyframes hero-in {
+  from {
+    opacity: 0.35;
+    filter: blur(8px);
+    transform: translateY(0.75rem) scale(0.985);
+  }
+}
+
+/* As the hero scrolls away it recedes, like a page sliding under glass. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-exit {
+      animation: hero-exit linear both;
+      animation-timeline: view();
+      animation-range: exit 10% exit 100%;
+    }
+  }
+}
+@keyframes hero-exit {
+  to {
+    opacity: 0.15;
+    transform: translateY(-3rem) scale(0.94);
+  }
+}
+
+/* Availability: a single ring ripples out once after the hero settles. */
+@media (prefers-reduced-motion: no-preference) {
+  .availability-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: ripple 1.4s ease-out 1s 2 both;
+  }
+}
+@keyframes ripple {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
 /* Solid chrome for people who ask for less transparency or more contrast. */
 @media (prefers-reduced-transparency: reduce) {
   .material,
