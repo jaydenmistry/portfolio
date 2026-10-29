@@ -46,7 +46,8 @@ export default function ScreenshotViewer({ shot }: { shot: Shot }) {
             height={1000}
             loading="lazy"
             decoding="async"
-            className="block aspect-[16/10] h-auto w-full rounded-[1.125rem] object-cover object-top"
+            style={{ borderRadius: 18 }}
+            className="block aspect-[16/10] h-auto w-full object-cover object-top"
           />
           <span
             aria-hidden
@@ -124,7 +125,7 @@ function Viewer({ shot, layoutId, onClose }: { shot: Shot; layoutId: string; onC
         <m.div className="absolute inset-0 bg-black/80 backdrop-blur-2xl" style={{ opacity: scrimOpacity }} />
       </m.div>
 
-      <m.div style={{ y, scale }} onPan={onPan} onPanEnd={onPanEnd} className="relative w-full max-w-6xl cursor-grab touch-none active:cursor-grabbing">
+      <m.div style={{ y, scale }} onPan={onPan} onPanEnd={onPanEnd} className="relative flex w-full max-w-6xl cursor-grab touch-none justify-center active:cursor-grabbing">
         <m.img
           layoutId={layoutId}
           src={shot.src}
@@ -132,7 +133,9 @@ function Viewer({ shot, layoutId, onClose }: { shot: Shot; layoutId: string; onC
           width={1600}
           height={1000}
           draggable={false}
-          className="block h-auto max-h-[78vh] w-full rounded-[1.125rem] object-contain shadow-float"
+          // Radius as a style so Motion keeps it round while the image scales.
+          style={{ borderRadius: 18 }}
+          className="mx-auto block h-auto max-h-[78vh] w-auto max-w-full shadow-float"
         />
       </m.div>
 
