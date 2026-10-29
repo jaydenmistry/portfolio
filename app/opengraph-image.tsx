@@ -7,15 +7,15 @@ export const alt = `${site.name}, software engineer`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-// Vendored IBM Plex (OFL, see assets/fonts/OFL.txt) so the image matches the
-// site and builds without network access. The route is prerendered at build.
+// Vendored IBM Plex Sans (OFL, see assets/fonts/OFL.txt): SF Pro's licence does
+// not allow bundling it, and the image must build without network access. The
+// route is prerendered at build.
 const font = (file: string) => readFile(join(process.cwd(), 'assets/fonts', file));
 
 export default async function OpengraphImage() {
-  const [sans400, sans600, mono400] = await Promise.all([
+  const [sans400, sans600] = await Promise.all([
     font('ibm-plex-sans-latin-400-normal.woff'),
     font('ibm-plex-sans-latin-600-normal.woff'),
-    font('ibm-plex-mono-latin-400-normal.woff'),
   ]);
 
   return new ImageResponse(
@@ -28,24 +28,36 @@ export default async function OpengraphImage() {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: 72,
-          background: '#F3F0E8',
-          backgroundImage:
-            'linear-gradient(#E7E2D7 1px, transparent 1px), linear-gradient(90deg, #E7E2D7 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          color: '#16181D',
+          background: '#FFFFFF',
+          color: '#1D1D1F',
           fontFamily: 'Plex Sans',
         }}
       >
-        <div style={{ display: 'flex', fontFamily: 'Plex Mono', fontSize: 22, color: '#4A4F5A' }}>
-          Software engineer · {site.education}
+        <div style={{ display: 'flex', fontSize: 28, color: '#6E6E73' }}>Software engineer · {site.education}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div style={{ fontSize: 132, fontWeight: 600, letterSpacing: -5, lineHeight: 1 }}>{site.name}</div>
+          <div style={{ fontSize: 46, fontWeight: 600, lineHeight: 1.15, maxWidth: 980, letterSpacing: -1, color: '#1D1D1F' }}>
+            {site.headline}
+          </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-          <div style={{ fontSize: 124, fontWeight: 600, letterSpacing: -5, lineHeight: 1 }}>{site.name}</div>
-          <div style={{ fontSize: 44, lineHeight: 1.22, maxWidth: 1000, letterSpacing: -0.5 }}>{site.headline}</div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'Plex Mono', fontSize: 24 }}>
-          <div style={{ width: 14, height: 14, background: '#E2531A' }} />
-          {site.availability}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 28, color: '#6E6E73' }}>
+            <div style={{ width: 16, height: 16, borderRadius: 8, background: '#34C759' }} />
+            {site.availability}
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              padding: '14px 30px',
+              borderRadius: 999,
+              background: '#0071E3',
+              color: '#FFFFFF',
+              fontSize: 28,
+              fontWeight: 600,
+            }}
+          >
+            jmistry.com
+          </div>
         </div>
       </div>
     ),
@@ -54,7 +66,6 @@ export default async function OpengraphImage() {
       fonts: [
         { name: 'Plex Sans', data: sans400, weight: 400, style: 'normal' },
         { name: 'Plex Sans', data: sans600, weight: 600, style: 'normal' },
-        { name: 'Plex Mono', data: mono400, weight: 400, style: 'normal' },
       ],
     },
   );
