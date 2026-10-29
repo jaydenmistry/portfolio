@@ -4,6 +4,16 @@
 
 /* Design rules live in DESIGN.md. */
 
+/* SF Pro installed as a file (Windows, Linux) only gets its optical sizes
+   when loaded through @font-face; by family name Chrome uses the Display
+   design at every size, which crowds body text. local() never downloads
+   anything, and Apple devices match -apple-system first. */
+@font-face {
+  font-family: 'SF Pro Local';
+  src: local('SF Pro'), local('SFPro-Regular');
+  font-weight: 1 1000;
+}
+
 /* Apple palette as RGB channels for Tailwind (see DESIGN.md, Color). */
 :root {
   color-scheme: light;
