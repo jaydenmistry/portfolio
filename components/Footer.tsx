@@ -8,22 +8,22 @@ export default function Footer() {
         <p className="m-0">© 2026 {site.name}. Designed and built by me with Next.js.</p>
         <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
           <li>
-            <a className="link text-label-2 hover:text-label" href={site.github}>
+            <a className="text-label-2 no-underline transition-colors hover:text-label" href={site.github}>
               GitHub
             </a>
           </li>
           <li>
-            <a className="link text-label-2 hover:text-label" href={site.linkedin}>
+            <a className="text-label-2 no-underline transition-colors hover:text-label" href={site.linkedin}>
               LinkedIn
             </a>
           </li>
           <li>
-            <Link href="/privacy" className="link text-label-2 hover:text-label">
+            <Link href="/privacy" className="text-label-2 no-underline transition-colors hover:text-label">
               Privacy
             </Link>
           </li>
           <li>
-            <a href="#top" className="link text-label-2 hover:text-label">
+            <a href="#top" className="text-label-2 no-underline transition-colors hover:text-label">
               Back to top
             </a>
           </li>
