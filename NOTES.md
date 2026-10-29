@@ -10,6 +10,21 @@ follow the OS theme with a System / Light / Dark control, add Motion
 materials. DESIGN.md holds the new rules. Pushed to origin/ui-redesign at
 Jayden's request; not merged to main or deployed.
 
+Verified 2026-10-29 on ui-redesign (Next 16.4.3, production build):
+- Lighthouse 13.5.0, local Chrome 153 headless: mobile 96/98/98 performance,
+  100 accessibility, best practices and SEO; desktop 100 across the board;
+  /privacy mobile 100 across the board. CLS 0. Mobile LCP 2.4-2.8s.
+- Smoke suite 21/21; `pnpm audit`: no known vulnerabilities; no horizontal
+  overflow or text under 14px at 320/390/768/1024/1440 in both themes.
+- Gestures checked in headless Chromium with pointer events: a small sheet
+  drag springs back, a flick closes it, pulling up 300px moves it 119px; the
+  screenshot viewer closes on a flick. Not tested on real iOS/Safari.
+- Calendly loads in both themes; the area around Calendly's booking card
+  takes the theme, the card itself stays white (Calendly's styling).
+- SF Pro installed as a file (Linux/Windows) renders with the Display design
+  at every size when used by family name; the `SF Pro Local` @font-face in
+  globals.css restores optical sizing. Apple devices use the system font.
+
 The privacy notice questions below are still open and also apply to this
 branch. The theme section of the privacy page was updated for the System
 option.
