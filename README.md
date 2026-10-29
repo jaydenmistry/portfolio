@@ -129,7 +129,7 @@ is end-of-life; revisit the migration when the plugin stack supports 10,
 rather than overriding its peer requirements or dropping checks.
 
 CI runs `pnpm audit --audit-level=high` before lint and build. The lockfile was
-refreshed with Next.js 16.3.6; the `yaml@<2.8.3` override keeps Tailwind's
+refreshed with Next.js 16.4.3 (2026-10-29); the `yaml@<2.8.3` override keeps Tailwind's
 configuration loader on a patched YAML release without changing Tailwind majors.
 
 ## Checklist before deploying

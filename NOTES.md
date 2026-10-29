@@ -19,7 +19,12 @@ and deployed at https://jmistry.com.
 
 ## Release changes
 
-- Next.js and eslint-config-next are pinned to 16.3.6. PostCSS is 8.5.28 and
+- 2026-10-29: Next.js and eslint-config-next moved from 16.3.6 to 16.4.3 to
+  clear new critical/high Next.js advisories (fixed in 16.4.1+); the same
+  refresh took sharp 0.35.5, source-map-js 1.2.2, zod 4.6.7 and
+  postcss-selector-parser 6.1.5, all within existing ranges. `pnpm audit`:
+  no known vulnerabilities.
+- Next.js and eslint-config-next were pinned to 16.3.6. PostCSS is 8.5.28 and
   Tailwind is 3.4.19. Transitive dependencies were refreshed; a scoped YAML
   override prevents versions older than 2.8.3. The full dependency audit reports
   zero known advisories. CI now rejects high/critical audit findings.
