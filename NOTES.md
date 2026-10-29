@@ -1,15 +1,21 @@
 # Working notes
 
-## Current scope - 2026-09-23
+## Current scope - 2026-10-29
 
-The blueprint redesign, Calendly and Umami are published on main and deployed
-at https://jmistry.com; Umami records visits. Keep the layout and follow
-DESIGN.md. Separate project pages and technical articles remain deferred.
-Do not push or deploy new work until the user explicitly approves it.
+Branch ui-redesign (from redesign/blueprint at b109df7, so it carries the
+unpushed privacy commits) replaces the blueprint look with an Apple-style
+redesign. Jayden's calls: replace the blueprint entirely, use the system font,
+follow the OS theme with a System / Light / Dark control, add Motion
+(pinned 14.2.0) for spring and gesture animations, and use translucent
+materials. DESIGN.md holds the new rules. Pushed to origin/ui-redesign at
+Jayden's request; not merged to main or deployed.
 
-In progress on redesign/blueprint (local, unpushed): optional dark theme with
-a header toggle, themed Calendly embed, motion refinements, blueprint favicon,
-Umami click events and a Playwright smoke test in CI.
+The privacy notice questions below are still open and also apply to this
+branch. The theme section of the privacy page was updated for the System
+option.
+
+Earlier (2026-09-23): the blueprint redesign, Calendly and Umami are on main
+and deployed at https://jmistry.com.
 
 ## Release changes
 
@@ -110,7 +116,8 @@ and it only counts jmistry.com, so LAN/Tailscale previews are not tracked.
 - Calendly: selecting event type, date and time, then switching theme twice,
   kept the details page and the selected slot. No booking was submitted.
 - `pnpm test:smoke` covers navigation, the mobile menu, links, theme
-  persistence and axe checks in both themes; it also runs in CI.
+  persistence and axe checks in both themes; it also runs in CI. (Blueprint
+  era; see the redesign section for the current suite.)
 - Keyboard pass (same era): all 31 desktop and 27 mobile portfolio controls show
   visible focus. The five expanded mobile-menu links are keyboard reachable;
   Escape closes the menu and restores button focus. Calendly's meeting links

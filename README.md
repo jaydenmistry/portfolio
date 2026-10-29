@@ -3,10 +3,12 @@
 Personal portfolio of **Jayden Mistry**, a software engineer who builds full-stack
 products and runs the infrastructure they ship on.
 
-Built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Light by
-default, with an optional dark theme from the header toggle. No animation
-libraries: diagrams draw with CSS, triggered by a small IntersectionObserver hook,
-and render fully drawn under `prefers-reduced-motion`. Visual rules live in
+Built with Next.js (App Router), React, TypeScript, Tailwind CSS and Motion. The
+design follows Apple's interface guidelines: the system font, translucent
+navigation, and spring animations, including a draggable menu sheet and
+screenshot viewer. The theme follows the operating system unless a visitor picks
+Light or Dark. Scroll reveals use CSS scroll-driven animations, and everything
+settles to its final state under `prefers-reduced-motion`. Visual rules live in
 [`DESIGN.md`](DESIGN.md).
 
 ## Develop
@@ -21,8 +23,9 @@ pnpm build      # production build
 ```
 
 Smoke tests (Playwright, Chromium) run against the production build and in CI.
-They cover section navigation, the mobile menu, critical links, theme
-persistence and axe accessibility checks in both themes. Calendly and
+They cover section navigation, the mobile menu, critical links, the theme
+control (system default and saved choices), the screenshot viewer, inline
+contact-form validation and axe accessibility checks in both themes. Calendly and
 Formspree requests are blocked so results never depend on those services.
 
 ```bash
