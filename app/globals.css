@@ -280,6 +280,21 @@ body {
   color: rgb(var(--label));
 }
 
+/* Nav scroll edge: the hairline fades in over the first 64px of scroll.
+   Without scroll-driven animations it simply stays visible. */
+@supports (animation-timeline: scroll()) {
+  .nav-edge {
+    animation: nav-edge linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 4rem;
+  }
+}
+@keyframes nav-edge {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Mobile menu drops in briefly; links are readable from the first frame. */
 .menu-enter {
   animation: menu-enter 0.16s ease-out;
