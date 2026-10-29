@@ -34,6 +34,7 @@
   --accent-fill: 0 113 227;
   --accent-fill-hover: 0 119 237;
   --success: 52 199 89;
+  --danger: 215 0 21;
   /* Floating chrome: translucent background plus the scrim behind sheets. */
   --material: 255 255 255;
   --scrim: 0 0 0 / 0.32;
@@ -72,6 +73,7 @@
   --accent-fill: 0 113 227;
   --accent-fill-hover: 0 119 237;
   --success: 48 209 88;
+  --danger: 255 69 58;
   --material: 22 22 23;
   --scrim: 0 0 0 / 0.56;
   --spotlight: 255 255 255 / 0.07;
@@ -559,6 +561,98 @@ body {
 }
 .topology-packet {
   filter: drop-shadow(0 0 6px rgb(var(--accent)));
+}
+
+/* Form fields: the label floats up out of the way as you type. */
+.field-input {
+  display: block;
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1px solid rgb(var(--separator));
+  background: rgb(var(--elevated));
+  padding: 1.625rem 1rem 0.5rem;
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  color: rgb(var(--label));
+  transition:
+    border-color 0.2s ease-out,
+    box-shadow 0.48s var(--spring);
+}
+.field-input:focus,
+.field-input:focus-visible {
+  outline: none;
+  border-color: rgb(var(--accent));
+  box-shadow: 0 0 0 4px rgb(var(--accent) / 0.2);
+}
+.field-input[aria-invalid='true'] {
+  border-color: rgb(var(--danger));
+}
+.field-input[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 4px rgb(var(--danger) / 0.18);
+}
+.field-label {
+  position: absolute;
+  left: 1rem;
+  top: 1.0625rem;
+  font-size: 1.0625rem;
+  line-height: 1.47;
+  color: rgb(var(--label-2));
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform 0.48s var(--spring),
+    color 0.2s ease-out;
+}
+/* 17px down to 14px: the readability floor. */
+.field-input:focus + .field-label,
+.field-input:not(:placeholder-shown) + .field-label {
+  transform: translateY(-0.625rem) scale(0.8235);
+}
+.field-input:focus + .field-label {
+  color: rgb(var(--accent));
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading placeholders shimmer gently while Calendly loads. */
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+}
+@keyframes shimmer {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* The experience timeline draws itself as you scroll down it. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline-line {
+      transform-origin: top;
+      animation: grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 60%;
+    }
+  }
+}
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
 }
 
 /* Solid chrome for people who ask for less transparency or more contrast. */
