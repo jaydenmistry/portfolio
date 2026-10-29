@@ -3,6 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 import { site, experience } from '@/lib/data';
 import { themePalette, themeScript } from '@/lib/theme';
+import MotionProvider from '@/components/MotionProvider';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jmistry.com'),
@@ -69,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         {umamiSrc && umamiWebsiteId ? (
           <Script
             src={umamiSrc}
