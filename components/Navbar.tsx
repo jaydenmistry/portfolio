@@ -47,12 +47,12 @@ export default function Navbar() {
     <header className="sticky top-0 z-50">
       <div className="material relative">
         <nav aria-label="Primary" className="container-content flex h-[3.25rem] items-center justify-between">
-          <a href="#top" className="press -mx-2 rounded-full px-2 py-1.5 text-[1.0625rem] font-semibold tracking-[-0.01em] text-label no-underline">
+          <a href="#top" className="press -mx-2 rounded-full px-2 py-1.5 text-[1.0625rem] font-semibold tracking-[-0.01em] text-label no-underline whitespace-nowrap">
             {site.name}
           </a>
 
           <div className="flex items-center gap-3">
-            <ul className="m-0 hidden list-none items-center gap-0.5 p-0 md:flex">
+            <ul className="m-0 hidden list-none items-center gap-0.5 p-0 lg:flex">
               {navItems.map((item) => {
                 const current = active === item.href;
                 return (
@@ -77,16 +77,16 @@ export default function Navbar() {
               })}
             </ul>
 
-            <ThemeSwitcher className="hidden md:grid" />
+            <ThemeSwitcher className="hidden lg:grid" />
 
-            <a href={site.resumePath} className="button-filled hidden min-h-9 px-4 md:inline-flex" {...resumeEvent('nav')}>
+            <a href={site.resumePath} className="button-filled hidden min-h-9 px-4 lg:inline-flex" {...resumeEvent('nav')}>
               Résumé
             </a>
 
             <button
               ref={menuButton}
               type="button"
-              className="press -mr-2.5 flex h-11 w-11 items-center justify-center rounded-full text-label md:hidden"
+              className="press -mr-2.5 flex h-11 w-11 items-center justify-center rounded-full text-label lg:hidden"
               onClick={() => setMenuOpen(true)}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"

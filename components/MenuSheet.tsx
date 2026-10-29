@@ -77,7 +77,7 @@ export default function MenuSheet({ open, active, onClose }: Props) {
           <m.div
             key="scrim"
             aria-hidden
-            className="fixed inset-0 z-[60] touch-none md:hidden"
+            className="fixed inset-0 z-[60] touch-none lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -101,7 +101,7 @@ export default function MenuSheet({ open, active, onClose }: Props) {
             initial={{ y: '110%' }}
             animate={{ y: 0 }}
             exit={{ y: '110%' }}
-            className="material-thick fixed inset-x-2 bottom-2 z-[70] touch-none md:hidden rounded-[2rem] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 shadow-float"
+            className="material-thick fixed inset-x-2 bottom-2 z-[70] touch-none lg:hidden rounded-[2rem] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 shadow-float"
           >
             <div aria-hidden className="mx-auto mb-1 h-[5px] w-9 rounded-full bg-label/25" />
             <div className="flex items-center justify-between">
