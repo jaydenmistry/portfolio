@@ -32,9 +32,10 @@ const config: Config = {
         success: 'rgb(var(--success) / <alpha-value>)',
       },
       fontFamily: {
-        // The platform's own UI font: SF Pro on Apple devices, Segoe UI on
-        // Windows, Roboto on Android. No web fonts (DESIGN.md, Type).
-        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'system-ui', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+        // The platform's own UI font: SF Pro on Apple devices (or wherever
+        // it is installed), Segoe UI on Windows, Roboto on Android. No web
+        // fonts (DESIGN.md, Type).
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro"', '"SF Pro Text"', '"Segoe UI"', 'system-ui', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
         mono: ['ui-monospace', '"SF Mono"', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       letterSpacing: {
