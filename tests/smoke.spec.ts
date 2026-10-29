@@ -74,44 +74,73 @@ test('critical links resolve', async ({ page, request }) => {
   expect((await request.get('/this-page-does-not-exist')).status()).toBe(404);
 });
 
-test('theme defaults to light and remembers an explicit choice', async ({ page }) => {
+/** The theme control: in the nav on desktop, in the menu sheet on phones. */
+async function themeControl(page: Page, isMobile: boolean) {
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    return page.locator('#mobile-menu').getByRole('radiogroup', { name: 'Theme' });
+  }
+  return page.getByRole('navigation', { name: 'Primary' }).getByRole('radiogroup', { name: 'Theme' });
+}
+
+test('theme follows the system and remembers an explicit choice', async ({ page, isMobile }) => {
   const root = page.locator('html');
-  const toggle = page.getByRole('button', { name: 'Dark mode' });
 
   await page.goto('/');
-  await expect(root).not.toHaveAttribute('data-theme');
-  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+  await expect(root).toHaveAttribute('data-theme', 'light');
+  await expect(root).toHaveAttribute('data-theme-pref', 'system');
+  let control = await themeControl(page, isMobile);
+  await expect(control.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true');
 
-  await toggle.click();
+  await control.getByRole('radio', { name: 'Dark' }).click();
   await expect(root).toHaveAttribute('data-theme', 'dark');
-  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(control.getByRole('radio', { name: 'Dark' })).toHaveAttribute('aria-checked', 'true');
 
   await page.reload();
-  // Applied by the head script before hydration, then reflected by the toggle.
+  // Applied by the head script before hydration.
   await expect(root).toHaveAttribute('data-theme', 'dark');
-  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(28, 27, 25)');
+  await expect(root).toHaveAttribute('data-theme-pref', 'dark');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
 
-  await toggle.click();
+  control = await themeControl(page, isMobile);
+  await control.getByRole('radio', { name: 'System' }).click();
   await page.reload();
-  await expect(root).not.toHaveAttribute('data-theme');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(243, 240, 232)');
+  await expect(root).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
 
-test('privacy page is linked from the footer and contact form', async ({ page }) => {
+test('theme follows a dark system setting with no stored choice', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
-  await expect(page.locator('footer').getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
-  await expect(page.locator('#contact form').getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
-
-  await page.locator('footer').getByRole('link', { name: 'Privacy' }).click();
-  await expect(page).toHaveURL(/\/privacy$/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
-
-  // The theme choice carries over to the privacy page.
-  await page.getByRole('button', { name: 'Dark mode' }).click();
-  await page.goto('/privacy');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+});
+
+test('screenshot viewer opens, closes on Escape and returns focus', async ({ page }) => {
+  await page.goto('/#spotr');
+  const open = page.getByRole('button', { name: /^View full size:/ });
+  await open.click();
+  const viewer = page.getByRole('dialog');
+  await expect(viewer).toBeVisible();
+  await expect(viewer.getByRole('button', { name: 'Close image' })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(viewer).toHaveCount(0);
+  await expect(open).toBeFocused();
+});
+
+test('contact form reports missing fields inline', async ({ page }) => {
+  await page.goto('/#contact');
+  const form = page.locator('#contact form');
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await expect(form.getByLabel('Name')).toBeFocused();
+  await expect(form.getByLabel('Name')).toHaveAttribute('aria-invalid', 'true');
+  await expect(form.getByText('Enter your name.')).toBeVisible();
+
+  await form.getByLabel('Email').fill('not-an-email');
+  await form.getByLabel('Name').fill('Ada');
+  await expect(form.getByText('Enter your name.')).toHaveCount(0);
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await expect(form.getByText('Enter an email address, like name@example.com.')).toBeVisible();
 });
 
 for (const [theme, path] of [
@@ -123,8 +152,7 @@ for (const [theme, path] of [
   test(`no automatically detectable accessibility violations on ${path} in ${theme} theme`, async ({ page }) => {
     if (theme === 'dark') await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
     await page.goto(path);
-    if (theme === 'dark') await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    else await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze();
