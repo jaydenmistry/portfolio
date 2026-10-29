@@ -1,83 +1,133 @@
 # Design rules
 
-The site uses an engineering-blueprint look: drafting paper, graphite ink and
-one signal-orange accent. Read this before changing any UI.
+The site follows Apple's interface design, translated for the web: system
+type, neutral surfaces, one blue accent, translucent floating chrome and
+spring motion that responds the moment you touch something. Read this before
+changing any UI.
 
 ## Color
 
+Tokens are RGB channels in `app/globals.css`, exposed to Tailwind in
+`tailwind.config.ts`. Components use tokens only, never raw hex.
+
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `paper` | `#F3F0E8` | `#1C1B19` | Page background |
-| `sheet` | `#FAF8F3` | `#252420` | Raised surfaces: diagram nodes, fields, row hover |
-| `grid` | `#E7E2D7` | `#2C2B27` | Diagram grid lines |
-| `rule` | `#CFC8B8` | `#3A3833` | Dividers, list rules, underlines at rest |
-| `rule-strong` | `#9A9383` | `#6E695F` | Dashed boundaries and placeholder outlines. Never text |
-| `graphite` | `#16181D` | `#EDE8DD` | Headings, primary text, node outlines, primary button |
-| `graphite-2` | `#4A4F5A` | `#B3ADA1` | Body copy and metadata (7.2:1 light, 7.7:1 dark) |
-| `graphite-hover` | `#2A2D34` | `#D9D3C7` | Primary button hover |
-| `signal` | `#E2531A` | `#E2531A` | Lines, markers, traffic paths. Never text |
-| `signal-ink` | `#B23E0C` | `#EE6D35` | Orange text: numbers, focus ring (5.1:1 light, 5.6:1 dark) |
+| `background` | `#FFFFFF` | `#000000` | Page |
+| `surface` | `#F5F5F7` | `#161617` | Tiles, alternating sections, fields |
+| `elevated` | `#FFFFFF` | `#1C1C1E` | Tiles that sit on `surface` |
+| `label` | `#1D1D1F` | `#F5F5F7` | Headings and primary text |
+| `label-2` | `#6E6E73` | `#A1A1A6` | Secondary text (5.07:1 light on white, 4.66:1 on surface; 8.16:1 dark) |
+| `separator` | `#D2D2D7` | `#38383A` | Hairlines. Never text |
+| `fill` | `#E8E8ED` | `#2C2C2E` | Chips, segmented-control tracks. Only `label` text on it |
+| `accent` | `#0066CC` | `#2997FF` | Links, focus rings, active states (5.11:1 on surface light, 6.00:1 dark) |
+| `accent-fill` | `#0071E3` | `#0071E3` | Filled buttons, with white text (4.70:1) |
+| `success` | `#34C759` | `#30D158` | The availability dot. Never text |
 
-Figure sheets and hatching use `--figure` and `--hatch` in
-`app/globals.css`. Components use tokens only, never raw hex, so both themes
-stay in step. The hex values in `lib/theme.ts` exist only for the browser
-theme color and the Calendly embed; keep them in sync with the table.
+The infrastructure section is always dark: it wraps itself in
+`.surface-dark`, which swaps in the dark token values locally.
 
-Orange stays rare. It marks the traffic path, list numbers, the availability
-marker and hover states. Everything else is graphite on paper.
+The hex values in `lib/theme.ts` exist only for the browser theme color and
+the Calendly embed; keep them in sync with this table.
 
 ## Theme
 
-- Light is the default for every first visit. Dark is optional: visitors
-  opt in with the header toggle, and their explicit choice is remembered.
-  The site does not follow the operating system setting.
-- Dark is the same drawing on charcoal: warm off-white ink, subtle grid
-  lines, the same orange. No new colors, glows or shadows.
-- Screenshots keep their original colors in both themes. No filters.
-- The saved theme is applied before first paint; never let a page flash
-  the wrong theme.
+- The site follows the operating system setting by default. Visitors can pin
+  Light or Dark with the System / Light / Dark control; the pinned choice is
+  stored in `localStorage` under `theme`. Choosing System removes it.
+- The saved choice is applied before first paint; never flash the wrong theme.
+- Switching themes reveals the new one in a circle that grows from the control
+  that was pressed. With reduced motion it switches instantly.
+- Screenshots keep their original colors in both themes.
 - Embedded third-party widgets follow the theme when they load. Never reload
   one the visitor has started using just to change its colors.
 
 ## Type
 
-- IBM Plex Sans for everything people read. IBM Plex Mono for labels,
-  captions, metadata and diagram text. No third family.
-- Weights: 400 body, 500 labels and row titles, 600 headings only.
-- Readability floor: no text under 14px, diagram labels included. Mono
-  metadata uses the `meta` size. Body copy is 17px on mobile, 18px on desktop.
-- Sentence case everywhere. No uppercase tracking labels.
+- The system font: SF Pro on Apple devices, Segoe UI on Windows, Roboto on
+  Android. No web fonts on the page. `ui-monospace` only for code.
+- Tracking and leading change with size. Use the named sizes in
+  `tailwind.config.ts`, which carry both; never set one letter-spacing for
+  every size.
+
+| Size | px | Leading | Tracking |
+|---|---|---|---|
+| `display` | 56–120 | 1.02 | −0.035em |
+| `title-1` | 40–64 | 1.06 | −0.028em |
+| `title-2` | 32–40 | 1.1 | −0.022em |
+| `title-3` | 24–28 | 1.18 | −0.016em |
+| `headline` | 19–21 | 1.3 | −0.01em |
+| `body` | 17 (18 on desktop) | 1.53 | 0 |
+| `callout` | 15 | 1.47 | 0 |
+| `caption` | 14 | 1.43 | 0.005em |
+
+- Readability floor: nothing under 14px.
+- Weights: 400 body, 500 labels, 600 headings, 700 for `display` only.
+- Sizes are in `rem`, so the layout grows with the reader's text size.
+- Sentence case everywhere.
 
 ## Layout
 
-- One primitive repeats: a hairline-ruled list or grid. Rows, not cards.
-- Left-aligned. Sections open with a mono label row: number, name, rule.
-- Figures carry a caption that starts `fig. NN.`
+- Content sits in a 1120px column with 20px gutters on phones.
+- Rounded tiles (`rounded-tile`, 28px; `rounded-card`, 18px) on `surface`,
+  with no shadows on flat content. Shadows belong to floating layers only.
+- Sections are introduced by a large `title-1` heading, not by labels or
+  numbers.
+
+## Materials
+
+- Translucent material is for floating chrome only: the nav bar, the mobile
+  menu sheet, the screenshot viewer controls and diagram popovers. Never on
+  content tiles, and never stack one translucent layer on another.
+- `.material` is `background` at 72% with `saturate(180%) blur(20px)`;
+  `.material-thick` raises the opacity and blur for larger surfaces.
+- No border under the nav at rest. A hairline fades in once content scrolls
+  underneath it.
+- `prefers-reduced-transparency: reduce` makes every material solid.
+  `prefers-contrast: more` makes them solid and adds a visible border.
 
 ## Motion
 
-- CSS, driven by small bits of existing React state. No animation
-  libraries. Diagrams draw their lines, then their nodes appear, in about a
-  second. Text never waits on an animation.
-- Hover and press: underline color, a 4px arrow nudge, a 1px button press.
-- The mobile menu drops in over 160ms and starts nearly opaque. The theme
-  toggle icon turns in after a click, and the page crossfades for 200ms
-  where the browser supports view transitions. Nothing else animates.
-- Native scrolling. No pinned sections, parallax, smooth-scroll libraries,
-  custom cursors or scroll-triggered fades on text.
-- `prefers-reduced-motion: reduce` shows every figure in its final state
-  and switches themes and menus instantly.
+Motion uses springs. Apple's two parameters, damping and response, map onto
+Motion's `bounce` and `visualDuration`, and onto the CSS curves `--spring`
+and `--spring-bounce` in `app/globals.css` (generated from the same values).
+
+| Use | Damping | Response | CSS | Motion |
+|---|---|---|---|---|
+| Default (everything) | 1.0 | 0.35s | `var(--spring)` over 0.48s | `spring` in `lib/motion.ts` |
+| After a flick or throw | 0.8 | 0.4s | `var(--spring-bounce)` over 0.52s | `springBounce` |
+| Press feedback | — | 0.1s | `ease-out` | — |
+
+- Feedback starts on pointer-down: buttons scale to 0.97, tiles to 0.985.
+- Hover effects only where the device can hover (`@media (hover: hover)`).
+- Things enter and leave along the same path, and open from the control that
+  triggered them (`transform-origin` at the trigger).
+- Draggable surfaces (the mobile menu sheet and the screenshot viewer) follow
+  the pointer 1:1 from where it was grabbed, resist past their bounds, and
+  on release carry the pointer's velocity. Whether they close is decided by
+  where the release velocity projects them (`lib/motion.ts`), not by where
+  the pointer let go.
+- Never block input during an animation. Motion animations start from the
+  value on screen, so they can be grabbed and reversed mid-flight.
+- Scroll reveals use CSS scroll-driven animations, tied to position rather
+  than timers, so a section reached by an anchor link is already settled.
+  Browsers without support show everything in its final state.
+- Text is readable from the first frame: entrance animations on text start
+  partly visible and never delay the main heading.
+- Only `transform`, `opacity` and `filter` animate.
+- `prefers-reduced-motion: reduce` replaces slides, scales and springs with
+  short crossfades, removes the traffic animation in the diagram, and shows
+  every figure in its final state.
 
 ## Content
 
 - No invented metrics, incidents or dates. If a fact is unknown, leave the
   field out of the UI instead of showing a placeholder.
-- The one allowed placeholder is a missing screenshot, labeled as such.
 - The privacy page states only practices that are verified or confirmed by
   Jayden. Update it whenever a service, tracker or embed changes.
 
 ## Banned
 
-Gradients, glows, glassmorphism, rounded cards with shadows, emoji icons,
-pill badges, fake terminals or status panels, stat rows, dark mode as the
-default or following the system setting.
+Gradient text, glowing blobs or aurora backgrounds, emoji icons, stat rows,
+fake terminals or status panels, looping background motion, scroll-jacking,
+pinned scroll sequences, custom cursors, and any animation that hides the
+page's main text.
