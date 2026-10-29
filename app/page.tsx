@@ -14,10 +14,8 @@ export default function Page() {
         <Hero />
         <Work />
         <Infrastructure />
-        <div className="mx-auto flex max-w-sheet flex-col gap-24 px-5 md:gap-32 md:px-12 xl:px-24">
-          <Experience />
-          <Contact />
-        </div>
+        <Experience />
+        <Contact />
       </main>
       <Footer />
     </>
