@@ -95,6 +95,8 @@ html {
 body {
   @apply bg-paper font-sans text-graphite antialiased;
   text-rendering: optimizeLegibility;
+  /* SF switches between its Text and Display cuts by size. */
+  font-optical-sizing: auto;
 }
 
 ::selection {
