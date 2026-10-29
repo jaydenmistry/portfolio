@@ -47,9 +47,9 @@ const summary =
 
 export default function FullTopology() {
   return (
-    <figure className="reveal-zoom m-0 flex flex-col gap-4">
+    <figure className="m-0 flex flex-col gap-4">
       {/* Wide screens: the routed diagram. */}
-      <div className="hidden rounded-tile bg-surface px-10 pb-12 pt-14 xl:block">
+      <div className="reveal-zoom hidden rounded-tile bg-surface px-10 pb-12 pt-14 xl:block">
         <TopologyCanvas
           nodes={nodes}
           edges={edges}
@@ -60,7 +60,7 @@ export default function FullTopology() {
       </div>
 
       {/* Narrow screens: the same system as stacked layers. */}
-      <div className="rounded-tile bg-surface xl:hidden">
+      <div className="reveal-zoom rounded-tile bg-surface xl:hidden">
         <DrawOnView as="ol" label="Service layers, from the internet down to the host" className="relative m-0 list-none space-y-6 px-5 py-8 sm:px-8">
           <span aria-hidden className="draw-spine absolute bottom-12 left-[2.35rem] top-12 w-0.5 rounded-full bg-accent/40 sm:left-[3.1rem]" />
           <span
@@ -90,7 +90,7 @@ export default function FullTopology() {
           ))}
         </DrawOnView>
       </div>
-      <figcaption className="text-center text-callout text-label-2">
+      <figcaption className="reveal text-center text-callout text-label-2">
         Kappa Theta Pi service topology. Blue lines carry request traffic.
         <span className="hidden xl:inline"> Point at a service to see what it does.</span>
       </figcaption>
