@@ -113,7 +113,9 @@ and `--spring-bounce` in `app/globals.css` (generated from the same values).
   value on screen, so they can be grabbed and reversed mid-flight.
 - Scroll reveals use CSS scroll-driven animations, tied to position rather
   than timers, so a section reached by an anchor link is already settled.
-  Browsers without support show everything in its final state.
+  They move and scale content but never fade it, so text keeps full contrast
+  wherever it sits. Browsers without support show everything in its final
+  state.
 - Text is readable from the first frame: entrance animations on text start
   partly visible and never delay the main heading.
 - Only `transform`, `opacity` and `filter` animate.

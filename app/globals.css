@@ -360,15 +360,15 @@ body {
     }
   }
 }
+/* Reveals move content but never fade it, so text keeps full contrast
+   wherever it sits on screen. */
 @keyframes reveal {
   from {
-    opacity: 0;
     transform: translateY(3rem);
   }
 }
 @keyframes reveal-zoom {
   from {
-    opacity: 0.4;
     transform: scale(0.9);
   }
 }
