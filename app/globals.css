@@ -75,7 +75,7 @@
 }
 
 /* Colors change at once when switching themes, not per element. */
-.theme-switching *,
+.theme-switching *:not(.theme-thumb),
 .theme-switching *::before,
 .theme-switching *::after {
   transition: none !important;
@@ -85,6 +85,13 @@
 ::view-transition-new(root) {
   animation-duration: 0.2s;
   animation-timing-function: ease-out;
+}
+
+/* A chosen theme grows out of the control that chose it (lib/use-theme.ts). */
+.theme-reveal::view-transition-old(root),
+.theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 html {
@@ -113,6 +120,18 @@ body {
   /* Section opener: number, name, then a hairline to the edge. */
   .section-label {
     @apply flex items-baseline gap-4 font-mono text-meta text-graphite;
+  }
+
+  /* Pointer-down feedback: in fast, back on a spring. */
+  .press {
+    transition-property: transform, color, background-color, border-color, opacity, box-shadow;
+    transition-duration: 480ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+    transition-timing-function: var(--spring), ease-out, ease-out, ease-out, ease-out, ease-out;
+  }
+  .press:active {
+    transform: scale(0.97);
+    transition-duration: 80ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+    transition-timing-function: ease-out;
   }
 
   .btn {
@@ -184,23 +203,21 @@ body {
   }
 }
 
-/* Theme toggle: the moon offers dark, the sun offers light. The shown icon
-   turns in briefly, only after a click (not on page load). */
-.theme-icon-sun,
-:root[data-theme='dark'] .theme-icon-moon {
-  display: none;
+/* Theme switcher: the thumb and the checked icon follow data-theme-pref,
+   which the head script sets before first paint. */
+.theme-thumb {
+  transition: transform 480ms var(--spring);
 }
-:root[data-theme='dark'] .theme-icon-sun {
-  display: block;
+:root[data-theme-pref='light'] .theme-thumb {
+  transform: translateX(100%);
 }
-.theme-animate .theme-toggle svg {
-  animation: theme-icon-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+:root[data-theme-pref='dark'] .theme-thumb {
+  transform: translateX(200%);
 }
-@keyframes theme-icon-in {
-  from {
-    opacity: 0.3;
-    transform: rotate(-45deg) scale(0.8);
-  }
+:root:not([data-theme-pref='light']):not([data-theme-pref='dark']) .theme-switcher [data-value='system'],
+:root[data-theme-pref='light'] .theme-switcher [data-value='light'],
+:root[data-theme-pref='dark'] .theme-switcher [data-value='dark'] {
+  color: rgb(var(--label));
 }
 
 /* Mobile menu drops in briefly; links are readable from the first frame. */

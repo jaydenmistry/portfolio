@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { navItems, site } from '@/lib/data';
 import { CloseIcon, MenuIcon } from '@/components/icons';
-import ThemeToggle from '@/components/ThemeToggle';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { resumeEvent } from '@/lib/analytics';
 
 export default function Navbar() {
@@ -67,7 +67,7 @@ export default function Navbar() {
             </li>
           </ul>
 
-          <ThemeToggle className="h-11 w-11 md:-mr-2.5 md:h-10 md:w-10" />
+          <ThemeSwitcher className="hidden md:grid" />
 
           <button
             ref={menuButton}
