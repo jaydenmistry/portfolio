@@ -4,25 +4,9 @@
 
 /* Design rules live in DESIGN.md. */
 
+/* Apple palette as RGB channels for Tailwind (see DESIGN.md, Color). */
 :root {
   color-scheme: light;
-  /* Blueprint palette as RGB channels for Tailwind (see DESIGN.md). */
-  --paper: 243 240 232;
-  --sheet: 250 248 243;
-  --grid: 231 226 215;
-  --rule: 207 200 184;
-  --rule-strong: 154 147 131;
-  --graphite: 22 24 29;
-  --graphite-2: 74 79 90;
-  --graphite-hover: 42 45 52;
-  --signal: 226 83 26;
-  --signal-ink: 178 62 12;
-  /* Figure sheet and hatch linework. */
-  --figure: 247 245 239;
-  --hatch: 230 224 211;
-  --selection: rgb(226 83 26 / 0.18);
-
-  /* Apple palette (see DESIGN.md), RGB channels for Tailwind. */
   --background: 255 255 255;
   --surface: 245 245 247;
   --elevated: 255 255 255;
@@ -35,33 +19,21 @@
   --accent-fill-hover: 0 119 237;
   --success: 52 199 89;
   --danger: 215 0 21;
-  /* Floating chrome: translucent background plus the scrim behind sheets. */
+  /* Floating chrome: translucent background, the scrim behind sheets, the
+     shadow under floating layers, and the light that follows the pointer. */
   --material: 255 255 255;
   --scrim: 0 0 0 / 0.32;
-  --spotlight: 255 255 255 / 0.85;
   --shadow-float: 0 12px 40px rgb(0 0 0 / 0.12), 0 2px 8px rgb(0 0 0 / 0.06);
+  --spotlight: 255 255 255 / 0.85;
   /* Springs, sampled from Apple's damping and response (DESIGN.md, Motion). */
   --spring: linear(0, 0.02, 0.07, 0.137, 0.214, 0.293, 0.371, 0.445, 0.514, 0.577, 0.634, 0.685, 0.73, 0.769, 0.803, 0.833, 0.858, 0.88, 0.899, 0.915, 0.929, 0.94, 0.95, 0.958, 0.965, 0.971, 0.976, 0.98, 0.983, 0.986, 0.988, 0.99, 0.992, 0.993, 0.995, 0.995, 0.996, 0.997, 0.997, 0.998, 1);
   --spring-bounce: linear(0, 0.019, 0.067, 0.135, 0.214, 0.3, 0.386, 0.47, 0.55, 0.623, 0.689, 0.748, 0.799, 0.843, 0.881, 0.912, 0.937, 0.958, 0.975, 0.987, 0.997, 1.004, 1.009, 1.012, 1.014, 1.015, 1.015, 1.015, 1.014, 1.013, 1.011, 1.01, 1.009, 1.008, 1.006, 1.005, 1.004, 1.004, 1.003, 1.002, 1);
 }
 
-/* Optional dark theme: charcoal paper, warm off-white ink, same orange. */
+/* Dark: pinned by the visitor or following the OS (set by the head script).
+   Without JS, the media query below applies the same values. */
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: 28 27 25;
-  --sheet: 37 36 32;
-  --grid: 44 43 39;
-  --rule: 58 56 51;
-  --rule-strong: 110 105 95;
-  --graphite: 237 232 221;
-  --graphite-2: 179 173 161;
-  --graphite-hover: 217 211 199;
-  --signal: 226 83 26;
-  --signal-ink: 238 109 53;
-  --figure: 32 31 28;
-  --hatch: 52 50 46;
-  --selection: rgb(226 83 26 / 0.32);
-
   --background: 0 0 0;
   --surface: 22 22 23;
   --elevated: 28 28 30;
@@ -70,14 +42,31 @@
   --separator: 56 56 58;
   --fill: 44 44 46;
   --accent: 41 151 255;
-  --accent-fill: 0 113 227;
-  --accent-fill-hover: 0 119 237;
   --success: 48 209 88;
   --danger: 255 69 58;
   --material: 22 22 23;
   --scrim: 0 0 0 / 0.56;
-  --spotlight: 255 255 255 / 0.07;
   --shadow-float: 0 12px 40px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.08);
+  --spotlight: 255 255 255 / 0.07;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --background: 0 0 0;
+    --surface: 22 22 23;
+    --elevated: 28 28 30;
+    --label: 245 245 247;
+    --label-2: 161 161 166;
+    --separator: 56 56 58;
+    --fill: 44 44 46;
+    --accent: 41 151 255;
+    --success: 48 209 88;
+    --danger: 255 69 58;
+    --material: 22 22 23;
+    --scrim: 0 0 0 / 0.56;
+    --shadow-float: 0 12px 40px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.08);
+    --spotlight: 255 255 255 / 0.07;
+  }
 }
 
 /* Colors change at once when switching themes, not per element. */
@@ -123,11 +112,6 @@ body {
 }
 
 @layer components {
-  /* Section opener: number, name, then a hairline to the edge. */
-  .section-label {
-    @apply flex items-baseline gap-4 font-mono text-meta text-graphite;
-  }
-
   /* Pointer-down feedback: in fast, back on a spring. Uses the separate
      `scale` property so it composes with reveal and hover transforms. */
   .press,
@@ -240,74 +224,6 @@ body {
     -webkit-backdrop-filter: saturate(180%) blur(40px);
     backdrop-filter: saturate(180%) blur(40px);
   }
-
-  .btn {
-    @apply inline-flex h-12 items-center justify-center gap-2 px-5 text-[0.9375rem] font-medium no-underline;
-    transition:
-      transform 0.1s ease-out,
-      background-color 0.15s ease-out;
-  }
-  .btn:active {
-    transform: translateY(1px);
-  }
-
-  .btn-dark {
-    @apply btn bg-graphite text-paper hover:bg-graphite-hover;
-  }
-
-  .btn-line {
-    @apply btn border border-graphite text-graphite hover:bg-sheet;
-  }
-
-  /* Text link with a hairline underline that turns signal orange. */
-  .ulink {
-    text-decoration-line: underline;
-    text-decoration-color: rgb(var(--rule));
-    text-decoration-thickness: 1px;
-    text-underline-offset: 5px;
-    transition: text-decoration-color 0.15s ease-out;
-  }
-  .ulink:hover,
-  .ulink:focus-visible,
-  .ulink[aria-current='true'] {
-    text-decoration-color: rgb(var(--signal));
-  }
-
-  /* Ruled list row with an arrow that nudges on hover. */
-  .row-link {
-    transition: background-color 0.15s ease-out;
-  }
-  .row-link:hover {
-    @apply bg-sheet;
-  }
-  .row-link .arrow {
-    display: inline-block;
-    transition:
-      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-      color 0.15s ease-out;
-  }
-  .row-link:hover .arrow,
-  .row-link:focus-visible .arrow {
-    transform: translateX(4px);
-    color: rgb(var(--signal-ink));
-  }
-
-  .blueprint-grid {
-    background-color: rgb(var(--figure));
-    background-image:
-      linear-gradient(rgb(var(--grid)) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--grid)) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .hatch {
-    background-color: rgb(var(--sheet));
-    background-image: repeating-linear-gradient(135deg, rgb(var(--hatch)) 0 1px, transparent 1px 10px);
-  }
-
-  .corner {
-    @apply pointer-events-none absolute h-4 w-4 border-graphite;
-  }
 }
 
 /* Theme switcher: the thumb and the checked icon follow data-theme-pref,
@@ -342,21 +258,10 @@ body {
   }
 }
 
-/* Mobile menu drops in briefly; links are readable from the first frame. */
-.menu-enter {
-  animation: menu-enter 0.16s ease-out;
-}
-@keyframes menu-enter {
-  from {
-    opacity: 0.4;
-    transform: translateY(-6px);
-  }
-}
-
 /* ------------------------------------------------------------------ */
 /* Diagram drawing. Lines draw, then nodes appear, in about a second.  */
-/* Figures render fully drawn unless JS arms them (`draw-armed`) or    */
-/* they draw on load (`draw-go` from the server).                      */
+/* Figures render fully drawn unless JS arms them (`draw-armed`) and   */
+/* then draw when scrolled into view (`draw-go`).                      */
 /* ------------------------------------------------------------------ */
 
 .draw-line {

@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <a
           href="#main"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 bg-graphite px-4 py-3 text-[0.9375rem] font-medium text-paper transition-transform focus:translate-y-0"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-accent-fill px-5 py-3 text-callout font-medium text-white transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>
