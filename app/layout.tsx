@@ -44,7 +44,11 @@ const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const viewport: Viewport = {
-  themeColor: themePalette.light.paper,
+  // Follows the OS; the head script overrides both when a theme is pinned.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: themePalette.light.background },
+    { media: '(prefers-color-scheme: dark)', color: themePalette.dark.background },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

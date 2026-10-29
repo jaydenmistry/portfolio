@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
-import ThemeToggle from '@/components/ThemeToggle';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { privacy } from '@/lib/privacy';
 import { site } from '@/lib/data';
 
@@ -88,9 +88,10 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
     title: 'Stored in your browser',
     body: (
       <p>
-        If you switch between light and dark mode, the site saves your choice in your browser&apos;s local storage
-        under the name <code className="font-mono text-meta text-graphite">theme</code>. It never leaves your
-        device. Clearing this site&apos;s data in your browser removes it.
+        The site follows your device&apos;s light or dark setting. If you choose Light or Dark instead, it saves
+        that choice in your browser&apos;s local storage under the name{' '}
+        <code className="font-mono text-meta text-graphite">theme</code>. It never leaves your device. Choosing
+        System, or clearing this site&apos;s data in your browser, removes it.
       </p>
     ),
   },
@@ -122,7 +123,7 @@ export default function PrivacyPage() {
             <Link href="/" className="ulink text-[0.9375rem] text-graphite">
               Back to home
             </Link>
-            <ThemeToggle className="h-11 w-11 -mr-3 md:-mr-2.5 md:h-10 md:w-10" />
+            <ThemeSwitcher />
           </div>
         </nav>
       </header>

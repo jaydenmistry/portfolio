@@ -16,9 +16,9 @@ type CalendlyWindow = Window & {
 // Calendly's own cookie banner stays enabled: its embed terms require it
 // unless the site provides its own cookie controls for Calendly.
 function bookingUrl(theme: Theme) {
-  const { paper, graphite, signalInk } = themePalette[theme];
+  const { surface, label, accent } = themePalette[theme];
   const hex = (color: string) => color.slice(1).toLowerCase();
-  return `${contact.calendlyUrl}?background_color=${hex(paper)}&text_color=${hex(graphite)}&primary_color=${hex(signalInk)}`;
+  return `${contact.calendlyUrl}?background_color=${hex(surface)}&text_color=${hex(label)}&primary_color=${hex(accent)}`;
 }
 
 const pageViews = ['calendly.profile_page_viewed', 'calendly.event_type_viewed'];
