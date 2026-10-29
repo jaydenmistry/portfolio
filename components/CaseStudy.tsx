@@ -4,10 +4,12 @@ import { ArrowUpRightIcon, CheckIcon } from '@/components/icons';
 import { Chips } from '@/components/WorkOverview';
 import ScreenshotViewer from '@/components/ScreenshotViewer';
 
-export function BuiltList({ items }: { items: string[] }) {
+type Level = 'h3' | 'h4';
+
+export function BuiltList({ items, heading: Heading = 'h4' }: { items: string[]; heading?: Level }) {
   return (
     <div className="flex flex-col gap-5">
-      <h4 className="m-0 text-callout font-medium text-label-2">What I built</h4>
+      <Heading className="m-0 text-callout font-medium text-label-2">What I built</Heading>
       <ul className="m-0 flex list-none flex-col gap-4 p-0">
         {items.map((item) => (
           <li key={item} className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-3 text-body text-label md:text-body-lg">
@@ -20,7 +22,7 @@ export function BuiltList({ items }: { items: string[] }) {
   );
 }
 
-export function Facts({ project }: { project: Project }) {
+export function Facts({ project, heading: Heading = 'h4' }: { project: Project; heading?: Level }) {
   const rows = [
     ['Role', project.role],
     ['Timeline', project.timeline],
@@ -38,7 +40,7 @@ export function Facts({ project }: { project: Project }) {
         ))}
       </dl>
       <div className="flex flex-col gap-3">
-        <h4 className="m-0 text-callout font-medium text-label-2">Stack</h4>
+        <Heading className="m-0 text-callout font-medium text-label-2">Stack</Heading>
         <Chips items={project.stack} />
       </div>
     </div>

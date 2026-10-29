@@ -26,10 +26,10 @@ export default function Infrastructure() {
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <div className="tile reveal p-7 md:p-10">
-            <BuiltList items={project.built} />
+            <BuiltList items={project.built} heading="h3" />
           </div>
           <div className="tile reveal p-7 md:p-10">
-            <Facts project={project} />
+            <Facts project={project} heading="h3" />
           </div>
         </div>
 
