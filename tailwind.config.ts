@@ -30,6 +30,7 @@ const config: Config = {
         accent: 'rgb(var(--accent) / <alpha-value>)',
         'accent-fill': 'rgb(var(--accent-fill) / <alpha-value>)',
         success: 'rgb(var(--success) / <alpha-value>)',
+        danger: 'rgb(var(--danger) / <alpha-value>)',
       },
       fontFamily: {
         // The platform's own UI font: SF Pro on Apple devices (or wherever
