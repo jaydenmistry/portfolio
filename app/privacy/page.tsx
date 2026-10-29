@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 function External({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a className="ulink text-graphite" href={href}>
+    <a className="link" href={href}>
       {children}
     </a>
   );
@@ -90,7 +90,7 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
       <p>
         The site follows your device&apos;s light or dark setting. If you choose Light or Dark instead, it saves
         that choice in your browser&apos;s local storage under the name{' '}
-        <code className="font-mono text-meta text-graphite">theme</code>. It never leaves your device. Choosing
+        <code className="font-mono text-[0.9375rem] text-label">theme</code>. It never leaves your device. Choosing
         System, or clearing this site&apos;s data in your browser, removes it.
       </p>
     ),
@@ -111,58 +111,50 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
 export default function PrivacyPage() {
   return (
     <>
-      <header id="top" className="border-b border-rule bg-paper">
-        <nav
-          aria-label="Primary"
-          className="mx-auto flex h-16 max-w-sheet items-center justify-between px-5 md:px-12 xl:px-24"
-        >
-          <Link href="/" className="text-base font-semibold tracking-[-0.01em] text-graphite no-underline">
-            {site.name}
-          </Link>
-          <div className="flex items-center gap-1 md:gap-6">
-            <Link href="/" className="ulink text-[0.9375rem] text-graphite">
-              Back to home
+      <header id="top" className="sticky top-0 z-50">
+        <div className="material relative">
+          <nav aria-label="Primary" className="container-content flex h-[3.25rem] items-center justify-between">
+            <Link href="/" className="press -mx-2 hidden rounded-full px-2 py-1.5 text-[1.0625rem] font-semibold tracking-[-0.01em] text-label no-underline sm:block">
+              {site.name}
             </Link>
-            <ThemeSwitcher />
-          </div>
-        </nav>
+            <div className="flex flex-1 items-center justify-between gap-4 sm:flex-none">
+              <Link href="/" className="link-chevron text-callout">
+                Back to home
+              </Link>
+              <ThemeSwitcher />
+            </div>
+          </nav>
+          <span aria-hidden className="nav-edge pointer-events-none absolute inset-x-0 bottom-0 h-px bg-separator" />
+        </div>
       </header>
 
-      <main
-        id="main"
-        className="mx-auto flex max-w-sheet flex-col gap-10 px-5 pb-24 pt-10 md:gap-12 md:px-12 md:pb-32 md:pt-24 xl:px-24"
-      >
-        <p className="section-label m-0">
-          <span>Privacy notice</span>
-          <span aria-hidden className="flex-1 self-center border-t border-rule" />
-        </p>
-        <div className="flex flex-col gap-6">
-          <h1 className="m-0 text-[2.75rem] font-semibold leading-[0.98] tracking-display text-graphite md:text-[4.5rem]">
-            Privacy
-          </h1>
-          <p className="m-0 max-w-[40rem] text-body text-graphite-2 md:text-body-lg">
+      <main id="main" className="container-content flex flex-col gap-12 pb-28 pt-16 md:gap-16 md:pb-40 md:pt-28">
+        <div className="hero-in flex max-w-3xl flex-col gap-5">
+          <p className="m-0 text-headline font-semibold text-accent">Privacy notice</p>
+          <h1 className="m-0 text-title-1 text-label">Privacy</h1>
+          <p className="m-0 text-pretty text-headline text-label-2">
             This is my personal portfolio. This page explains what information the site collects, which services
             handle it, and how to reach me about it.
           </p>
-          <p className="m-0 font-mono text-meta text-graphite-2">Effective {privacy.effectiveDate}</p>
+          <p className="m-0 text-callout text-label-2">Effective {privacy.effectiveDate}</p>
         </div>
 
-        <ol className="m-0 list-none border-b border-rule p-0">
+        <ol className="m-0 flex list-none flex-col gap-4 p-0">
           {sections.map((section) => (
             <li
               key={section.id}
               id={section.id}
-              className="grid gap-3 border-t border-rule py-7 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-[4.5rem] lg:py-9"
+              className="tile reveal grid gap-3 rounded-card p-7 md:p-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-12"
             >
-              <h2 className="m-0 font-mono text-meta font-medium text-graphite">{section.title}</h2>
-              <div className="flex max-w-[44rem] flex-col gap-4 text-body text-graphite-2 md:text-body-lg [&_p]:m-0">
+              <h2 className="m-0 text-headline font-semibold text-label">{section.title}</h2>
+              <div className="flex max-w-[44rem] flex-col gap-4 text-body text-label-2 md:text-body-lg [&_p]:m-0">
                 {section.body}
               </div>
             </li>
           ))}
         </ol>
 
-        <p className="m-0 max-w-[44rem] font-mono text-meta text-graphite-2">
+        <p className="m-0 max-w-[44rem] text-callout text-label-2">
           If these practices change, I&apos;ll update this page and its effective date.
         </p>
       </main>
