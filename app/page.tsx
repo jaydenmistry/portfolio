@@ -1,7 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import WorkIndex from '@/components/WorkIndex';
-import Projects from '@/components/Projects';
+import Work from '@/components/Work';
 import Infrastructure from '@/components/Infrastructure';
 import Experience from '@/components/Experience';
 import Contact from '@/components/Contact';
@@ -11,12 +10,11 @@ export default function Page() {
   return (
     <>
       <Navbar />
-      <main id="main">
+      <main id="main" className="flex flex-col gap-28 pb-28 md:gap-40 md:pb-40">
         <Hero />
-        <div className="mx-auto flex max-w-sheet flex-col gap-24 px-5 pb-24 md:gap-32 md:px-12 md:pb-32 xl:px-24">
-          <WorkIndex />
-          <Projects />
-          <Infrastructure />
+        <Work />
+        <Infrastructure />
+        <div className="mx-auto flex max-w-sheet flex-col gap-24 px-5 md:gap-32 md:px-12 xl:px-24">
           <Experience />
           <Contact />
         </div>

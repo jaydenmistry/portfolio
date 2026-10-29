@@ -7,7 +7,7 @@ const step = (i: number) => ({ '--i': i }) as CSSProperties;
 
 export default function Hero() {
   return (
-    <section id="top" aria-labelledby="hero-name" className="hero-exit container-content flex flex-col items-center pb-20 pt-16 text-center md:pb-28 md:pt-28">
+    <section id="top" aria-labelledby="hero-name" className="hero-exit container-content flex flex-col items-center pt-16 text-center md:pt-28">
       <p className="hero-in m-0 text-balance text-callout text-label-2 md:text-headline" style={step(0)}>
         Software engineer <span aria-hidden>·</span> {site.education}
       </p>
