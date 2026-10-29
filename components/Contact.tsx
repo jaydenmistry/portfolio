@@ -123,12 +123,17 @@ export default function Contact() {
 
   // Validate when a field is left, then keep the message current while typing.
   const onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (!e.currentTarget.value && !errors[e.currentTarget.name as FieldName]) return;
-    setErrors((prev) => ({ ...prev, [e.currentTarget.name]: problem(e.currentTarget) }));
+    const el = e.currentTarget;
+    // Don't scold an empty field someone has only tabbed through.
+    if (!el.value && !errors[el.name as FieldName]) return;
+    const message = problem(el);
+    setErrors((prev) => ({ ...prev, [el.name]: message }));
   };
   const onInput: FormEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const el = e.currentTarget;
-    if (errors[el.name as FieldName]) setErrors((prev) => ({ ...prev, [el.name]: problem(el) }));
+    if (!errors[el.name as FieldName]) return;
+    const message = problem(el);
+    setErrors((prev) => ({ ...prev, [el.name]: message }));
   };
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
