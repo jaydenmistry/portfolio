@@ -47,15 +47,18 @@ the Calendly embed; keep them in sync with this table.
   Android. No web fonts on the page. `ui-monospace` only for code.
 - Tracking and leading change with size. Use the named sizes in
   `tailwind.config.ts`, which carry both; never set one letter-spacing for
-  every size.
+  every size. The values follow Apple's own web type for SF Pro: SF's
+  Display design is already tight, so only the largest sizes go negative.
+- SF Pro installed as a file (not via the OS) is loaded through the
+  `SF Pro Local` face in `app/globals.css` so its optical sizes work.
 
 | Size | px | Leading | Tracking |
 |---|---|---|---|
-| `display` | 56–120 | 1.02 | −0.035em |
-| `title-1` | 40–64 | 1.06 | −0.028em |
-| `title-2` | 32–40 | 1.1 | −0.022em |
-| `title-3` | 24–28 | 1.18 | −0.016em |
-| `headline` | 19–21 | 1.3 | −0.01em |
+| `display` | 56–120 | 1.02 | −0.02em |
+| `title-1` | 40–64 | 1.06 | −0.01em |
+| `title-2` | 32–40 | 1.1 | −0.004em |
+| `title-3` | 24–28 | 1.18 | 0 |
+| `headline` | 19–21 | 1.3 | 0 |
 | `body` | 17 (18 on desktop) | 1.53 | 0 |
 | `callout` | 15 | 1.47 | 0 |
 | `caption` | 14 | 1.43 | 0.005em |
