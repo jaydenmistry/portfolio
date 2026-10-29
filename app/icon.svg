@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- Blueprint mark: graphite JM drawn on paper, orange baseline. See DESIGN.md. -->
-  <rect width="64" height="64" fill="#F3F0E8"/>
-  <rect x="1.5" y="1.5" width="61" height="61" fill="none" stroke="#16181D" stroke-width="3"/>
-  <g fill="none" stroke="#16181D" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M26 14V35a8 8 0 0 1-16 0"/>
-    <path d="M34 45V14l8.5 17L51 14v31"/>
+  <!-- JM in white on a graphite rounded tile, with a blue accent dot. See DESIGN.md. -->
+  <rect width="64" height="64" rx="15" fill="#1D1D1F"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 17V35a7.5 7.5 0 0 1-15 0"/>
+    <path d="M33 45V17l8.5 16L50 17v28"/>
   </g>
-  <rect x="10" y="51" width="44" height="4" fill="#E2531A"/>
+  <circle cx="17" cy="51" r="3.5" fill="#2997FF"/>
 </svg>
