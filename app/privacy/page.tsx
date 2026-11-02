@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import { privacy } from '@/lib/privacy';
-import { site } from '@/lib/data';
+import { contact, site } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Privacy | Jayden Mistry',
@@ -47,8 +47,10 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
           <External href={privacy.links.calendly}>Calendly&apos;s Privacy Notice</External>.
         </p>
         <p>
-          Calendly sets cookies. Use the cookie banner or the Cookie settings link inside the scheduler to decline
-          optional Calendly cookies. You can also email me instead of using the scheduler.
+          Calendly sets cookies. Choose Decline on Calendly&apos;s cookie banner inside the scheduler to turn off
+          optional Calendly cookies. To change that choice later, use Cookie settings at the bottom of{' '}
+          <External href={contact.calendlyUrl}>my Calendly page</External>; that link does not open inside the
+          embedded scheduler. You can also email me instead of using the scheduler.
         </p>
       </>
     ),
