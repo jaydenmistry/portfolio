@@ -1,22 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { site, experience } from '@/lib/data';
 import { themePalette, themeScript } from '@/lib/theme';
-
-const plexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-const plexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-});
+import MotionProvider from '@/components/MotionProvider';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jmistry.com'),
@@ -58,13 +45,17 @@ const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const viewport: Viewport = {
-  themeColor: themePalette.light.paper,
+  // Follows the OS; the head script overrides both when a theme is pinned.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: themePalette.light.background },
+    { media: '(prefers-color-scheme: dark)', color: themePalette.dark.background },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // The theme script sets data-theme on <html> before hydration.
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
@@ -75,11 +66,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <a
           href="#main"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 bg-graphite px-4 py-3 text-[0.9375rem] font-medium text-paper transition-transform focus:translate-y-0"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-accent-fill px-5 py-3 text-callout font-medium text-white transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         {umamiSrc && umamiWebsiteId ? (
           <Script
             src={umamiSrc}

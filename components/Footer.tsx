@@ -1,15 +1,33 @@
+import Link from 'next/link';
 import { site } from '@/lib/data';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-rule">
-      <div className="mx-auto flex max-w-sheet flex-col gap-3 px-5 py-10 font-mono text-meta text-graphite-2 md:flex-row md:items-center md:justify-between md:px-12 xl:px-24">
-        <p className="m-0">
-          © 2026 {site.name}. Built with Next.js and Tailwind CSS.
-        </p>
-        <a href="#top" className="ulink text-graphite">
-          Back to top
-        </a>
+    <footer className="container-content">
+      <div className="flex flex-col gap-4 border-t border-separator py-8 text-caption text-label-2 md:flex-row md:items-center md:justify-between">
+        <p className="m-0">© 2026 {site.name}. Designed and built by me with Next.js.</p>
+        <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
+          <li>
+            <a className="text-label-2 no-underline transition-colors hover:text-label" href={site.github}>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a className="text-label-2 no-underline transition-colors hover:text-label" href={site.linkedin}>
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <Link href="/privacy" className="text-label-2 no-underline transition-colors hover:text-label">
+              Privacy
+            </Link>
+          </li>
+          <li>
+            <a href="#top" className="text-label-2 no-underline transition-colors hover:text-label">
+              Back to top
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

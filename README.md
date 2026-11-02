@@ -3,10 +3,12 @@
 Personal portfolio of **Jayden Mistry**, a software engineer who builds full-stack
 products and runs the infrastructure they ship on.
 
-Built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Light by
-default, with an optional dark theme from the header toggle. No animation
-libraries: diagrams draw with CSS, triggered by a small IntersectionObserver hook,
-and render fully drawn under `prefers-reduced-motion`. Visual rules live in
+Built with Next.js (App Router), React, TypeScript, Tailwind CSS and Motion. The
+design follows Apple's interface guidelines: the system font, translucent
+navigation, and spring animations, including a draggable menu sheet and
+screenshot viewer. The theme follows the operating system unless a visitor picks
+Light or Dark. Scroll reveals use CSS scroll-driven animations, and everything
+settles to its final state under `prefers-reduced-motion`. Visual rules live in
 [`DESIGN.md`](DESIGN.md).
 
 ## Develop
@@ -21,8 +23,9 @@ pnpm build      # production build
 ```
 
 Smoke tests (Playwright, Chromium) run against the production build and in CI.
-They cover section navigation, the mobile menu, critical links, theme
-persistence and axe accessibility checks in both themes. Calendly and
+They cover section navigation, the mobile menu, critical links, the theme
+control (system default and saved choices), the screenshot viewer, inline
+contact-form validation and axe accessibility checks in both themes. Calendly and
 Formspree requests are blocked so results never depend on those services.
 
 ```bash
@@ -89,6 +92,10 @@ skill groups, experience entries, and contact copy. Optional project fields
 (role, timeline, status, repo) are simply omitted from the page when unset.
 Components read from that file — you should rarely need to touch them for copy changes.
 
+The privacy notice is `app/privacy/page.tsx`, with its effective date, contact
+and provider links in [`lib/privacy.ts`](lib/privacy.ts). Update it whenever
+the site adds or changes a service that handles visitor data.
+
 The Contact section includes an inline Calendly scheduler. Set its link with
 `contact.calendlyUrl`; the script loads as the section approaches the viewport.
 A fixed-size loading placeholder prevents the scheduler from moving surrounding
@@ -122,7 +129,7 @@ is end-of-life; revisit the migration when the plugin stack supports 10,
 rather than overriding its peer requirements or dropping checks.
 
 CI runs `pnpm audit --audit-level=high` before lint and build. The lockfile was
-refreshed with Next.js 16.3.6; the `yaml@<2.8.3` override keeps Tailwind's
+refreshed with Next.js 16.4.3 (2026-10-29); the `yaml@<2.8.3` override keeps Tailwind's
 configuration loader on a patched YAML release without changing Tailwind majors.
 
 ## Checklist before deploying

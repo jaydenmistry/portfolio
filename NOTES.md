@@ -1,19 +1,46 @@
 # Working notes
 
-## Current scope - 2026-09-23
+## Current scope - 2026-10-29
 
-The blueprint redesign, Calendly and Umami are published on main and deployed
-at https://jmistry.com; Umami records visits. Keep the layout and follow
-DESIGN.md. Separate project pages and technical articles remain deferred.
-Do not push or deploy new work until the user explicitly approves it.
+Branch ui-redesign (from redesign/blueprint at b109df7, so it carries the
+unpushed privacy commits) replaces the blueprint look with an Apple-style
+redesign. Jayden's calls: replace the blueprint entirely, use the system font,
+follow the OS theme with a System / Light / Dark control, add Motion
+(pinned 14.2.0) for spring and gesture animations, and use translucent
+materials. DESIGN.md holds the new rules. Pushed to origin/ui-redesign at
+Jayden's request; not merged to main or deployed.
 
-In progress on redesign/blueprint (local, unpushed): optional dark theme with
-a header toggle, themed Calendly embed, motion refinements, blueprint favicon,
-Umami click events and a Playwright smoke test in CI.
+Verified 2026-10-29 on ui-redesign (Next 16.4.3, production build):
+- Lighthouse 13.5.0, local Chrome 153 headless: mobile 96/98/98 performance,
+  100 accessibility, best practices and SEO; desktop 100 across the board;
+  /privacy mobile 100 across the board. CLS 0. Mobile LCP 2.4-2.8s.
+- Smoke suite 21/21; `pnpm audit`: no known vulnerabilities; no horizontal
+  overflow or text under 14px at 320/390/768/1024/1440 in both themes.
+- Gestures checked in headless Chromium with pointer events: a small sheet
+  drag springs back, a flick closes it, pulling up 300px moves it 119px; the
+  screenshot viewer closes on a flick. Not tested on real iOS/Safari.
+- Calendly's color parameters are ignored on the free plan (checked on the
+  profile and event pages), so dark mode inverts the embed in CSS
+  (`.calendly-embed`). Switching themes no longer reloads it.
+- SF Pro installed as a file (Linux/Windows) renders with the Display design
+  at every size when used by family name; the `SF Pro Local` @font-face in
+  globals.css restores optical sizing. Apple devices use the system font.
+
+The privacy notice questions below are still open and also apply to this
+branch. The theme section of the privacy page was updated for the System
+option.
+
+Earlier (2026-09-23): the blueprint redesign, Calendly and Umami are on main
+and deployed at https://jmistry.com.
 
 ## Release changes
 
-- Next.js and eslint-config-next are pinned to 16.3.6. PostCSS is 8.5.28 and
+- 2026-10-29: Next.js and eslint-config-next moved from 16.3.6 to 16.4.3 to
+  clear new critical/high Next.js advisories (fixed in 16.4.1+); the same
+  refresh took sharp 0.35.5, source-map-js 1.2.2, zod 4.6.7 and
+  postcss-selector-parser 6.1.5, all within existing ranges. `pnpm audit`:
+  no known vulnerabilities.
+- Next.js and eslint-config-next were pinned to 16.3.6. PostCSS is 8.5.28 and
   Tailwind is 3.4.19. Transitive dependencies were refreshed; a scoped YAML
   override prevents versions older than 2.8.3. The full dependency audit reports
   zero known advisories. CI now rejects high/critical audit findings.
@@ -29,6 +56,30 @@ Umami click events and a Playwright smoke test in CI.
 - Spotr screenshot: public/spotr-pipeline.webp, 1600 x 1000, full-size link present.
 - Unknown public repository URLs for the KV store and chat app remain hidden.
 - Person JSON-LD uses affiliation for the current university.
+
+## Privacy notice - 2026-09-24
+
+app/privacy/page.tsx describes only practices verified in code or by
+observation; its facts live in lib/privacy.ts. Before release, confirm with
+Jayden and update the page if any answer changes it:
+
+- Location/jurisdiction, and whether the site is solely a job-search
+  portfolio or also offers paid services.
+- Retention: how long contact emails, Formspree submissions (plan-dependent),
+  Calendly bookings and Umami data (self-hosted default: kept until deleted)
+  are kept, and whether Jayden deletes them on a schedule.
+- Whether Traefik or other homelab services log visitor IP addresses, and for
+  how long.
+- The live Umami environment matches the defaults assumed on the page: no
+  SALT_ROTATION override (monthly visitor-identifier rotation) and no stored
+  IP address.
+- jayden@jmistry.com as the privacy contact; set effectiveDate on release.
+
+Verified 2026-09-24: analytics.jmistry.com has no public DNS record
+(NXDOMAIN on 1.1.1.1, 8.8.8.8 and 9.9.9.9), so only tailnet devices can load
+the tracker. Calendly's banner and Cookie settings appear once
+hide_gdpr_banner is removed; a local DNS blocklist here blocks
+cdn.cookielaw.org, which hides them during local testing.
 
 ## Git history
 
@@ -86,7 +137,8 @@ and it only counts jmistry.com, so LAN/Tailscale previews are not tracked.
 - Calendly: selecting event type, date and time, then switching theme twice,
   kept the details page and the selected slot. No booking was submitted.
 - `pnpm test:smoke` covers navigation, the mobile menu, links, theme
-  persistence and axe checks in both themes; it also runs in CI.
+  persistence and axe checks in both themes; it also runs in CI. (Blueprint
+  era; see the redesign section for the current suite.)
 - Keyboard pass (same era): all 31 desktop and 27 mobile portfolio controls show
   visible focus. The five expanded mobile-menu links are keyboard reachable;
   Escape closes the menu and restores button focus. Calendly's meeting links
