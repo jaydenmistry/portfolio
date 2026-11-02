@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import localFont from 'next/font/local';
 import './globals.css';
 import { site, experience } from '@/lib/data';
 import { themePalette, themeScript } from '@/lib/theme';
@@ -41,6 +42,18 @@ const personJsonLd = {
   ...(education ? { affiliation: { '@type': 'CollegeOrUniversity', name: education.org } } : {}),
 };
 
+// SF Pro can't be served from a website (Apple's license), so Inter, the
+// closest open font, stands in where the system has no SF: Windows, Android,
+// Linux. Apple devices match -apple-system first and never download it, so
+// it isn't preloaded. Latin subset with weight and optical-size axes.
+const inter = localFont({
+  src: './fonts/inter-latin-opsz.woff2',
+  variable: '--font-inter',
+  weight: '100 900',
+  display: 'swap',
+  preload: false,
+});
+
 const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
@@ -55,7 +68,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // The theme script sets data-theme on <html> before hydration.
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

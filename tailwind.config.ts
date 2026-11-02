@@ -20,10 +20,9 @@ const config: Config = {
         danger: 'rgb(var(--danger) / <alpha-value>)',
       },
       fontFamily: {
-        // The platform's own UI font: SF Pro on Apple devices (or wherever
-        // it is installed; see `SF Pro Local` in globals.css), Segoe UI on
-        // Windows, Roboto on Android. No web fonts (DESIGN.md, Type).
-        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Local"', '"SF Pro Text"', '"Segoe UI"', 'system-ui', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+        // SF Pro on Apple devices (or wherever it is installed; see
+        // `SF Pro Local` in globals.css), Inter everywhere else (app/layout.tsx).
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Local"', '"SF Pro Text"', 'var(--font-inter)', '"Segoe UI"', 'system-ui', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
         mono: ['ui-monospace', '"SF Mono"', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       fontSize: {
