@@ -65,7 +65,7 @@ export default function WorkOverview() {
       ) : null}
 
       {infra ? (
-        <SpotlightTile href={`#${infra.id}`} className="surface-dark reveal flex min-h-[34rem] flex-col justify-between gap-8 bg-surface p-7 md:p-10 lg:col-span-2 lg:row-span-2">
+        <SpotlightTile href={`#${infra.id}`} className="reveal flex min-h-[34rem] flex-col justify-between gap-8 bg-surface p-7 md:p-10 lg:col-span-2 lg:row-span-2">
           <TileText project={{ ...infra, title: 'Production infrastructure' }} />
           <TrafficSpine />
         </SpotlightTile>

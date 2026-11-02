@@ -23,8 +23,9 @@ Tokens are RGB channels in `app/globals.css`, exposed to Tailwind in
 | `accent-fill` | `#7D4FC0` | `#7D4FC0` | Filled buttons, with white text (5.60:1); hover `#8456C8` (5.06:1) |
 | `success` | `#34C759` | `#30D158` | The availability dot. Never text |
 
-The infrastructure section is always dark: it wraps itself in
-`.surface-dark`, which swaps in the dark token values locally.
+Every surface follows the theme. `.surface-dark` (dark token values,
+locally) is only for controls that float over the dark scrim of the
+screenshot viewer.
 
 The hex values in `lib/theme.ts` exist only for the browser theme color; keep
 them in sync with this table.

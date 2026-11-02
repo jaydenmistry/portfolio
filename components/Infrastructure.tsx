@@ -2,7 +2,7 @@ import { BuiltList, Facts, ProjectLinks } from '@/components/CaseStudy';
 import FullTopology from '@/components/figures/FullTopology';
 import { projects, topologyNodes } from '@/lib/data';
 
-/** The infrastructure story, on a dark band in either theme. */
+/** The infrastructure story, on its own band set off from the page. */
 export default function Infrastructure() {
   const project = projects.find((p) => p.id === 'infrastructure');
   if (!project) return null;
@@ -10,7 +10,7 @@ export default function Infrastructure() {
     <section
       id="infrastructure"
       aria-labelledby="infrastructure-title"
-      className="surface-dark mx-2 scroll-mt-12 rounded-[2.5rem] bg-background py-20 ring-1 ring-separator/60 md:mx-4 md:py-32"
+      className="mx-2 scroll-mt-12 rounded-[2.5rem] bg-background py-20 ring-1 ring-separator/60 md:mx-4 md:py-32"
     >
       <div className="container-content flex flex-col gap-10 md:gap-14">
         <header className="reveal flex max-w-3xl flex-col gap-4">
