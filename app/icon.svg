@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- JM in white on a graphite rounded tile, with a blue accent dot. See DESIGN.md. -->
+  <!-- JM in white on a graphite rounded tile, with a purple accent dot. See DESIGN.md. -->
   <rect width="64" height="64" rx="15" fill="#1D1D1F"/>
   <g fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M25 17V35a7.5 7.5 0 0 1-15 0"/>
     <path d="M33 45V17l8.5 16L50 17v28"/>
   </g>
-  <circle cx="17" cy="51" r="3.5" fill="#2997FF"/>
+  <circle cx="17" cy="51" r="3.5" fill="#B691F2"/>
 </svg>

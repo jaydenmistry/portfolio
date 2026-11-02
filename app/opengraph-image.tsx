@@ -50,7 +50,7 @@ export default async function OpengraphImage() {
               display: 'flex',
               padding: '14px 30px',
               borderRadius: 999,
-              background: '#0071E3',
+              background: '#7D4FC0',
               color: '#FFFFFF',
               fontSize: 28,
               fontWeight: 600,
