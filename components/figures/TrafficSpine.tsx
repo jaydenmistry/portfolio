@@ -14,8 +14,8 @@ const hops = [
 export default function TrafficSpine() {
   return (
     <div aria-hidden className="relative z-10">
-      <span className="absolute bottom-6 left-[1.125rem] top-6 w-0.5 rounded-full bg-accent/30" />
-      <span className="traffic-packet absolute left-[0.9375rem] top-6 h-2.5 w-2.5 rounded-full bg-accent" />
+      <span className="absolute bottom-6 left-[1.0625rem] top-6 w-0.5 rounded-full bg-accent/30" />
+      <span className="traffic-packet absolute left-[0.8125rem] top-6 h-2.5 w-2.5 rounded-full bg-accent" />
       <ol className="relative m-0 flex list-none flex-col gap-2.5 p-0">
         {hops.map((hop) => (
           <li key={hop.label} className="flex items-center gap-4">
