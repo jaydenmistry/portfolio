@@ -175,7 +175,10 @@ export default function TopologyCanvas({ nodes, edges, aspect, boundary, label, 
             }
           >
             <span className="block whitespace-nowrap text-callout font-semibold text-label">{node.label}</span>
-            {node.sub ? <span className="block whitespace-nowrap text-caption text-label-2">{node.sub}</span> : null}
+            {/* label-2 is too faint on the fill of base nodes in light mode. */}
+            {node.sub ? (
+              <span className={clsx('block whitespace-nowrap text-caption', node.base ? 'text-label/80' : 'text-label-2')}>{node.sub}</span>
+            ) : null}
           </div>
         ))}
       </div>

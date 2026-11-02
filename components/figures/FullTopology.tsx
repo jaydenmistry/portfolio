@@ -80,7 +80,7 @@ export default function FullTopology() {
                     return (
                       <li key={id} className={`rounded-card px-4 py-2.5 ${id === 'proxmox' ? 'bg-fill' : 'bg-elevated'}`}>
                         <span className="block text-callout font-semibold text-label">{n.label}</span>
-                        <span className="block text-caption text-label-2">{n.sub}</span>
+                        <span className={`block text-caption ${id === 'proxmox' ? 'text-label/80' : 'text-label-2'}`}>{n.sub}</span>
                       </li>
                     );
                   })}
@@ -91,7 +91,7 @@ export default function FullTopology() {
         </DrawOnView>
       </div>
       <figcaption className="reveal text-center text-callout text-label-2">
-        Kappa Theta Pi service topology. Blue lines carry request traffic.
+        Kappa Theta Pi service topology. Purple lines carry request traffic.
         <span className="hidden xl:inline"> Point at a service to see what it does.</span>
       </figcaption>
     </figure>
