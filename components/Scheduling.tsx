@@ -4,8 +4,6 @@ import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
 import { contact } from '@/lib/data';
 import { ArrowUpRightIcon } from '@/components/icons';
-import { themePalette, type Theme } from '@/lib/theme';
-import { getTheme, useTheme } from '@/lib/use-theme';
 
 type CalendlyWindow = Window & {
   Calendly?: {
@@ -13,14 +11,10 @@ type CalendlyWindow = Window & {
   };
 };
 
-// Calendly's embed color parameters take hex without the leading '#'.
 // Calendly's own cookie banner stays enabled: its embed terms require it
 // unless the site provides its own cookie controls for Calendly.
-function bookingUrl(theme: Theme) {
-  const { surface, label, accent } = themePalette[theme];
-  const hex = (color: string) => color.slice(1).toLowerCase();
-  return `${contact.calendlyUrl}?background_color=${hex(surface)}&text_color=${hex(label)}&primary_color=${hex(accent)}`;
-}
+// Its color parameters only work on paid plans, so the embed always loads
+// light and the dark theme is applied in CSS (`.calendly-embed`).
 
 const pageViews = ['calendly.profile_page_viewed', 'calendly.event_type_viewed'];
 
@@ -29,12 +23,6 @@ export default function Scheduling() {
   const container = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
-  const theme = useTheme();
-  // Theme the embed was built with, and whether the visitor has moved past
-  // its first page. A started booking is never reloaded to change colors.
-  const embedTheme = useRef<Theme | null>(null);
-  const views = useRef(0);
-  const started = useRef(false);
 
   useEffect(() => {
     const element = section.current;
@@ -69,41 +57,11 @@ export default function Scheduling() {
     };
   }, [enabled, status]);
 
-  // Track booking progress for as long as the embed exists.
-  useEffect(() => {
-    if (!enabled) return;
-    const onMessage = (event: MessageEvent) => {
-      const iframe = container.current?.querySelector('iframe');
-      if (event.origin !== 'https://calendly.com' || !iframe || event.source !== iframe.contentWindow) return;
-      const name = event.data?.event;
-      if (pageViews.includes(name)) {
-        views.current += 1;
-        if (views.current > 1) started.current = true;
-      } else if (name === 'calendly.date_and_time_selected' || name === 'calendly.event_scheduled') {
-        started.current = true;
-      }
-    };
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [enabled]);
-
-  // Rebuild the embed in the new colors unless a booking is under way.
-  useEffect(() => {
-    const parentElement = container.current;
-    if (!parentElement || !embedTheme.current || embedTheme.current === theme || started.current) return;
-    parentElement.replaceChildren();
-    setStatus('loading');
-    initialize();
-  }, [theme]);
-
   function initialize() {
     const parentElement = container.current;
     const calendly = (window as CalendlyWindow).Calendly;
     if (!parentElement || !calendly || parentElement.querySelector('iframe')) return;
-    const current = getTheme();
-    embedTheme.current = current;
-    views.current = 0;
-    calendly.initInlineWidget({ url: bookingUrl(current), parentElement });
+    calendly.initInlineWidget({ url: contact.calendlyUrl, parentElement });
     const iframe = parentElement.querySelector('iframe');
     if (iframe) {
       iframe.title = 'Schedule a meeting with Jayden Mistry';
@@ -135,7 +93,7 @@ export default function Scheduling() {
         ) : null}
         {/* Calendly's page is color-scheme light; matching it keeps the iframe
             transparent instead of the browser painting it white in dark mode. */}
-        <div ref={container} className="h-full w-full [color-scheme:light]" data-auto-load="false" />
+        <div ref={container} className="calendly-embed h-full w-full [color-scheme:light]" data-auto-load="false" />
         {status === 'error' ? (
           <p role="status" className="material absolute inset-x-3 top-3 m-0 rounded-card p-5 text-callout text-label shadow-float">
             The scheduler is taking longer to load.{' '}

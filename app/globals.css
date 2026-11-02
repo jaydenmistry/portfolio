@@ -563,6 +563,13 @@ body {
   }
 }
 
+/* Calendly's free plan ignores embed colors, so in dark mode its light page
+   is inverted. Hue-rotating back keeps blue blue; 0.9 lands its white card
+   on a near-black grey instead of pure black. */
+:root[data-theme='dark'] .calendly-embed iframe {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
 /* The experience timeline draws itself as you scroll down it. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
