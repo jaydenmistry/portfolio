@@ -62,14 +62,22 @@ export default function FullTopology() {
       {/* Narrow screens: the same system as stacked layers. */}
       <div className="reveal-zoom rounded-tile bg-surface xl:hidden">
         <DrawOnView as="ol" label="Service layers, from the internet down to the host" className="relative m-0 list-none space-y-6 px-5 py-8 sm:px-8">
-          <span aria-hidden className="draw-spine absolute bottom-12 left-[2.35rem] top-12 w-0.5 rounded-full bg-accent/40 sm:left-[3.1rem]" />
-          <span
-            aria-hidden
-            className="traffic-packet absolute left-[2.1rem] h-2.5 w-2.5 rounded-full bg-accent sm:left-[2.85rem]"
-            style={{ '--packet-from': '2.75rem', '--packet-to': '3.375rem' } as CSSProperties}
-          />
-          {layers.map((layer) => (
+          {layers.map((layer, i) => (
             <li key={layer.name} className="relative grid grid-cols-[1.5rem_minmax(0,1fr)] items-start gap-4">
+              {/* Each layer draws the line from its dot to the next one, so the
+                  line always ends on a dot however tall a layer wraps. */}
+              {i < layers.length - 1 ? (
+                <span
+                  aria-hidden
+                  className="draw-spine absolute -bottom-9 left-[calc(0.75rem-1px)] top-3 w-0.5 bg-accent/40"
+                  style={{ '--draw-delay': `${i * 0.12}s` } as CSSProperties}
+                >
+                  <span
+                    className="traffic-packet traffic-hop absolute -left-1 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-accent"
+                    style={{ '--hop': i } as CSSProperties}
+                  />
+                </span>
+              ) : null}
               <span aria-hidden className="relative z-10 mt-1.5 h-3 w-3 justify-self-center rounded-full border-2 border-accent bg-surface" />
               <div>
                 <p className="m-0 text-callout font-medium text-label-2">{layer.name}</p>

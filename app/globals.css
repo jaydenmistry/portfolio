@@ -303,7 +303,7 @@ body {
   transform-origin: top;
 }
 .draw-go .draw-spine {
-  animation: draw-spine 0.9s var(--spring) both;
+  animation: draw-spine 0.6s var(--spring) var(--draw-delay, 0s) both;
 }
 @keyframes draw-spine {
   from {
@@ -450,6 +450,28 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   .traffic-packet {
     animation: packet 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+}
+/* The topology layer list: one packet per hop, each moving in its quarter of
+   the cycle, so together they read as one packet travelling all four hops. */
+@media (prefers-reduced-motion: no-preference) {
+  .traffic-packet.traffic-hop {
+    animation: hop 2.8s cubic-bezier(0.45, 0, 0.55, 1) calc(var(--hop, 0) * 0.7s) infinite;
+  }
+}
+@keyframes hop {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  4%,
+  21% {
+    opacity: 1;
+  }
+  25%,
+  100% {
+    top: 100%;
+    opacity: 0;
   }
 }
 @keyframes packet {
