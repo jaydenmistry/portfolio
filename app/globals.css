@@ -578,7 +578,7 @@ body {
       transform-origin: top;
       animation: grow-y linear both;
       animation-timeline: view();
-      animation-range: entry 20% cover 60%;
+      animation-range: entry 0% cover 50%;
     }
   }
 }

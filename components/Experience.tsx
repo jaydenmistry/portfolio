@@ -7,17 +7,21 @@ export default function Experience() {
     <section id="experience" aria-labelledby="experience-title" className="container-content flex scroll-mt-12 flex-col gap-10 md:gap-14">
       <SectionHeading id="experience-title" title="Experience" />
 
-      {/* A timeline whose line grows as you scroll down it. */}
-      <ol className="relative m-0 flex list-none flex-col p-0">
-        <span aria-hidden className="timeline-line absolute bottom-3 left-[0.3125rem] top-3 w-0.5 rounded-full bg-separator lg:left-[16.3125rem]" />
-        {experience.map((item) => (
-          <li key={item.org} className="reveal relative grid gap-2 pb-12 pl-9 last:pb-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-0 lg:pl-0 lg:pb-16">
+      {/* A timeline whose line grows as you scroll down it. Each entry draws
+          the line from its dot to the next one; the dots stay put while the
+          text slides in, so they always sit on the line. */}
+      <ol className="m-0 flex list-none flex-col p-0">
+        {experience.map((item, index) => (
+          <li key={item.org} className="relative grid gap-2 pb-12 pl-9 last:pb-0 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-0 lg:pl-0 lg:pb-16">
+            {index < experience.length - 1 ? (
+              <span aria-hidden className="timeline-line absolute -bottom-3.5 left-[0.3125rem] top-3.5 w-0.5 bg-separator lg:left-[16.3125rem]" />
+            ) : null}
             <span aria-hidden className="absolute left-0 top-2 h-3 w-3 rounded-full border-2 border-accent bg-background lg:left-[16rem]" />
-            <p className="m-0 text-callout text-label-2 lg:pr-10 lg:pt-1 lg:text-right">
+            <p className="reveal m-0 text-callout text-label-2 lg:pr-10 lg:pt-1 lg:text-right">
               {item.dates}
               <span className="block">{item.location}</span>
             </p>
-            <div className="flex flex-col gap-1.5 lg:pl-12">
+            <div className="reveal flex flex-col gap-1.5 lg:pl-12">
               <h3 className="m-0 text-title-2 text-label">{item.org}</h3>
               <p className="m-0 text-headline font-medium text-label">{item.role}</p>
               <p className="m-0 mt-2 max-w-[44rem] text-pretty text-body text-label-2 md:text-body-lg">{item.body}</p>
