@@ -2,17 +2,17 @@
  * Light and dark themes. The site follows the operating system unless the
  * visitor pins Light or Dark, which is stored under `THEME_KEY` and applied
  * by `themeScript` before first paint. CSS tokens live in app/globals.css.
- * These hex values are for the few places that need colors in JS: the
- * browser theme-color and Calendly.
+ * These hex values are for the one place that needs colors in JS: the
+ * browser theme-color.
  */
 export type Theme = 'light' | 'dark';
 export type ThemePreference = 'system' | Theme;
 
 export const THEME_KEY = 'theme';
 
-export const themePalette: Record<Theme, { background: string; surface: string; label: string; accent: string }> = {
-  light: { background: '#FFFFFF', surface: '#F5F5F7', label: '#1D1D1F', accent: '#0066CC' },
-  dark: { background: '#000000', surface: '#161617', label: '#F5F5F7', accent: '#2997FF' },
+export const themePalette: Record<Theme, { background: string }> = {
+  light: { background: '#FFFFFF' },
+  dark: { background: '#000000' },
 };
 
 /**
