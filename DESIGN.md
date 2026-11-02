@@ -1,7 +1,7 @@
 # Design rules
 
 The site follows Apple's interface design, translated for the web: system
-type, neutral surfaces, one blue accent, translucent floating chrome and
+type, neutral surfaces, one purple accent, translucent floating chrome and
 spring motion that responds the moment you touch something. Read this before
 changing any UI.
 
@@ -19,8 +19,8 @@ Tokens are RGB channels in `app/globals.css`, exposed to Tailwind in
 | `label-2` | `#6E6E73` | `#A1A1A6` | Secondary text (5.07:1 light on white, 4.66:1 on surface; 8.16:1 dark) |
 | `separator` | `#D2D2D7` | `#38383A` | Hairlines. Never text |
 | `fill` | `#E8E8ED` | `#2C2C2E` | Chips, segmented-control tracks. Only `label` text on it |
-| `accent` | `#0066CC` | `#2997FF` | Links, focus rings, active states (5.11:1 on surface light, 6.00:1 dark) |
-| `accent-fill` | `#0071E3` | `#0071E3` | Filled buttons, with white text (4.70:1) |
+| `accent` | `#6E44B0` | `#B691F2` | Links, focus rings, active states (6.19:1 on surface light; 7.17:1 on surface dark, 6.14:1 on the darkest elevated tile) |
+| `accent-fill` | `#7D4FC0` | `#7D4FC0` | Filled buttons, with white text (5.60:1); hover `#8456C8` (5.06:1) |
 | `success` | `#34C759` | `#30D158` | The availability dot. Never text |
 
 The infrastructure section is always dark: it wraps itself in
@@ -44,8 +44,11 @@ them in sync with this table.
 
 ## Type
 
-- The system font: SF Pro on Apple devices, Segoe UI on Windows, Roboto on
-  Android. No web fonts on the page. `ui-monospace` only for code.
+- SF Pro on Apple devices, from the system. SF Pro can't be served from a
+  website (Apple's license), so everywhere else the page uses Inter, the
+  closest open font, self-hosted in `app/fonts` (latin subset, weight and
+  optical-size axes, OFL). Apple devices match the system font first and
+  never download Inter. `ui-monospace` only for code.
 - Tracking and leading change with size. Use the named sizes in
   `tailwind.config.ts`, which carry both; never set one letter-spacing for
   every size. The values follow Apple's own web type for SF Pro: SF's
