@@ -19,8 +19,9 @@ Verified 2026-10-29 on ui-redesign (Next 16.4.3, production build):
 - Gestures checked in headless Chromium with pointer events: a small sheet
   drag springs back, a flick closes it, pulling up 300px moves it 119px; the
   screenshot viewer closes on a flick. Not tested on real iOS/Safari.
-- Calendly loads in both themes; the area around Calendly's booking card
-  takes the theme, the card itself stays white (Calendly's styling).
+- Calendly's color parameters are ignored on the free plan (checked on the
+  profile and event pages), so dark mode inverts the embed in CSS
+  (`.calendly-embed`). Switching themes no longer reloads it.
 - SF Pro installed as a file (Linux/Windows) renders with the Display design
   at every size when used by family name; the `SF Pro Local` @font-face in
   globals.css restores optical sizing. Apple devices use the system font.

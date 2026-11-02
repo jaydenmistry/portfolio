@@ -26,8 +26,8 @@ Tokens are RGB channels in `app/globals.css`, exposed to Tailwind in
 The infrastructure section is always dark: it wraps itself in
 `.surface-dark`, which swaps in the dark token values locally.
 
-The hex values in `lib/theme.ts` exist only for the browser theme color and
-the Calendly embed; keep them in sync with this table.
+The hex values in `lib/theme.ts` exist only for the browser theme color; keep
+them in sync with this table.
 
 ## Theme
 
@@ -38,8 +38,9 @@ the Calendly embed; keep them in sync with this table.
 - Switching themes reveals the new one in a circle that grows from the control
   that was pressed. With reduced motion it switches instantly.
 - Screenshots keep their original colors in both themes.
-- Embedded third-party widgets follow the theme when they load. Never reload
-  one the visitor has started using just to change its colors.
+- Embedded third-party widgets follow the theme without reloading. Calendly
+  ignores color parameters on its free plan, so in dark mode its iframe is
+  inverted in CSS (`.calendly-embed`).
 
 ## Type
 
