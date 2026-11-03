@@ -7,15 +7,17 @@ export const alt = `${site.name}, software engineer`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-// Vendored IBM Plex Sans (OFL, see assets/fonts/OFL.txt): SF Pro's licence does
-// not allow bundling it, and the image must build without network access. The
-// route is prerendered at build.
+// Vendored Inter (OFL, see assets/fonts/Inter-OFL.txt), the site's fallback
+// for SF Pro, whose licence does not allow bundling it. Static .woff files,
+// because the image renderer reads neither woff2 nor variable fonts, and the
+// image must build without network access. The route is prerendered at build.
 const font = (file: string) => readFile(join(process.cwd(), 'assets/fonts', file));
 
 export default async function OpengraphImage() {
-  const [sans400, sans600] = await Promise.all([
-    font('ibm-plex-sans-latin-400-normal.woff'),
-    font('ibm-plex-sans-latin-600-normal.woff'),
+  const [sans400, sans600, sans700] = await Promise.all([
+    font('inter-latin-400-normal.woff'),
+    font('inter-latin-600-normal.woff'),
+    font('inter-latin-700-normal.woff'),
   ]);
 
   return new ImageResponse(
@@ -30,13 +32,13 @@ export default async function OpengraphImage() {
           padding: 72,
           background: '#FFFFFF',
           color: '#1D1D1F',
-          fontFamily: 'Plex Sans',
+          fontFamily: 'Inter',
         }}
       >
         <div style={{ display: 'flex', fontSize: 28, color: '#6E6E73' }}>Software engineer · {site.education}</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          <div style={{ fontSize: 132, fontWeight: 600, letterSpacing: -5, lineHeight: 1 }}>{site.name}</div>
-          <div style={{ fontSize: 46, fontWeight: 600, lineHeight: 1.15, maxWidth: 980, letterSpacing: -1, color: '#1D1D1F' }}>
+          <div style={{ fontSize: 132, fontWeight: 700, letterSpacing: -5, lineHeight: 1 }}>{site.name}</div>
+          <div style={{ fontSize: 46, fontWeight: 600, lineHeight: 1.15, maxWidth: 980, letterSpacing: -0.5, color: '#1D1D1F' }}>
             {site.headline}
           </div>
         </div>
@@ -64,8 +66,9 @@ export default async function OpengraphImage() {
     {
       ...size,
       fonts: [
-        { name: 'Plex Sans', data: sans400, weight: 400, style: 'normal' },
-        { name: 'Plex Sans', data: sans600, weight: 600, style: 'normal' },
+        { name: 'Inter', data: sans400, weight: 400, style: 'normal' },
+        { name: 'Inter', data: sans600, weight: 600, style: 'normal' },
+        { name: 'Inter', data: sans700, weight: 700, style: 'normal' },
       ],
     },
   );
