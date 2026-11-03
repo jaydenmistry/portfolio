@@ -1,5 +1,10 @@
 import type { NextConfig } from 'next';
 
+// Umami runs beside the site on the homelab (see deploy/umami). Its tracker
+// and event endpoint are proxied under /stats on this origin, so visitors
+// never need to reach the analytics hostname, which stays private.
+const umamiUpstream = process.env.UMAMI_UPSTREAM;
+
 // A tracker loaded from another origin has to be allowed by the CSP.
 const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiOrigin = umamiSrc?.startsWith('http') ? new URL(umamiSrc).origin : '';
@@ -38,6 +43,13 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
+  },
+  async rewrites() {
+    if (!umamiUpstream) return [];
+    return [
+      { source: '/stats/script.js', destination: `${umamiUpstream}/script.js` },
+      { source: '/stats/api/send', destination: `${umamiUpstream}/api/send` },
+    ];
   },
 };
 

@@ -35,9 +35,12 @@ values stable and out of Git. Leave `NEXT_PUBLIC_UMAMI_WEBSITE_ID` empty until t
 website has been created in Umami. Keep the existing Formspree ID if it differs
 from the example.
 
-Route `analytics.jmistry.com` through the same Cloudflare/Traefik ingress as the
-portfolio. The tracker script and event endpoint must be reachable by visitors;
-an interactive SSO redirect on the entire analytics hostname prevents tracking.
+Visitors never contact `analytics.jmistry.com`. The portfolio serves Umami's
+tracker at `/stats/script.js` and its event endpoint at `/stats/api/send`, and
+proxies both to the Umami container over `apps_net` (`UMAMI_UPSTREAM`, default
+`http://umami:3000`, set in the Dockerfile). The dashboard hostname can stay on
+the tailnet or behind SSO. Umami reads the visitor's address from the
+`CF-Connecting-IP` header that Cloudflare adds and the proxy passes along.
 
 If Umami already has data in a named volume, migrate that database before
 switching to the bind mount. An empty host directory initializes a new database;
@@ -76,8 +79,8 @@ docker compose up -d --no-deps portfolio
 ## 4. Verify and maintain
 
 - Both Umami containers report healthy.
-- `https://analytics.jmistry.com/script.js` returns JavaScript without an SSO redirect.
-- The portfolio includes the script and the correct `data-website-id`.
+- `https://jmistry.com/stats/script.js` returns Umami's JavaScript.
+- The portfolio includes the `/stats/script.js` tag with the correct `data-website-id`.
 - A visit to `https://jmistry.com` appears in Umami. LAN/Tailscale previews are
   excluded by the tracker's `data-domains="jmistry.com"` setting.
 
