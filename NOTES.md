@@ -1,14 +1,23 @@
 # Working notes
 
-## Current scope - 2026-10-29
+## Current scope - 2026-11-03
 
-Branch ui-redesign (from redesign/blueprint at b109df7, so it carries the
-unpushed privacy commits) replaces the blueprint look with an Apple-style
-redesign. Jayden's calls: replace the blueprint entirely, use the system font,
-follow the OS theme with a System / Light / Dark control, add Motion
-(pinned 14.2.0) for spring and gesture animations, and use translucent
-materials. DESIGN.md holds the new rules. Pushed to origin/ui-redesign at
-Jayden's request; not merged to main or deployed.
+The Apple-style redesign is merged (PR #1) and live at https://jmistry.com;
+the pre-redesign site is preserved on the old-design branch. main deploys
+itself on hp-envy once CI passes (deploy/homelab). Since the merge: purple
+accent, Inter as the non-Apple font, theme-following infrastructure surfaces,
+per-entry timeline lines, security headers, the /stats Umami proxy, an Inter
+link-preview image and the kvstore repo link.
+
+Open:
+- On hp-envy: set NEXT_PUBLIC_UMAMI_SRC=/stats/script.js in ~/docker/.env (the
+  old analytics.jmistry.com URL has no public DNS, so only tailnet visits were
+  counted), reinstall the homelab scripts, enable umami-backup.timer.
+- Privacy: whether Traefik keeps access logs with IP addresses (pending
+  Jayden's check on hp-envy).
+- Chat app has no public repo; kvstore README is a bare title.
+- Real-device checks (iPhone Safari gestures, Windows font, Firefox reveals),
+  a real contact-form message, external uptime monitoring.
 
 Verified 2026-10-29 on ui-redesign (Next 16.4.3, production build):
 - Lighthouse 13.5.0, local Chrome 153 headless: mobile 96/98/98 performance,
@@ -25,10 +34,6 @@ Verified 2026-10-29 on ui-redesign (Next 16.4.3, production build):
 - SF Pro installed as a file (Linux/Windows) renders with the Display design
   at every size when used by family name; the `SF Pro Local` @font-face in
   globals.css restores optical sizing. Apple devices use the system font.
-
-The privacy notice questions below are still open and also apply to this
-branch. The theme section of the privacy page was updated for the System
-option.
 
 Earlier (2026-09-23): the blueprint redesign, Calendly and Umami are on main
 and deployed at https://jmistry.com.
@@ -60,24 +65,15 @@ and deployed at https://jmistry.com.
 ## Privacy notice - 2026-09-24
 
 app/privacy/page.tsx describes only practices verified in code or by
-observation; its facts live in lib/privacy.ts. Before release, confirm with
-Jayden and update the page if any answer changes it:
-
-- Location/jurisdiction, and whether the site is solely a job-search
-  portfolio or also offers paid services.
-- Retention: how long contact emails, Formspree submissions (plan-dependent),
-  Calendly bookings and Umami data (self-hosted default: kept until deleted)
-  are kept, and whether Jayden deletes them on a schedule.
-- Whether Traefik or other homelab services log visitor IP addresses, and for
-  how long.
-- The live Umami environment matches the defaults assumed on the page: no
-  SALT_ROTATION override (monthly visitor-identifier rotation) and no stored
-  IP address.
-- jayden@jmistry.com as the privacy contact; set effectiveDate on release.
+observation, or confirmed by Jayden; its facts live in lib/privacy.ts.
+Confirmed 2026-11-03: job-search portfolio only, no paid services, based in
+Georgia, USA; contact messages, bookings and analytics are kept until Jayden
+deletes them. Umami's live environment sets no SALT_ROTATION or IP-storage
+override (checked in the apps compose file). Still open: Traefik access logs.
 
 Verified 2026-09-24: analytics.jmistry.com has no public DNS record
 (NXDOMAIN on 1.1.1.1, 8.8.8.8 and 9.9.9.9), so only tailnet devices can load
-the tracker. Calendly's banner and Cookie settings appear once
+the tracker. Fixed 2026-11-03 by serving it from the site under /stats. Calendly's banner and Cookie settings appear once
 hide_gdpr_banner is removed; a local DNS blocklist here blocks
 cdn.cookielaw.org, which hides them during local testing.
 
@@ -89,8 +85,8 @@ history. Never merge pre-rewrite history back in, and add no co-author
 trailers to new commits. The original history is recoverable from a local Git
 bundle under the Windows temporary directory portfolio-release-20260923.
 
-Local branch codex/main-history-clean is an ancestor of main and can be
-deleted. Local main may lag origin/main; fast-forward it rather than merging.
+GitHub cached the old co-authors in the repo's contributor list until the
+default branch was switched away and back (done by Jayden, 2026-11-03).
 
 ## Umami on hp-envy
 
