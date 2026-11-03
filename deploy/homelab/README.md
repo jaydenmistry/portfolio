@@ -62,6 +62,24 @@ gunzip -c ~/docker/backups/umami/umami-<date>.sql.gz | docker exec -i umami-db p
 The dumps sit on the same disk as the database. Copy them somewhere else too
 (another machine or cloud storage) if losing the disk shouldn't lose the data.
 
+## Traefik access log
+
+Traefik (`~/docker/stacks/traefik/compose.yml`) writes a JSON access log to
+its container log. The privacy page says that log has a size limit, so the
+Traefik service needs rotation:
+
+```yaml
+logging:
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+```
+
+Entries hold the time, path, status, size and client address, which is a
+Cloudflare edge address for public visitors. Request headers are not logged
+(Traefik drops them by default). Update the privacy page if either changes.
+
 ## Optional: only accept traffic through Cloudflare
 
 Public DNS points jmistry.com at Cloudflare, but anyone who finds the home IP

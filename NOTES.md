@@ -10,11 +10,8 @@ per-entry timeline lines, security headers, the /stats Umami proxy, an Inter
 link-preview image and the kvstore repo link.
 
 Open:
-- On hp-envy: set NEXT_PUBLIC_UMAMI_SRC=/stats/script.js in ~/docker/.env (the
-  old analytics.jmistry.com URL has no public DNS, so only tailnet visits were
-  counted), reinstall the homelab scripts, enable umami-backup.timer.
-- Privacy: whether Traefik keeps access logs with IP addresses (pending
-  Jayden's check on hp-envy).
+- On hp-envy: add log rotation to the Traefik service (deploy/homelab README);
+  the privacy page already says the access log is size-limited.
 - Chat app has no public repo; kvstore README is a bare title.
 - Real-device checks (iPhone Safari gestures, Windows font, Firefox reveals),
   a real contact-form message, external uptime monitoring.
@@ -69,7 +66,12 @@ observation, or confirmed by Jayden; its facts live in lib/privacy.ts.
 Confirmed 2026-11-03: job-search portfolio only, no paid services, based in
 Georgia, USA; contact messages, bookings and analytics are kept until Jayden
 deletes them. Umami's live environment sets no SALT_ROTATION or IP-storage
-override (checked in the apps compose file). Still open: Traefik access logs.
+override (checked in the apps compose file). Traefik logs requests as JSON to
+its container log (checked 2026-11-03: --accesslog=true, format json, no
+header fields, no rotation yet); Jayden chose to keep it with a size cap.
+
+The kvstore copy was updated 2026-11-03 from the repo (phases 0-5 done);
+Jayden confirmed the Raft version runs on Proxmox LXC.
 
 Verified 2026-09-24: analytics.jmistry.com has no public DNS record
 (NXDOMAIN on 1.1.1.1, 8.8.8.8 and 9.9.9.9), so only tailnet devices can load

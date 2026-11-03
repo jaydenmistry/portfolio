@@ -79,11 +79,19 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
     id: 'delivery',
     title: 'Delivery and security',
     body: (
-      <p>
-        <External href={privacy.links.cloudflare}>Cloudflare</External> delivers this site and protects it from
-        abuse, so it processes every request, including your IP address. Cloudflare also hides the email addresses
-        on this page from spam bots, using a small script that reveals them in your browser.
-      </p>
+      <>
+        <p>
+          <External href={privacy.links.cloudflare}>Cloudflare</External> delivers this site and protects it from
+          abuse, so it processes every request, including your IP address. Cloudflare also hides the email
+          addresses on this page from spam bots, using a small script that reveals them in your browser.
+        </p>
+        <p>
+          The server that runs this site logs each request it receives: the time, the page requested, the response
+          status and size, and the address the request came from. Requests reach it through Cloudflare, so that
+          address is a Cloudflare server&apos;s, not yours. The log has a size limit, so older entries are
+          overwritten as new ones come in.
+        </p>
+      </>
     ),
   },
   {
