@@ -6,7 +6,7 @@ import { site } from '@/lib/data';
  */
 export const privacy = {
   // Update on release so it matches the date the notice goes live.
-  effectiveDate: 'September 24, 2026',
+  effectiveDate: 'November 3, 2026',
   contactEmail: site.email,
   links: {
     formspree: 'https://formspree.io/legal/privacy-policy/',

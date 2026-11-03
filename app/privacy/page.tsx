@@ -67,6 +67,7 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
           uses to derive the browser, operating system, device type and approximate location.
         </p>
         <p>
+          Umami&apos;s script loads from this site, and what it records goes through this site to my Umami server.
           Umami does not use cookies or store anything in your browser. As configured here, it combines your IP
           address and browser details into a visitor identifier that changes each month, and does not save the IP
           address in its database.
@@ -98,13 +99,25 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
     ),
   },
   {
+    id: 'retention',
+    title: 'How long I keep it',
+    body: (
+      <p>
+        I keep contact messages, emails, Calendly bookings and analytics data until I delete them. Formspree and
+        Calendly also keep their own copies under their privacy policies, linked above. If you&apos;d like
+        something deleted sooner, email me and I&apos;ll remove it.
+      </p>
+    ),
+  },
+  {
     id: 'requests',
     title: 'Your requests',
     body: (
       <p>
         To ask what information I have about you from the contact form or scheduler, or to have it corrected or
         deleted, email <External href={`mailto:${privacy.contactEmail}`}>{privacy.contactEmail}</External>.
-        Depending on where you live, you may have other rights under local law.
+        I&apos;m based in Georgia, in the United States. Depending on where you live, you may have other rights under
+        local law.
       </p>
     ),
   },
@@ -135,8 +148,9 @@ export default function PrivacyPage() {
           <p className="m-0 text-headline font-semibold text-accent">Privacy notice</p>
           <h1 className="m-0 text-title-1 text-label">Privacy</h1>
           <p className="m-0 text-pretty text-headline text-label-2">
-            This is my personal portfolio. This page explains what information the site collects, which services
-            handle it, and how to reach me about it.
+            This is my personal portfolio. I use it to look for software engineering work and to let people get in
+            touch, and I don&apos;t offer paid services through it. This page explains what information the site
+            collects, which services handle it, and how to reach me about it.
           </p>
           <p className="m-0 text-callout text-label-2">Effective {privacy.effectiveDate}</p>
         </div>
