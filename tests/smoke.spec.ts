@@ -143,6 +143,25 @@ test('contact form reports missing fields inline', async ({ page }) => {
   await expect(form.getByText('Enter an email address, like name@example.com.')).toBeVisible();
 });
 
+test('security headers are sent and the page breaks no CSP rule', async ({ page }) => {
+  await page.addInitScript(() => {
+    const violations: string[] = [];
+    (window as unknown as { cspViolations: string[] }).cspViolations = violations;
+    document.addEventListener('securitypolicyviolation', (e) => violations.push(`${e.violatedDirective} ${e.blockedURI}`));
+  });
+  const response = await page.goto('/');
+  const headers = response!.headers();
+  expect(headers['content-security-policy']).toContain("frame-ancestors 'none'");
+  expect(headers['strict-transport-security']).toBeTruthy();
+  expect(headers['x-content-type-options']).toBe('nosniff');
+  expect(headers['x-powered-by']).toBeUndefined();
+
+  // Reach the contact section so the scheduler and every figure load.
+  await page.goto('/#contact');
+  await expect(page.locator('#contact')).toBeInViewport();
+  expect(await page.evaluate(() => (window as unknown as { cspViolations: string[] }).cspViolations)).toEqual([]);
+});
+
 for (const [theme, path] of [
   ['light', '/'],
   ['dark', '/'],
