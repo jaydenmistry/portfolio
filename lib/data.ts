@@ -56,7 +56,7 @@ export type Project = {
 
 /**
  * Order matters: software first, infrastructure last, matching the page.
- * The KV store and chat app have no public repo links yet, so none are set.
+ * The chat app has no public repo yet, so it has no repo link.
  */
 export const projects: Project[] = [
   {
@@ -103,6 +103,7 @@ export const projects: Project[] = [
     stack: ['Go', 'Raft', 'Proxmox', 'LXC'],
     indexStack: 'Go · write-ahead log · Raft',
     status: 'Raft in progress',
+    repo: 'https://github.com/jaydenmistry/kvstore',
   },
   {
     number: '03',
