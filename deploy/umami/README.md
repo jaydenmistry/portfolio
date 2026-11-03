@@ -86,9 +86,9 @@ docker compose up -d --no-deps portfolio
 
 To disable tracking, clear both `NEXT_PUBLIC_UMAMI_*` entries and rebuild the
 portfolio. Preserve `${CONFIG_ROOT}/umami/db` to retain accounts and analytics.
-Use PostgreSQL backups (`pg_dump`) for a running database, or stop the database
-before copying its data directory. This repository does not configure automatic
-Umami backups or activate the services remotely.
+Nightly `pg_dump` backups are set up by `umami-backup.timer` (see
+[`deploy/homelab`](../homelab/README.md)). This repository does not activate
+the services remotely.
 
 Upstream references: [installation](https://docs.umami.is/docs/install),
 [tracker configuration](https://docs.umami.is/docs/tracker-configuration).
