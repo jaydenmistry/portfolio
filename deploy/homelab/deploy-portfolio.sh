@@ -8,6 +8,7 @@ STACK="$HOME/docker/stacks/apps"
 ENV_FILE="$HOME/docker/.env"
 BRANCH=main
 GITHUB_REPO=jaydenmistry/portfolio
+CI_JOB=build  # the job in .github/workflows/ci.yml
 SERVICE=portfolio
 CONTAINER=portfolio
 IMAGE=portfolio:local
@@ -36,11 +37,12 @@ wait_healthy() {  # container name, timeout in seconds
   return 1
 }
 
-# Prints success, failure or pending for the GitHub checks on a commit.
-# The repository is public, so this needs no token.
+# Prints success, failure or pending for CI's build job on a commit. Other
+# checks on main (Dependabot's update runs) don't gate deploys. The repository
+# is public, so this needs no token.
 ci_status() {
   curl -fsS -m 15 -H 'accept: application/vnd.github+json' \
-    "https://api.github.com/repos/$GITHUB_REPO/commits/$1/check-runs" |
+    "https://api.github.com/repos/$GITHUB_REPO/commits/$1/check-runs?check_name=$CI_JOB" |
     python3 -c '
 import json, sys
 runs = json.load(sys.stdin).get("check_runs", [])

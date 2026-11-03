@@ -9,6 +9,7 @@ on:
       - main
 
 jobs:
+  # deploy/homelab/deploy-portfolio.sh waits for this job by name.
   build:
     runs-on: ubuntu-latest
     steps:
