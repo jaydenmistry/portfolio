@@ -107,7 +107,9 @@ Umami runs in the existing hp-envy apps Compose stack using `apps_net` and
 [`deploy/umami/README.md`](../deploy/umami/README.md) for environment variables and
 activation steps. No separate stack, named volume, or override file is needed.
 Analytics remain disabled until the tracker URL and website ID are supplied
-at build time.
+at build time. The site serves the tracker itself: `/stats/script.js` and
+`/stats/api/send` are proxied to the Umami container (`UMAMI_UPSTREAM` in
+[`next.config.ts`](../next.config.ts)), so the dashboard hostname stays private.
 
 Click events (defined in [`lib/analytics.ts`](../lib/analytics.ts)) appear under
 Events in Umami:
@@ -118,10 +120,18 @@ Events in Umami:
 
 They count clicks, not who clicked.
 
+## Security headers
+
+[`next.config.ts`](../next.config.ts) sends a Content Security Policy, HSTS,
+`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and
+`Permissions-Policy` on every response. A new third-party script, frame or API
+has to be added to the CSP, or the browser blocks it; the smoke tests fail on
+any CSP violation.
+
 ## Tooling compatibility
 
 ESLint remains pinned to 9.39.5 pending compatible React and accessibility
-plugins. As of 2026-09-22, the registry releases `eslint-plugin-react@7.37.5`
+plugins. As of 2026-11-03, the registry releases `eslint-plugin-react@7.37.5`
 and `eslint-plugin-jsx-a11y@6.10.2` do not declare ESLint 10 support. ESLint 9
 is end-of-life; revisit the migration when the plugin stack supports 10,
 rather than overriding its peer requirements or dropping checks.
@@ -137,7 +147,8 @@ configuration loader on a patched YAML release without changing Tailwind majors.
       it is cropped from the top. Removing `src` brings back the placeholder.
 - [x] Updated résumé at `public/resume.pdf`; every Résumé link points there.
       Its LaTeX source isn't in this repo.
-- [ ] Add repo URLs (`repo`) for the key-value store and chat projects if public.
+- [x] Key-value store links to `github.com/jaydenmistry/kvstore`.
+- [ ] Add a `repo` URL for the chat project once it is on GitHub.
 - [x] Contact form is configured for Formspree (`xwvgkeda`, default in `lib/data.ts`;
       `NEXT_PUBLIC_FORMSPREE_ID` overrides it at build time).
 - [ ] Confirm real contact-form delivery; local validation does not send a message.
